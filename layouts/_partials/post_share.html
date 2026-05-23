@@ -36,9 +36,9 @@
         <a class="share__btn share__btn--telegram"
            href="{{ $tg | safeURL }}"
            target="_blank" rel="noopener noreferrer nofollow"
+           title="{{ i18n "share_telegram" }}"
            aria-label="{{ i18n "share_telegram" }}">
           {{ partial "svg.html" (dict "name" "telegram" "size" 18 "class" "share__icon") }}
-          <span>{{ i18n "share_telegram" }}</span>
         </a>
       </li>
       {{- else if eq $c "twitter" }}
@@ -46,9 +46,9 @@
         <a class="share__btn share__btn--twitter"
            href="{{ $tw | safeURL }}"
            target="_blank" rel="noopener noreferrer nofollow"
+           title="{{ i18n "share_twitter" }}"
            aria-label="{{ i18n "share_twitter" }}">
           {{ partial "svg.html" (dict "name" "twitter" "size" 18 "class" "share__icon") }}
-          <span>{{ i18n "share_twitter" }}</span>
         </a>
       </li>
       {{- else if eq $c "linkedin" }}
@@ -56,18 +56,18 @@
         <a class="share__btn share__btn--linkedin"
            href="{{ $li | safeURL }}"
            target="_blank" rel="noopener noreferrer nofollow"
+           title="{{ i18n "share_linkedin" }}"
            aria-label="{{ i18n "share_linkedin" }}">
           {{ partial "svg.html" (dict "name" "linkedin" "size" 18 "class" "share__icon") }}
-          <span>{{ i18n "share_linkedin" }}</span>
         </a>
       </li>
       {{- else if eq $c "email" }}
       <li class="share__item">
         <a class="share__btn share__btn--email"
            href="{{ $em | safeURL }}"
+           title="{{ i18n "share_email" }}"
            aria-label="{{ i18n "share_email" }}">
           {{ partial "svg.html" (dict "name" "mail" "size" 18 "class" "share__icon") }}
-          <span>{{ i18n "share_email" }}</span>
         </a>
       </li>
       {{- else if eq $c "copy" }}
@@ -76,9 +76,11 @@
                 class="share__btn share__btn--copy"
                 data-share-copy
                 data-url="{{ $url }}"
+                title="{{ i18n "share_copy" }}"
                 aria-label="{{ i18n "share_copy" }}">
           {{ partial "svg.html" (dict "name" "link" "size" 18 "class" "share__icon") }}
-          <span data-share-copy-label>{{ i18n "share_copy" }}</span>
+          {{- /* sr-only span — обновляется в JS на «Скопировано», скринридеры озвучат */ -}}
+          <span class="visually-hidden" data-share-copy-label>{{ i18n "share_copy" }}</span>
         </button>
       </li>
       {{- end -}}
