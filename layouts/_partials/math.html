@@ -1,11 +1,18 @@
-{{- /* MathJax 4: подключаем только если в посте есть `math: true`
-       (или site.Params.math = true). Конфиг минимальный — дефолтные
-       размеры math, без принудительного inherit-font. Горизонтальный
-       скролл широких display-формул — в 18-math.css. */ -}}
+{{- /* MathJax 4: подключаем если включено через `math: true` в frontmatter,
+       глобально `site.Params.math = true`, или авто-детектом — на странице
+       встречаются `$$..$$` (display) или `\(..\)` (inline). Конфигурация
+       минимальная: only the delimiters list and ui/safe loader. Без
+       `options.processHtmlClass`, иначе MathJax обработает только элементы
+       с этим классом, а формулы в обычном `<p>` останутся сырым текстом. */ -}}
 {{- $enabled := or .Params.math site.Params.math -}}
+{{- if not $enabled -}}
+  {{- $raw := .RawContent -}}
+  {{- if or (strings.Contains $raw "$$") (strings.Contains $raw "\\(") -}}
+    {{- $enabled = true -}}
+  {{- end -}}
+{{- end -}}
 {{- if $enabled -}}
 {{- $src := site.Params.mathjaxSrc | default "https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js" -}}
-<script id="MathJax-script" async src="{{ $src }}"></script>
 <script>
   window.MathJax = {
     tex: {
@@ -13,13 +20,10 @@
       inlineMath: [['\\(', '\\)'], ['$', '$']],
       processEscapes: true
     },
-    options: {
-      ignoreHtmlClass: 'no-mathjax',
-      processHtmlClass: 'math|mathjax'
-    },
     loader: {
       load: ['ui/safe']
     }
   };
 </script>
+<script id="MathJax-script" async src="{{ $src }}"></script>
 {{- end -}}
