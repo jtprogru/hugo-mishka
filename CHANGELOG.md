@@ -7,6 +7,7 @@
 
 ### Added
 
+- Related posts: партиал `_partials/related.html` + CSS-модуль `30-related.css`. Использует встроенный Hugo-механизм `site.RegularPages.Related` поверх `related:` конфига сайта. Опции: `params.ShowRelatedPosts` (по умолчанию `true`), `params.relatedMax` (по умолчанию `4`), per-page переопределение через frontmatter `related: false`.
 - SVG-иконки `mail`, `share`, `edit`, `link` в `_partials/svg.html`.
 
 ### Fixed

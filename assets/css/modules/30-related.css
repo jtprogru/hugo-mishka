@@ -1,0 +1,92 @@
+/* ============================================================================
+   30-related.css — блок «Похожие посты» под статьёй.
+
+   Сетка 1 колонка на мобиле, 2 на ≥768px. Карточки — лёгкая обводка + hover
+   с подъёмом и accent-подсветкой заголовка. Никаких теней — соответствует
+   общему «бумажному» духу темы.
+   ============================================================================ */
+
+.related {
+  margin-top: var(--gap-2xl);
+  padding-top: var(--gap-xl);
+  border-top: 1px solid var(--border);
+}
+
+.related__heading {
+  font-size: var(--fs-xl);
+  line-height: var(--lh-tight);
+  margin: 0 0 var(--gap-md);
+  color: var(--text);
+}
+
+.related__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: var(--gap-md);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .related__list {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.related__item {
+  margin: 0;
+}
+
+.related__link {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-xs);
+  padding: var(--gap-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
+  color: var(--text);
+  text-decoration: none;
+  transition: transform var(--transition, 0.18s ease),
+              border-color var(--transition, 0.18s ease),
+              color var(--transition, 0.18s ease);
+  height: 100%;
+}
+
+.related__link:hover,
+.related__link:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.related__title {
+  font-weight: 600;
+  line-height: var(--lh-snug);
+}
+
+.related__meta {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+.related__link:hover .related__meta,
+.related__link:focus-visible .related__meta {
+  /* мета остаётся приглушённой, акцент уходит в заголовок */
+  color: var(--text-muted);
+}
+
+.related__cat {
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .related__link {
+    transition: none;
+  }
+  .related__link:hover,
+  .related__link:focus-visible {
+    transform: none;
+  }
+}

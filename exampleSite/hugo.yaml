@@ -82,6 +82,8 @@ params:
   ShowPostNavLinks: true
   ShowBreadCrumbs: true
   ShowToc: true
+  ShowRelatedPosts: true
+  relatedMax: 4
   math: false
   mermaid: false
 

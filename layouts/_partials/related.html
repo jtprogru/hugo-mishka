@@ -1,0 +1,37 @@
+{{- /* Related posts: подбирает похожие посты через встроенный Hugo-механизм
+       (site.RegularPages.Related .), который опирается на конфиг `related:` в hugo.yaml.
+
+       Управление:
+       - site.Params.ShowRelatedPosts: true|false (по умолчанию true)
+       - frontmatter `related: false`  → выключает на конкретном посте
+       - site.Params.relatedMax: int  (по умолчанию 4)
+
+       Рендерим только для регулярных страниц (постов), не для list/term/home. */ -}}
+{{- if not .IsPage -}}{{ return }}{{ end -}}
+{{- $siteOn := ne (site.Params.ShowRelatedPosts | default true) false -}}
+{{- if eq .Params.related false -}}{{ $siteOn = false }}{{ end -}}
+{{- if not $siteOn -}}{{ return }}{{ end -}}
+
+{{- $max := site.Params.relatedMax | default 4 -}}
+{{- $related := first $max (site.RegularPages.Related .) -}}
+{{- with $related -}}
+{{- $dateFmt := site.Params.dateFormat | default "2 January 2006" -}}
+<aside class="related" aria-labelledby="related-heading">
+  <h2 id="related-heading" class="related__heading">{{ i18n "related_posts" }}</h2>
+  <ul class="related__list">
+    {{- range . }}
+    <li class="related__item">
+      <a class="related__link" href="{{ .RelPermalink }}">
+        <span class="related__title">{{ .Title }}</span>
+        <span class="related__meta">
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format $dateFmt }}</time>
+          {{- with .GetTerms "categories" }}
+            {{- range first 1 . }} · <span class="related__cat">{{ .LinkTitle }}</span>{{ end -}}
+          {{- end }}
+        </span>
+      </a>
+    </li>
+    {{- end }}
+  </ul>
+</aside>
+{{- end -}}

@@ -111,6 +111,11 @@ params:
       url: "https://github.com/<you>"
     - name: telegram
       url: "https://t.me/<you>"
+
+  # Related posts под статьёй (использует встроенный Hugo-механизм site.RegularPages.Related).
+  # Конфигурация ранжирования — в верхнем `related:` блоке hugo.yaml.
+  ShowRelatedPosts: true
+  relatedMax: 4
 ```
 
 ### Данные проекта
