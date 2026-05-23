@@ -1,0 +1,114 @@
+/* ============================================================================
+   19-archive.css — страница архивов (layout: archives).
+   На мобиле — год блоком сверху, под ним список. На ≥1024px год слева
+   sticky, список постов справа.
+   ============================================================================ */
+
+.archives {
+  padding-block: var(--gap-lg) var(--gap-xl);
+}
+
+.archives__header {
+  margin-bottom: var(--gap-xl);
+  padding-bottom: var(--gap-lg);
+  border-bottom: 1px solid var(--border);
+}
+
+.archives__title {
+  font-size: var(--fs-3xl);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--gap-sm);
+}
+
+.archives__intro {
+  color: var(--text-muted);
+  margin-bottom: var(--gap-sm);
+}
+
+.archives__count {
+  font-size: var(--fs-sm);
+  color: var(--text-subtle);
+  margin: 0;
+}
+
+.archives__year {
+  margin-bottom: var(--gap-2xl);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--gap-md);
+}
+
+@media (min-width: 1024px) {
+  .archives__year {
+    grid-template-columns: 120px 1fr;
+    gap: var(--gap-xl);
+  }
+}
+
+.archives__year-title {
+  font-size: var(--fs-2xl);
+  line-height: 1;
+  color: var(--accent);
+  margin: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 1024px) {
+  .archives__year-title {
+    position: sticky;
+    top: calc(var(--header-height) + 1rem);
+    align-self: start;
+    text-align: right;
+    padding-right: var(--gap-sm);
+    border-right: 2px solid var(--border);
+  }
+}
+
+.archives__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.archives__item {
+  display: grid;
+  grid-template-columns: minmax(80px, 100px) 1fr;
+  align-items: baseline;
+  gap: var(--gap-md);
+  padding: var(--gap-xs) 0;
+  border-bottom: 1px dashed transparent;
+  transition: border-color var(--transition, 0.18s ease);
+}
+
+.archives__item:hover {
+  border-bottom-color: var(--border);
+}
+
+.archives__date {
+  font-size: var(--fs-sm);
+  color: var(--text-subtle);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.archives__link {
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition, 0.18s ease);
+}
+
+.archives__link:hover,
+.archives__link:focus-visible {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .archives__item,
+  .archives__link { transition: none; }
+}

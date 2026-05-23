@@ -1,0 +1,50 @@
+{{- /* Archives page — посты сгруппированы по годам.
+
+       Использование (в проекте):
+         content/archives.md:
+           ---
+           title: "Архив"
+           layout: "archives"
+           url: "/archives/"
+           ---
+
+       Берём только страницы из mainSections (по умолчанию posts). На
+       мобиле — год сверху, ниже список постов; на десктопе год прилипает
+       слева, посты идут справа двумя колонками (sticky-year). */ -}}
+
+{{- define "main" -}}
+{{- $mainSections := site.Params.mainSections | default (slice "posts") -}}
+{{- $pages := where site.RegularPages "Type" "in" $mainSections -}}
+{{- $dateFmt := site.Params.dateFormat | default "2 January" -}}
+
+<div class="container">
+  {{- partial "breadcrumbs.html" . }}
+
+  <article class="archives">
+    <header class="archives__header">
+      <h1 class="archives__title">{{ .Title }}</h1>
+      {{- with .Content }}<div class="md-content archives__intro">{{ . }}</div>{{ end }}
+      <p class="archives__count">
+        {{- $n := len $pages -}}
+        {{ i18n "archives_total" (dict "Count" $n) | default (printf "%d публикаций" $n) }}
+      </p>
+    </header>
+
+    {{- range $pages.GroupByDate "2006" }}
+    <section class="archives__year">
+      <h2 class="archives__year-title">{{ .Key }}</h2>
+      <ul class="archives__list">
+        {{- range .Pages }}
+        <li class="archives__item">
+          <time class="archives__date" datetime="{{ .Date.Format "2006-01-02" }}">
+            {{- .Date.Format $dateFmt -}}
+          </time>
+          <a class="archives__link" href="{{ .RelPermalink }}">{{ .Title }}</a>
+        </li>
+        {{- end }}
+      </ul>
+    </section>
+    {{- end }}
+  </article>
+</div>
+{{- end -}}

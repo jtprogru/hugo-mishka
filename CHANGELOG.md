@@ -7,6 +7,7 @@
 
 ### Added
 
+- Archives page: `layouts/archives.html` + CSS-модуль `19-archive.css`. Подключается через `layout: "archives"` на контентной странице. Группирует посты из `mainSections` по году; на десктопе год прилипает слева sticky, посты идут справа. Поддержка i18n-плюрализации (`archives_total`). Демо: `exampleSite/content/archives.md`.
 - KaTeX как альтернативный рендерер математики. `_partials/math.html` стал диспетчером, вызывающим `_partials/mathjax.html` или `_partials/katex.html` по `params.mathRenderer` ("mathjax" | "katex"). По умолчанию — `mathjax` (без breaking change). KaTeX подключается с jsDelivr (CSS + JS + contrib/auto-render) с возможностью переопределить версию (`params.katexVersion`) или адреса (`params.katex{Css,Js,AutoRender}Src`).
 - Translation list: партиал `_partials/translation_list.html` + CSS-модуль `33-translation.css`. Показывает ссылки на переводы текущей страницы (из `.Translations`), если они есть — для моноязычных сайтов ничего не рендерит. Интегрирован в шапку single. i18n-строка `translations_label` (ru/en).
 - Telegram Instant View support: новые мета-теги в `head_meta.html` — `article:author`, `og:image:alt` / `og:image:width` / `og:image:height` (если заданы в `cover`), и опциональный `te:channel` (из `params.telegramChannel`). Стартовый IV-template для Telegram IV Editor лежит в `docs/telegram-instant-view.iv` — копируется в редактор и адаптируется под путь постов сайта. В README добавлен раздел «Telegram Instant View» с инструкцией.
