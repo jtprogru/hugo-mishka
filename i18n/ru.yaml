@@ -1,24 +1,39 @@
-read_time:
-  one: "{{ .Count }} мин"
-  few: "{{ .Count }} мин"
-  many: "{{ .Count }} мин"
-  other: "{{ .Count }} мин"
+# i18n строки темы. Сгруппированы по семантическим блокам:
+# навигация, плюрализация, мета поста, действия, контролы, оверлеи.
 
+# --- Навигация / каркас ---
 home: "Главная"
 posts: "Посты"
 tags: "Теги"
 categories: "Категории"
 search: "Поиск"
-related_posts: "Похожие посты"
-no_results: "Ничего не найдено."
-prev_page: "Назад"
-next_page: "Вперёд"
-404_title: "Страница не найдена"
-404_message: "Тут пусто. Возможно, страница переехала или была удалена."
 to_content: "К содержимому"
-theme_toggle_label: "Переключить тему"
+footer_nav_label: "Навигация"
+social_heading: "Где ещё я"
+footer_commit_title: "Текущая сборка"
+
+# --- Плюрализация ---
+read_time:
+  one: "{{ .Count }} мин"
+  few: "{{ .Count }} мин"
+  many: "{{ .Count }} мин"
+  other: "{{ .Count }} мин"
+archives_total:
+  one: "{{ .Count }} публикация"
+  few: "{{ .Count }} публикации"
+  many: "{{ .Count }} публикаций"
+  other: "{{ .Count }} публикаций"
+
+# --- Пост: мета и действия ---
 edit_post: "Редактировать пост"
 read_more: "Читать дальше"
+related_posts: "Похожие посты"
+translations_label: "Перевод"
+toc_title: "Содержание"
+comments_label: "Комментарии"
+pinned: "Закреплено"
+
+# --- Поделиться ---
 share_heading: "Поделиться"
 share_telegram: "Telegram"
 share_twitter: "X (Twitter)"
@@ -26,29 +41,28 @@ share_linkedin: "LinkedIn"
 share_email: "Email"
 share_copy: "Скопировать ссылку"
 share_copy_done: "Скопировано"
+
+# --- Callouts / alerts ---
 alert_note: "Заметка"
 alert_tip: "Совет"
 alert_important: "Важно"
 alert_warning: "Предупреждение"
 alert_danger: "Осторожно"
-translations_label: "Перевод"
-archives_total:
-  one: "{{ .Count }} публикация"
-  few: "{{ .Count }} публикации"
-  many: "{{ .Count }} публикаций"
-  other: "{{ .Count }} публикаций"
-comments_label: "Комментарии"
-footer_commit_title: "Текущая сборка"
-audio_unsupported: "Ваш браузер не поддерживает <audio>."
-video_unsupported: "Ваш браузер не поддерживает <video>."
-toc_title: "Содержание"
+
+# --- Контролы и микрокопии ---
+theme_toggle_label: "Переключить тему"
 copy_code: "Скопировать"
 copy_code_done: "Скопировано"
 search_placeholder: "Найти пост…"
 search_noscript: "Для поиска нужен включённый JavaScript."
-footer_nav_label: "Навигация"
-social_heading: "Где ещё я"
-pinned: "Закреплено"
+
+# --- Media shortcodes ---
+audio_unsupported: "Ваш браузер не поддерживает <audio>."
+video_unsupported: "Ваш браузер не поддерживает <video>."
+
+# --- Системные экраны ---
+404_title: "Страница не найдена"
+404_message: "Тут пусто. Возможно, страница переехала или была удалена."
 offline_title: "Нет интернета"
 offline_message: "Эта страница ещё не была закэширована. Подключитесь к интернету и попробуйте снова."
 offline_retry: "Повторить"

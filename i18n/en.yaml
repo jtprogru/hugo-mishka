@@ -1,22 +1,35 @@
-read_time:
-  one: "{{ .Count }} min"
-  other: "{{ .Count }} min"
+# i18n strings. Grouped semantically: navigation, plurals, post meta,
+# actions, controls, overlays. Keep in sync with i18n/ru.yaml.
 
+# --- Navigation / chrome ---
 home: "Home"
 posts: "Posts"
 tags: "Tags"
 categories: "Categories"
 search: "Search"
-related_posts: "Related posts"
-no_results: "No results."
-prev_page: "Previous"
-next_page: "Next"
-404_title: "Page not found"
-404_message: "Nothing here. The page may have moved or been removed."
 to_content: "Skip to content"
-theme_toggle_label: "Toggle theme"
+footer_nav_label: "Navigation"
+social_heading: "Find me on"
+footer_commit_title: "Current build"
+
+# --- Plurals ---
+read_time:
+  one: "{{ .Count }} min"
+  other: "{{ .Count }} min"
+archives_total:
+  one: "{{ .Count }} post"
+  other: "{{ .Count }} posts"
+
+# --- Post: meta and actions ---
 edit_post: "Edit post"
 read_more: "Read more"
+related_posts: "Related posts"
+translations_label: "Translation"
+toc_title: "Contents"
+comments_label: "Comments"
+pinned: "Pinned"
+
+# --- Share ---
 share_heading: "Share"
 share_telegram: "Telegram"
 share_twitter: "X (Twitter)"
@@ -24,27 +37,28 @@ share_linkedin: "LinkedIn"
 share_email: "Email"
 share_copy: "Copy link"
 share_copy_done: "Copied"
+
+# --- Callouts / alerts ---
 alert_note: "Note"
 alert_tip: "Tip"
 alert_important: "Important"
 alert_warning: "Warning"
 alert_danger: "Caution"
-translations_label: "Translation"
-archives_total:
-  one: "{{ .Count }} post"
-  other: "{{ .Count }} posts"
-comments_label: "Comments"
-footer_commit_title: "Current build"
-audio_unsupported: "Your browser does not support the <audio> element."
-video_unsupported: "Your browser does not support the <video> element."
-toc_title: "Contents"
+
+# --- Controls and micro-copy ---
+theme_toggle_label: "Toggle theme"
 copy_code: "Copy"
 copy_code_done: "Copied"
 search_placeholder: "Find a post…"
 search_noscript: "Search needs JavaScript enabled."
-footer_nav_label: "Navigation"
-social_heading: "Find me on"
-pinned: "Pinned"
+
+# --- Media shortcodes ---
+audio_unsupported: "Your browser does not support the <audio> element."
+video_unsupported: "Your browser does not support the <video> element."
+
+# --- System screens ---
+404_title: "Page not found"
+404_message: "Nothing here. The page may have moved or been removed."
 offline_title: "You're offline"
 offline_message: "This page hasn't been cached yet. Reconnect and try again."
 offline_retry: "Retry"
