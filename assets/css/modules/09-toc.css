@@ -1,0 +1,75 @@
+/* TOC (table of contents) — на мобилке collapsible над контентом,
+   на десктопе sticky справа от контента. */
+
+.toc {
+  margin-block: var(--gap-md) var(--gap-lg);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-snug);
+}
+
+.toc__details {
+  background: var(--bg-sunken);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--gap-sm) var(--gap-md);
+}
+.toc__details[open] { padding-bottom: var(--gap-md); }
+
+.toc__summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--text);
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  user-select: none;
+}
+.toc__summary::-webkit-details-marker { display: none; }
+.toc__summary::before {
+  content: "›";
+  font-size: 1.2em;
+  display: inline-block;
+  transition: transform var(--transition);
+  color: var(--text-muted);
+}
+.toc__details[open] .toc__summary::before { transform: rotate(90deg); }
+
+.toc__nav { margin-top: var(--gap-sm); }
+.toc__nav ul, .toc__nav ol {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+.toc__nav ul ul, .toc__nav ol ol { padding-left: var(--gap-md); margin-top: var(--gap-xs); }
+.toc__nav li { margin: 2px 0; }
+.toc__nav a {
+  display: block;
+  padding: 2px var(--gap-sm);
+  color: var(--text-muted);
+  text-decoration: none;
+  border-left: 2px solid transparent;
+  transition: color var(--transition), border-color var(--transition), background var(--transition);
+}
+.toc__nav a:hover { color: var(--accent); background: var(--bg-elevated); }
+.toc__nav a.is-active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .toc__summary::before,
+  .toc__nav a { transition: none; }
+}
+
+/* Десктоп: sticky справа от контента. Single-пост сам должен переключиться в grid. */
+@media (min-width: 1024px) {
+  .post--with-toc { position: relative; }
+  .post--with-toc .toc {
+    position: sticky;
+    top: calc(var(--header-height) + var(--gap-md));
+    max-height: calc(100vh - var(--header-height) - var(--gap-lg));
+    overflow-y: auto;
+  }
+}

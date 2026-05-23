@@ -1,0 +1,17 @@
+{{- /* TOC поста. Рендерится только если в посте >= 2 заголовков и не отключён фронтматтером.
+       Активная секция подсвечивается через assets/js/toc-active.js. */ -}}
+{{- $toc := .TableOfContents -}}
+{{- if and $toc (gt (len $toc) 50) -}}
+{{- /* По умолчанию TOC свёрнут. Открыть его можно из проекта/поста:
+       - в hugo.yaml: params.tocOpen: true
+       - во фронтматтере поста: tocOpen: true */ -}}
+{{- $open := or (eq (.Params.tocOpen | default site.Params.tocOpen) true) -}}
+<aside class="toc" aria-label="{{ i18n "toc_title" | default "Содержание" }}">
+  <details class="toc__details"{{ if $open }} open{{ end }}>
+    <summary class="toc__summary">{{ i18n "toc_title" | default "Содержание" }}</summary>
+    <nav class="toc__nav">
+      {{ $toc | safeHTML }}
+    </nav>
+  </details>
+</aside>
+{{- end -}}
