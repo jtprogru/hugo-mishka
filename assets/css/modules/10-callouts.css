@@ -1,4 +1,4 @@
-/* Callouts (note / tip / warn / danger) + collapse + refresh-banner + telegram-cta + thin-place. */
+/* Callouts (note / tip / important / warn / danger) + collapse + refresh-banner + telegram-cta + thin-place. */
 
 .callout {
   --type-color: var(--info);
@@ -10,10 +10,11 @@
   background: color-mix(in srgb, var(--type-color) 7%, var(--bg-elevated));
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
 }
-.callout--note   { --type-color: var(--info); }
-.callout--tip    { --type-color: var(--success); }
-.callout--warn   { --type-color: var(--warning); }
-.callout--danger { --type-color: var(--danger); }
+.callout--note      { --type-color: var(--info); }
+.callout--tip       { --type-color: var(--success); }
+.callout--important { --type-color: var(--accent); }
+.callout--warn      { --type-color: var(--warning); }
+.callout--danger    { --type-color: var(--danger); }
 
 .callout__icon {
   flex: 0 0 auto;

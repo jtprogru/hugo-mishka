@@ -1,0 +1,54 @@
+{{- /* Render-hook для blockquote.
+       Если blockquote — GFM alert (`> [!NOTE]`, `> [!TIP]`, `> [!IMPORTANT]`,
+       `> [!WARNING]`, `> [!CAUTION]`), рендерим его как callout с иконкой,
+       цветом и (опционально) заголовком. В остальных случаях — обычная
+       цитата с базовой типографикой из 08-post-single.css.
+
+       Подробнее: https://gohugo.io/render-hooks/blockquotes/ */ -}}
+
+{{- if eq .Type "alert" -}}
+
+{{- /* Маппинг GFM-типов на наши .callout--*: */ -}}
+{{- $typeMap := dict
+  "note"      "note"
+  "tip"       "tip"
+  "important" "important"
+  "warning"   "warn"
+  "caution"   "danger" -}}
+
+{{- $iconMap := dict
+  "note"      "info"
+  "tip"       "lightbulb"
+  "important" "zap"
+  "warn"      "alert-triangle"
+  "danger"    "alert-octagon" -}}
+
+{{- $titleMap := dict
+  "note"      (i18n "alert_note"      | default "Заметка")
+  "tip"       (i18n "alert_tip"       | default "Совет")
+  "important" (i18n "alert_important" | default "Важно")
+  "warn"      (i18n "alert_warning"   | default "Предупреждение")
+  "danger"    (i18n "alert_danger"    | default "Осторожно") -}}
+
+{{- $rawType := .AlertType | lower -}}
+{{- $type := index $typeMap $rawType | default "note" -}}
+{{- $icon := index $iconMap $type | default "info" -}}
+{{- $title := .AlertTitle | default (index $titleMap $type) -}}
+
+<aside class="callout callout--{{ $type }}" role="note">
+  <div class="callout__icon" aria-hidden="true">
+    {{- partial "svg.html" (dict "name" $icon "size" 20) -}}
+  </div>
+  <div class="callout__body">
+    {{- with $title }}<p class="callout__title">{{ . }}</p>{{ end }}
+    <div class="callout__content">{{ .Text }}</div>
+  </div>
+</aside>
+
+{{- else -}}
+
+<blockquote{{ with .Attributes.class }} class="{{ . }}"{{ end }}>
+  {{- .Text -}}
+</blockquote>
+
+{{- end -}}

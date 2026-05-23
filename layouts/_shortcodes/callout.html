@@ -3,14 +3,19 @@
          {{< callout type="note" title="Например" >}}
          Содержимое в **markdown**.
          {{< /callout >}}
-       Типы: note (default), tip, warn, danger. */ -}}
+       Типы: note (default), tip, important, warn, danger.
+       Альтернатива в markdown — GFM-блок:
+         > [!NOTE]
+         > Текст
+       обрабатывается layouts/_default/_markup/render-blockquote.html. */ -}}
 {{- $type := .Get "type" | default "note" -}}
 {{- $title := .Get "title" -}}
 {{- $icons := dict
-  "note"   "info"
-  "tip"    "lightbulb"
-  "warn"   "alert-triangle"
-  "danger" "alert-octagon" -}}
+  "note"      "info"
+  "tip"       "lightbulb"
+  "important" "zap"
+  "warn"      "alert-triangle"
+  "danger"    "alert-octagon" -}}
 {{- $icon := index $icons $type | default "info" -}}
 <aside class="callout callout--{{ $type }}" role="note">
   <div class="callout__icon" aria-hidden="true">

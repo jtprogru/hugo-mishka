@@ -186,7 +186,19 @@ Fuse.js (v7, basic) подключается только на странице 
 {{< /callout >}}
 ```
 
-Доступные `type`: `note`, `tip`, `warn`, `danger`.
+Доступные `type`: `note`, `tip`, `important`, `warn`, `danger`.
+
+Альтернатива — обычный markdown в GitHub-стиле (рендерит тот же `.callout` через `render-blockquote.html`):
+
+```markdown
+> [!NOTE]
+> Содержимое заметки.
+
+> [!TIP] Кастомный заголовок
+> Если хочется свой заголовок, припишите его после типа.
+```
+
+Поддерживаемые типы alerts: `NOTE`, `TIP`, `IMPORTANT`, `WARNING`, `CAUTION`. Дефолтные заголовки берутся из i18n-строк `alert_note`, `alert_tip`, `alert_important`, `alert_warning`, `alert_danger`.
 
 Парные (с `.Inner`):
 
