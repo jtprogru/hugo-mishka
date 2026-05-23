@@ -79,16 +79,25 @@
       <media:thumbnail url="{{ . }}" />
       {{- end }}
 
-      <description>{{ if $fullContent -}}
-        {{- /* Полный контент с inline-стилями. Оборачиваем в <div>,
-               чтобы стили жили только в области описания (стандартные
-               ридеры в любом случае иногда игнорируют <style>). */ -}}
-        {{- printf "<style>%s</style><div>%s</div>" $css .Content | html -}}
-      {{- else -}}
-        {{- .Summary | html -}}
-      {{- end }}</description>
+      {{- /* description и content:encoded оба в CDATA: иначе HTML-сущности
+             (`&rsquo;`), HTML void-tags (`<source>`, `<br>`) и любые
+             незакрытые теги в нашем рендере ломают XML-парсер RSS.
+             Escape `]]>` если он встретится внутри контента — иначе
+             CDATA закрывается раньше времени.
 
-      <content:encoded><![CDATA[{{ if $fullContent }}<style>{{ $css | safeHTML }}</style><div>{{ .Content | safeHTML }}</div>{{ else }}{{ .Content | safeHTML }}{{ end }}]]></content:encoded>
+             Hugo использует html/template для .xml — поэтому литералы
+             `<![CDATA[` он сам html-escape-ит. Собираем строку через
+             printf и помечаем результат safeHTML, чтобы Hugo не трогал. */ -}}
+      {{- $body := "" -}}
+      {{- if $fullContent -}}
+        {{- $body = printf "<style>%s</style><div>%s</div>" $css .Content -}}
+      {{- else -}}
+        {{- $body = printf "%s" .Summary -}}
+      {{- end -}}
+      {{- $body = replace $body "]]>" "]]]]><![CDATA[>" -}}
+
+      {{ printf "<description><![CDATA[%s]]></description>" $body | safeHTML }}
+      {{ printf "<content:encoded><![CDATA[%s]]></content:encoded>" $body | safeHTML }}
     </item>
     {{- end }}
   </channel>
