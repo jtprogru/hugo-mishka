@@ -7,9 +7,11 @@
          2. site.Params.commit  (если на стороне проекта подставляется через Taskfile/CI)
 
        Ссылка на коммит формируется из site.Params.commitURL — это
-       printf-шаблон с %s, например:
+       шаблон с плейсхолдером `%s`, который заменится на SHA. Например:
          commitURL: "https://github.com/user/repo/commit/%s"
-*/ -}}
+
+       Используем replace, а не printf — чтобы опечатка в формате
+       (например %d) не валила сборку с runtime-ошибкой. */ -}}
 
 {{- $commit := os.Getenv "HUGO_COMMIT" -}}
 {{- if not $commit }}{{ $commit = site.Params.commit | default "" }}{{ end -}}
@@ -27,7 +29,7 @@
   {{- with $commit -}}
     · <span class="footer__commit" title="{{ i18n "footer_commit_title" | default "Текущая сборка" }}">
       {{- with site.Params.commitURL -}}
-        <a href="{{ printf . $commit | safeURL }}" rel="noopener" class="footer__commit-link">{{ $commit }}</a>
+        <a href="{{ replace . "%s" $commit | safeURL }}" rel="noopener" class="footer__commit-link">{{ $commit }}</a>
       {{- else -}}
         {{ $commit }}
       {{- end -}}
