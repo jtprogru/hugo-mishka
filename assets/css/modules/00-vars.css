@@ -64,6 +64,56 @@
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, .45);
 }
 
+/* === prefers-contrast: more — high-contrast палитра ===
+   Срабатывает автоматически для пользователей с системной настройкой
+   повышенной контрастности (Windows/macOS Accessibility settings,
+   Firefox/Chrome → Settings → Accessibility). Усиливает контраст
+   между текстом и фоном, делает границы заметнее, убирает полупрозрачность. */
+@media (prefers-contrast: more) {
+  :root,
+  :root[data-theme="light"] {
+    --bg:           #ffffff;
+    --bg-elevated:  #ffffff;
+    --bg-sunken:    #f0f0f0;
+
+    --text:         #000000;
+    --text-muted:   #1a1a1a;
+    --text-subtle:  #404040;
+
+    --accent:       #8a2c00;        /* темнее ржавого — больше контраст к белому */
+    --accent-hover: #5a1d00;
+    --accent-soft:  #ffd9b3;
+
+    --border:        #999999;
+    --border-strong: #444444;
+
+    --code-bg:    #000000;
+    --code-text:  #ffffff;
+    --code-inline-bg: #e8e8e8;
+  }
+
+  :root[data-theme="dark"] {
+    --bg:           #000000;
+    --bg-elevated:  #000000;
+    --bg-sunken:    #1a1a1a;
+
+    --text:         #ffffff;
+    --text-muted:   #e6e6e6;
+    --text-subtle:  #bfbfbf;
+
+    --accent:       #ffb878;        /* светлее оранжевого — больше контраст к чёрному */
+    --accent-hover: #ffd1a8;
+    --accent-soft:  #b34d00;
+
+    --border:        #808080;
+    --border-strong: #cccccc;
+
+    --code-bg:    #000000;
+    --code-text:  #ffffff;
+    --code-inline-bg: #1a1a1a;
+  }
+}
+
 :root {
   /* Шрифты */
   --font-sans:  "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
