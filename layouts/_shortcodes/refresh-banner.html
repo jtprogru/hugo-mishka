@@ -1,0 +1,12 @@
+{{- /* Тонкий «обновлено» баннер в посте.
+       {{< refresh-banner date="2026-05-20" >}}Что обновили{{< /refresh-banner >}} */ -}}
+{{- $date := .Get "date" -}}
+{{- $note := .Inner | .Page.RenderString -}}
+<aside class="refresh-banner" role="note">
+  <span class="refresh-banner__dot" aria-hidden="true"></span>
+  <span class="refresh-banner__label">
+    {{- with $date }}<time datetime="{{ . }}">{{ dateFormat "2 January 2006" . }}</time> — {{ end -}}
+    обновлено
+  </span>
+  {{- with $note }}<span class="refresh-banner__text">{{ . }}</span>{{ end -}}
+</aside>
