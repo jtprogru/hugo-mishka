@@ -1,0 +1,33 @@
+{{- /* Twitter cards партиал темы.
+
+       Можно переопределить в проекте через `layouts/_partials/twitter_cards.html`.
+
+       Динамически выбирает `summary_large_image`, если у поста есть cover;
+       иначе `summary`. Пробрасывает twitter:image:alt при наличии alt в
+       cover-конфиге. */ -}}
+
+{{- $title := .Title | default site.Title -}}
+{{- $desc  := or .Description .Summary site.Params.description | plainify | htmlUnescape | chomp -}}
+
+{{- $img := "" -}}
+{{- $alt := "" -}}
+{{- with .Params.cover -}}
+  {{- with .image }}{{ $img = . | absURL }}{{ end -}}
+  {{- with .alt }}{{ $alt = . }}{{ end -}}
+{{- end -}}
+
+<meta name="twitter:card" content="{{ if $img }}summary_large_image{{ else }}summary{{ end }}">
+<meta name="twitter:title" content="{{ $title }}">
+<meta name="twitter:description" content="{{ $desc }}">
+
+{{- with $img }}
+<meta name="twitter:image" content="{{ . }}">
+{{- end }}
+{{- with $alt }}
+<meta name="twitter:image:alt" content="{{ . }}">
+{{- end }}
+
+{{- with site.Params.twitter }}
+  {{- with .site }}<meta name="twitter:site" content="{{ . }}">{{- end }}
+  {{- with .creator }}<meta name="twitter:creator" content="{{ . }}">{{- end }}
+{{- end }}
