@@ -20,7 +20,7 @@
 {{- end -}}
 {{- $hideCover := or .Params.cover.hidden site.Params.cover.hiddenInList -}}
 
-<article class="post-card">
+<article class="post-card{{ if .Params.pinned }} post-card--pinned{{ end }}">
   {{- if and $coverURL (not $hideCover) }}
   <a class="post-card__cover-wrap" href="{{ .RelPermalink }}" tabindex="-1" aria-hidden="true">
     <img class="post-card__cover" src="{{ $coverURL }}" alt="{{ $coverAlt }}" loading="lazy" decoding="async">
@@ -28,7 +28,10 @@
   {{- end }}
   <div class="post-card__body">
     <header class="post-card__head">
-      <h2 class="post-card__title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+      <h2 class="post-card__title">
+        {{- if .Params.pinned }}<span class="badge badge--pinned" title="{{ i18n "pinned" | default "Закреплено" }}">★</span> {{ end -}}
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      </h2>
       <div class="post-card__meta">
         <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format $dateFmt }}</time>
         {{- if site.Params.ShowReadingTime }} · {{ .ReadingTime }} мин{{ end }}

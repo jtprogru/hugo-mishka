@@ -10,8 +10,15 @@
   {{- $paginator := .Paginate $pages -}}
 
   <div class="post-list">
-    {{- range $paginator.Pages }}
-      {{- partial "post_card.html" . }}
+    {{- /* Pinned-сортировка: посты с frontmatter `pinned: true` показываются
+           первыми. Hugo's .Paginate ре-сортирует custom slices, поэтому
+           делаем два прохода по странице пагинации — это сохраняет работу
+           prev/next. На второй странице пагинации pinned не повторяются. */ -}}
+    {{- range where $paginator.Pages "Params.pinned" true -}}
+      {{- partial "post_card.html" . -}}
+    {{- end }}
+    {{- range where $paginator.Pages "Params.pinned" "!=" true -}}
+      {{- partial "post_card.html" . -}}
     {{- end }}
   </div>
 

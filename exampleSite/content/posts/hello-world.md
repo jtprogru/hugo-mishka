@@ -2,6 +2,7 @@
 title: "Hello, Mishka"
 date: 2026-05-20T10:00:00+03:00
 draft: false
+pinned: true
 tags: ["intro", "demo"]
 categories: ["Hugo"]
 description: "Первый демо-пост темы Mishka. Проверяем базовую типографику."

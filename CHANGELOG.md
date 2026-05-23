@@ -7,6 +7,7 @@
 
 ### Added
 
+- Pinned posts: фронтматтер `pinned: true` поднимает пост наверх в `latest_posts` на главной и в `list.html` (на текущей странице пагинации). Карточки получают `.post-card--pinned` (тонкая accent-полоска слева) и `★`-badge в заголовке. CSS `.badge` / `.badge--pinned` в `15-tags.css`. i18n `pinned` (ru/en).
 - Reading mode: клавиша `f` переключает body-класс `is-reading-mode`, скрывающий header/footer/share/related/edit/toc/cover/nav. Esc выходит. `assets/js/reading-mode.js` (~30 строк) + CSS `34-reading-mode.css`. Подсказка `f / esc` появляется в углу при hover. Активируется только на single-страницах поста.
 - AVIF в render-image: render-hook теперь умеет генерировать `<source type="image/avif">` как первый источник в `<picture>`, перед WebP и оригинальным JPG/PNG. Опт-ин через `params.renderImageAvif: true` (по умолчанию off — Hugo Extended на некоторых платформах кодирует AVIF в 0-байтные файлы). Качество и max-width настраиваются: `renderImageAvifQ` (60), `renderImageWebpQ` (85), `renderImageMaxW` (1200).
 - Шорткоды `audio`, `video`, `rawhtml`, `ltr`, `rtl`. `audio`/`video` оборачивают HTML5-плееры в `<figure class="media">` с подписью; поддержка нескольких форматов через `sources="mp3,ogg"` или `sources="mp4,webm"`. `rawhtml` — passthrough `safeHTML`. `ltr`/`rtl` — обёртки `<div dir="...">` с `lang`. CSS `.media` в `08-post-single.css`; i18n `audio_unsupported` / `video_unsupported` (ru/en). Демо: `exampleSite/content/posts/all-shortcodes.md`.

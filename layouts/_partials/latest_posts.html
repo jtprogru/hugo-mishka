@@ -4,7 +4,17 @@
 {{- $dateFmt := site.Params.dateFormat | default "2 January 2006" -}}
 {{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections -}}
 {{- $pages = where $pages "Params.hiddenInHomeList" "!=" true -}}
-{{- $latest := first $count $pages -}}
+{{- /* Pinned posts: страницы с frontmatter `pinned: true` поднимаются
+       наверх перед остальными. Порядок внутри pinned/non-pinned —
+       по убыванию даты (как .Pages по умолчанию).
+       Используем явный append, потому что union на page-коллекциях не
+       гарантирует порядок. */ -}}
+{{- $pinned := where $pages "Params.pinned" true -}}
+{{- $rest := where $pages "Params.pinned" "!=" true -}}
+{{- $combined := slice -}}
+{{- range $pinned }}{{ $combined = $combined | append . }}{{ end -}}
+{{- range $rest   }}{{ $combined = $combined | append . }}{{ end -}}
+{{- $latest := first $count $combined -}}
 {{- with $latest }}
 <section class="latest-posts">
   <h2 class="section-title">Свежие посты</h2>
@@ -20,7 +30,7 @@
         {{- $coverURL = $cover | absURL -}}
       {{- end -}}
     {{- end -}}
-    <article class="lp-card">
+    <article class="lp-card{{ if .Params.pinned }} lp-card--pinned{{ end }}">
       {{- if $coverURL }}
       <img class="lp-card__cover"
            src="{{ $coverURL }}"
@@ -32,6 +42,7 @@
       <div class="lp-card__meta">
         <h3 class="lp-card__title">{{ .Title }}</h3>
         <div class="lp-card__date">
+          {{- if .Params.pinned }}<span class="badge badge--pinned" title="{{ i18n "pinned" | default "Закреплено" }}">★</span> {{ end -}}
           <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format $dateFmt }}</time>
           {{- if site.Params.ShowReadingTime }} · {{ .ReadingTime }} мин{{ end }}
         </div>

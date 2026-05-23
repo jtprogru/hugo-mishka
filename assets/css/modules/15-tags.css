@@ -90,6 +90,44 @@
   border-color: transparent;
 }
 
+/* Badge — маленький маркер (например, для pinned-поста). */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.4em;
+  padding: 1px 6px;
+  border-radius: var(--radius-pill);
+  font-size: 0.85em;
+  font-weight: 600;
+  line-height: 1;
+  background: var(--bg-sunken);
+  color: var(--text-muted);
+  vertical-align: middle;
+}
+
+.badge--pinned {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* Pinned-карточка получает тонкую accent-полоску слева (для list). */
+.post-card--pinned {
+  position: relative;
+}
+
+.post-card--pinned::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--accent);
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  z-index: 1;
+}
+
 /* Список тегов под постом (в .post__footer). */
 .post__tags {
   display: flex;
