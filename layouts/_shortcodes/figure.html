@@ -1,0 +1,29 @@
+{{- /* Расширенная figure: ссылка-обёртка, alt, caption, attribution. Похоже на встроенный, но с нашей разметкой.
+       {{< figure src="..." alt="..." caption="..." attr="..." attrlink="..." >}} */ -}}
+{{- $src := .Get "src" -}}
+{{- $alt := .Get "alt" | default (.Get "caption") -}}
+{{- $caption := .Get "caption" -}}
+{{- $attr := .Get "attr" -}}
+{{- $attrlink := .Get "attrlink" -}}
+{{- $width := .Get "width" -}}
+{{- $height := .Get "height" -}}
+{{- $link := .Get "link" -}}
+<figure class="post-figure">
+  {{- if $link -}}<a href="{{ $link | safeURL }}" target="_blank" rel="noopener noreferrer">{{- end -}}
+  <img loading="lazy" decoding="async"
+       src="{{ $src | safeURL }}"
+       alt="{{ $alt }}"
+       {{- with $width }} width="{{ . }}"{{ end }}
+       {{- with $height }} height="{{ . }}"{{ end }}>
+  {{- if $link -}}</a>{{- end -}}
+  {{- if or $caption $attr -}}
+  <figcaption>
+    {{- with $caption }}{{ . | safeHTML }}{{ end -}}
+    {{- with $attr }}
+      <span class="post-figure__attr">
+        {{- if $attrlink }}<a href="{{ $attrlink | safeURL }}" target="_blank" rel="noopener noreferrer">{{ . }}</a>{{ else }}{{ . }}{{ end -}}
+      </span>
+    {{- end -}}
+  </figcaption>
+  {{- end -}}
+</figure>
