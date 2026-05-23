@@ -1,0 +1,18 @@
+{{- /* Render hook для блоков кода.
+       Оборачивает результат HighlightCodeBlock в .codeblock с лэйблом языка
+       и кнопкой «копировать». JS — assets/js/code-copy.js. */ -}}
+{{- $type := .Type | default "" -}}
+{{- $opts := .Options | default dict -}}
+{{- $result := transform.HighlightCodeBlock . $opts -}}
+{{- $showCopy := site.Params.ShowCodeCopyButtons | default true -}}
+<div class="codeblock{{ with $type }} codeblock--{{ . }}{{ end }}"{{ with $type }} data-lang="{{ . }}"{{ end }}>
+  {{- with $type -}}
+  <span class="codeblock__lang" aria-hidden="true">{{ . }}</span>
+  {{- end -}}
+  {{- if $showCopy -}}
+  <button class="codeblock__copy" type="button" data-copy aria-label="{{ i18n "copy_code" | default "Copy" }}" title="{{ i18n "copy_code" | default "Copy" }}">
+    {{- partial "svg.html" (dict "name" "copy" "size" 16) -}}
+  </button>
+  {{- end -}}
+  {{ $result.Wrapped }}
+</div>
