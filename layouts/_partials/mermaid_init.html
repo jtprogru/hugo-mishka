@@ -1,0 +1,38 @@
+{{- /* Mermaid: подключается только если страница содержит mermaid-кодоблок или
+       во фронтматтере явно указано mermaid: true. По умолчанию — CDN; можно
+       переключить на self-host через site.Params.mermaidSrc. Тема Mermaid
+       синхронизируется с темой сайта (light/dark). */ -}}
+{{- $hasMermaid := or (.Store.Get "hasMermaid") .Params.mermaid -}}
+{{- if $hasMermaid -}}
+{{- $src := site.Params.mermaidSrc | default "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs" -}}
+<script type="module">
+  import mermaid from {{ $src | jsonify | safeJS }};
+  function currentTheme() {
+    var t = document.documentElement.getAttribute('data-theme');
+    return t === 'dark' ? 'dark' : 'default';
+  }
+  function initOnce(theme) {
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: theme,
+      securityLevel: 'strict',
+      fontFamily: getComputedStyle(document.documentElement).getPropertyValue('--font-sans') || 'inherit'
+    });
+    return mermaid.run({ querySelector: '.mermaid' });
+  }
+  initOnce(currentTheme());
+
+  // Перерисовываем при смене темы — Mermaid не поддерживает live-theme-swap,
+  // поэтому сохраняем исходный код и рендерим заново.
+  var blocks = document.querySelectorAll('pre.mermaid');
+  blocks.forEach(function (el) { if (!el.dataset.src) el.dataset.src = el.textContent; });
+  var observer = new MutationObserver(function () {
+    blocks.forEach(function (el) {
+      el.innerHTML = el.dataset.src;
+      el.removeAttribute('data-processed');
+    });
+    initOnce(currentTheme());
+  });
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+</script>
+{{- end -}}

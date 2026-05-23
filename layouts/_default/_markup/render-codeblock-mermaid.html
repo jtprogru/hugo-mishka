@@ -1,0 +1,6 @@
+{{- /* Render hook для кодоблока с языком mermaid. Заменяет <pre><code> на <pre class="mermaid">.
+       Помечает страницу как «нужен Mermaid» — partial mermaid_init.html инициализирует библиотеку. */ -}}
+<pre class="mermaid">
+{{- .Inner | safeHTML -}}
+</pre>
+{{ .Page.Store.Set "hasMermaid" true }}

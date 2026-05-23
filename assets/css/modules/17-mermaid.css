@@ -1,0 +1,23 @@
+/* Mermaid диаграммы */
+
+pre.mermaid,
+.mermaid {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: var(--gap-md);
+  margin-block: var(--gap-md);
+  text-align: center;
+  overflow-x: auto;
+}
+
+pre.mermaid:not([data-processed="true"]) {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  background: var(--bg-sunken);
+  color: var(--text-muted);
+  white-space: pre-wrap;
+}
+
+.mermaid svg { max-width: 100%; height: auto; }
