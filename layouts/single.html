@@ -28,7 +28,9 @@
   <article class="post{{ if $hasToc }} post--with-toc{{ end }}">
     <header class="post__header">
       <h1 class="post__title">{{ .Title }}</h1>
-      {{- with .Description }}<p class="post__description">{{ . }}</p>{{ end }}
+      {{- /* .Description намеренно НЕ рендерим в шапке поста — она остаётся
+             только в head_meta (description meta tag, og:description,
+             twitter:description) для SEO/share-превью. */ -}}
       <div class="post__header-meta">
         {{- partial "post_meta.html" . }}
         {{- partial "edit_post.html" . }}
