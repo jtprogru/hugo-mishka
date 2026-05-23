@@ -1,0 +1,23 @@
+/* Entry-point CSS темы Mishka.
+   ВАЖНО: реальная сборка темы НЕ использует этот файл напрямую — в `_partials/head.html`
+   мы делаем `resources.Match "css/modules/*.css" | resources.Concat`, чтобы любые новые
+   модули из `modules/` подхватывались автоматически. Этот файл — справочное оглавление
+   и точка входа для линтеров / IDE.
+
+   Порядок модулей: 00-vars → 01-reset → 02-typography → 03-layout → 04-header → 05-footer
+   → 06-profile → 07-post-card → 08-post-single → 09-toc → 10-callouts → 11-code → 12-chroma
+   → 99-a11y.
+*/
+
+@import "modules/00-vars.css";
+@import "modules/01-reset.css";
+@import "modules/02-typography.css";
+@import "modules/03-layout.css";
+@import "modules/04-header.css";
+@import "modules/05-footer.css";
+@import "modules/06-profile.css";
+@import "modules/07-post-card.css";
+@import "modules/08-post-single.css";
+@import "modules/11-code.css";
+@import "modules/12-chroma.css";
+@import "modules/99-a11y.css";

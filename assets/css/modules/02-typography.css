@@ -1,0 +1,56 @@
+/* Базовая типографика: заголовки, абзацы, инлайн-элементы.
+   Шрифты пока system-ui (Inter подключим в Этапе 2 через @font-face). */
+
+body {
+  font-feature-settings: "ss01", "cv11";
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  line-height: var(--lh-tight);
+  color: var(--text);
+  letter-spacing: -0.01em;
+}
+
+h1 { font-size: var(--fs-3xl); }
+h2 { font-size: var(--fs-2xl); }
+h3 { font-size: var(--fs-xl); }
+h4 { font-size: var(--fs-lg); }
+h5 { font-size: var(--fs-md); }
+h6 { font-size: var(--fs-base); text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-muted); }
+
+@media (min-width: 768px) {
+  h1 { font-size: var(--fs-4xl); }
+}
+
+p { color: var(--text); }
+strong, b { font-weight: 700; color: var(--text); }
+em, i { font-style: italic; }
+small { font-size: var(--fs-sm); color: var(--text-muted); }
+
+mark {
+  background: var(--accent-soft);
+  color: var(--text);
+  padding: 0 0.2em;
+  border-radius: 2px;
+}
+
+blockquote {
+  border-left: 3px solid var(--accent);
+  padding: var(--gap-sm) var(--gap-md);
+  color: var(--text-muted);
+  background: var(--bg-sunken);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+abbr[title] {
+  text-decoration: underline dotted;
+  cursor: help;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}

@@ -1,0 +1,112 @@
+/* CSS-переменные. Единственный источник правды для цвета, размеров, отступов.
+   Темы переключаются через [data-theme="light|dark"] на <html>. */
+
+:root,
+:root[data-theme="light"] {
+  /* Фоны и поверхности */
+  --bg:           #fafaf7;
+  --bg-elevated:  #ffffff;
+  --bg-sunken:    #f3f1ed;
+
+  /* Текст */
+  --text:         #1c1c1f;
+  --text-muted:   #5b5b62;
+  --text-subtle:  #8b8b92;
+
+  /* Акценты */
+  --accent:       #c2410c;
+  --accent-hover: #9a3412;
+  --accent-soft:  #fed7aa;
+
+  /* Границы */
+  --border:        #e5e3dc;
+  --border-strong: #c8c5bb;
+
+  /* Код */
+  --code-bg:    #1e1e24;
+  --code-text:  #e8e6df;
+  --code-inline-bg: #f3f1ed;
+
+  /* Семантика */
+  --success: #16a34a;
+  --warning: #d97706;
+  --danger:  #dc2626;
+  --info:    #0ea5e9;
+
+  /* Тени */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .04);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, .06);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, .08);
+}
+
+:root[data-theme="dark"] {
+  --bg:           #1a1b1e;
+  --bg-elevated:  #23252a;
+  --bg-sunken:    #2a2b2f;
+
+  --text:         #e8e6df;
+  --text-muted:   #a8a89e;
+  --text-subtle:  #7a7a72;
+
+  --accent:       #fb923c;
+  --accent-hover: #fdba74;
+  --accent-soft:  #7c2d12;
+
+  --border:        #2e2e33;
+  --border-strong: #3f3f46;
+
+  --code-bg:    #0f1014;
+  --code-text:  #e8e6df;
+  --code-inline-bg: #2a2b2f;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, .25);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, .35);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, .45);
+}
+
+:root {
+  /* Шрифты */
+  --font-sans:  "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: Georgia, "Times New Roman", serif;
+  --font-mono:  "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Размеры (type scale 1.250 — Major Third) */
+  --fs-xs:   0.75rem;
+  --fs-sm:   0.875rem;
+  --fs-base: 1rem;
+  --fs-md:   1.125rem;
+  --fs-lg:   1.25rem;
+  --fs-xl:   1.5rem;
+  --fs-2xl:  1.875rem;
+  --fs-3xl:  2.25rem;
+  --fs-4xl:  3rem;
+
+  /* Межстрочный */
+  --lh-tight: 1.2;
+  --lh-snug:  1.4;
+  --lh-base:  1.65;
+  --lh-loose: 1.8;
+
+  /* Отступы */
+  --gap-xs:  0.25rem;
+  --gap-sm:  0.5rem;
+  --gap-md:  1rem;
+  --gap-lg:  1.5rem;
+  --gap-xl:  2.5rem;
+  --gap-2xl: 4rem;
+
+  /* Радиусы */
+  --radius-sm:   4px;
+  --radius-md:   8px;
+  --radius-lg:   12px;
+  --radius-pill: 999px;
+
+  /* Контейнеры */
+  --content-width:   720px;
+  --container-width: 1100px;
+  --header-height:   64px;
+
+  /* Анимации */
+  --transition: 0.18s ease;
+  --transition-slow: 0.36s ease;
+}
