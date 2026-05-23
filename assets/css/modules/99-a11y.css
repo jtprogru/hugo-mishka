@@ -14,15 +14,21 @@
 
 .skip-link {
   position: absolute;
-  top: -40px;
+  top: 0;
   left: 0;
   background: var(--accent);
   color: var(--bg);
   padding: var(--gap-sm) var(--gap-md);
   z-index: 100;
   border-radius: 0 0 var(--radius-sm) 0;
+  /* Скрываем за верхним краем независимо от positioning родителя.
+     Без transform top: -40px не работал в некоторых лэйаутах. */
+  transform: translateY(-100%);
+  transition: transform 0.18s ease;
 }
-.skip-link:focus { top: 0; }
+.skip-link:focus {
+  transform: translateY(0);
+}
 
 :focus-visible {
   outline: 2px solid var(--accent);
