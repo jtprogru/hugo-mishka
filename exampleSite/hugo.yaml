@@ -112,3 +112,6 @@ params:
     URL: "https://github.com/jtprogru/hugo-mishka/edit/main/exampleSite/content"
     Text: "Suggest changes"
     appendFilePath: true
+
+  # Telegram-канал для IV-метатега te:channel (опционально).
+  telegramChannel: "@hugo_mishka_demo"

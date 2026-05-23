@@ -1,0 +1,67 @@
+~version: "2.1"
+
+# Telegram Instant View template для Hugo-темы mishka.
+#
+# Как использовать:
+#   1. Открой Instant View Editor: https://instantview.telegram.org/my
+#   2. Введи URL любого поста на твоём сайте (например https://example.com/posts/my-post/).
+#   3. В правой колонке "Template" вставь содержимое этого файла.
+#   4. Поправь правила ?path и host под свой домен.
+#   5. Жми "Track Changes" → "Submit Template" → подождай ревью от Telegram-команды.
+#
+# Документация по синтаксису: https://instantview.telegram.org/docs
+
+# === Какие страницы превращаем в Instant View ===
+# Под IV попадают только статьи в /posts/ — все остальные страницы (главная,
+# тег-страницы, поиск) проигнорируются.
+
+?path: /posts/.+
+
+# === Базовые поля статьи ===
+
+# Заголовок берём из <h1 class="post__title">.
+title:      $body//article[contains-token(@class, "post")]//h1[contains-token(@class, "post__title")]
+
+# Автор и его профиль — из meta-тегов (Hugo-тема выставляет их в head_meta.html).
+author:     //meta[@name="author"]/@content
+author_url: //meta[@property="article:author"]/@content
+
+# Дата публикации — из article:published_time (ISO-8601).
+published_date: //meta[@property="article:published_time"]/@content
+
+# Cover-картинка для превью.
+cover: //meta[@property="og:image"]/@content
+
+# Telegram-канал для CTA-подписки под IV.
+channel: //meta[@property="te:channel"]/@content
+
+# === Подмена body ===
+# Берём только содержимое статьи — без шапки сайта, футера, share-блока и
+# прочей навигации. Корневой элемент — <div class="post__content">.
+
+body: $body//article[contains-token(@class, "post")]//div[contains-token(@class, "post__content")]
+
+# === Вычищаем то, что не должно попадать в IV ===
+# Эти элементы могут оказаться внутри body или article — убираем их безопасно.
+
+@remove: $body//*[contains-token(@class, "share")]
+@remove: $body//*[contains-token(@class, "related")]
+@remove: $body//*[contains-token(@class, "toc")]
+@remove: $body//*[contains-token(@class, "post-nav")]
+@remove: $body//*[contains-token(@class, "edit-post")]
+@remove: $body//*[contains-token(@class, "breadcrumbs")]
+@remove: $body//*[contains-token(@class, "footer")]
+@remove: $body//*[contains-token(@class, "header")]
+@remove: $body//*[contains-token(@class, "post__header-meta")]
+
+# === Подсветка кода ===
+# Hugo (Chroma) рендерит блоки кода как <div class="highlight"><pre>...</pre></div>.
+# IV отображает <pre> монопространственно — этого достаточно.
+
+# Telegram не понимает background-color у inline-code; визуально это всё равно
+# будет читаемо.
+
+# === Callouts ===
+# Наши .callout — это <aside>. Telegram IV рендерит aside как pull-quote.
+# Если хочется иной поведения — преобразуй в <blockquote>:
+# @replace_tag(<blockquote>): $body//aside[contains-token(@class, "callout")]

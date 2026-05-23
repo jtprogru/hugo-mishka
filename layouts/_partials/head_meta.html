@@ -33,6 +33,10 @@
   {{- with .Lastmod }}
 <meta property="article:modified_time" content="{{ .Format $ISO8601 }}">
   {{- end }}
+  {{- /* article:author — Telegram Instant View и многие соц-сети читают этот тег. */ -}}
+  {{- with (.Params.author | default site.Params.author) }}
+<meta property="article:author" content="{{ . }}">
+  {{- end }}
   {{- range .GetTerms "tags" | first 6 }}
 <meta property="article:tag" content="{{ .Page.Title | plainify }}">
   {{- end }}
@@ -46,6 +50,19 @@
 <meta property="og:image" content="{{ . | absURL }}">
 <meta name="twitter:image" content="{{ . | absURL }}">
   {{- end }}
+  {{- with .alt }}
+<meta property="og:image:alt" content="{{ . }}">
+<meta name="twitter:image:alt" content="{{ . }}">
+  {{- end }}
+  {{- with .width }}<meta property="og:image:width" content="{{ . }}">{{- end }}
+  {{- with .height }}<meta property="og:image:height" content="{{ . }}">{{- end }}
+{{- end }}
+
+{{- /* Telegram-канал (опционально). Используется Instant View и channel-link.
+       Пример: params.telegramChannel: "@your_channel" или "your_channel". */ -}}
+{{- with site.Params.telegramChannel -}}
+  {{- $ch := . | strings.TrimPrefix "@" -}}
+<meta property="te:channel" content="@{{ $ch }}">
 {{- end }}
 
 {{- /* Twitter */ -}}

@@ -126,6 +126,10 @@ params:
     URL: "https://github.com/<you>/<your-site>/edit/main/content"
     Text: "Suggest changes"
     appendFilePath: true
+
+  # Telegram-канал — выводится как <meta property="te:channel">.
+  # Используется Telegram Instant View и при превью ссылок в Telegram.
+  telegramChannel: "@your_channel"
 ```
 
 ### Данные проекта
@@ -177,6 +181,27 @@ params:
    ```
 
 Fuse.js (v7, basic) подключается только на странице `/search/`.
+
+## Telegram Instant View
+
+Тема выставляет всё необходимое для Telegram, чтобы ссылки на твои посты получали кнопку «Просмотр» (Instant View) и красивое превью внутри Telegram:
+
+- семантический `<article>` с `<h1 class="post__title">` и `<div class="post__content">`;
+- `og:title` / `og:description` / `og:image` (+ `og:image:alt` / `width` / `height`, если заданы в `cover`);
+- `article:published_time`, `article:modified_time`, `article:author`, `article:tag`, `article:section`;
+- `te:channel` (если задан `params.telegramChannel`).
+
+Чтобы IV-кнопка появилась под ссылками, нужен **Instant View Template** на стороне Telegram. Готовый стартовый template для этой темы лежит в [`docs/telegram-instant-view.iv`](./docs/telegram-instant-view.iv).
+
+Процесс:
+
+1. Открой [Instant View Editor](https://instantview.telegram.org/my).
+2. Вставь URL любого своего поста.
+3. В колонку «Template» скопируй содержимое `docs/telegram-instant-view.iv`.
+4. Поправь правило `?path` под структуру своего сайта (если посты лежат не в `/posts/`).
+5. Жми **Track Changes** → **Submit Template** — Telegram-команда ревьюит шаблоны, через несколько дней он начнёт работать для всех ссылок твоего домена.
+
+Пока шаблон не одобрен, IV работает только в самом редакторе и в группах/каналах, где ты вручную включил его через `?` после ссылки.
 
 ## Шорткоды
 

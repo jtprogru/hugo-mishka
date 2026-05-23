@@ -7,6 +7,7 @@
 
 ### Added
 
+- Telegram Instant View support: новые мета-теги в `head_meta.html` — `article:author`, `og:image:alt` / `og:image:width` / `og:image:height` (если заданы в `cover`), и опциональный `te:channel` (из `params.telegramChannel`). Стартовый IV-template для Telegram IV Editor лежит в `docs/telegram-instant-view.iv` — копируется в редактор и адаптируется под путь постов сайта. В README добавлен раздел «Telegram Instant View» с инструкцией.
 - GFM-style alerts в markdown: `> [!NOTE]`, `> [!TIP]`, `> [!IMPORTANT]`, `> [!WARNING]`, `> [!CAUTION]` рендерятся через `layouts/_default/_markup/render-blockquote.html` в тот же стиль `.callout`, что и shortcode `{{< callout >}}`. Опциональный кастомный заголовок: `> [!TIP] My title`. Дефолтные заголовки локализованы (i18n `alert_*`).
 - Новый тип callout `important` (акцентный цвет темы) + иконка `zap` в `_partials/svg.html`. Доступен и через shortcode (`type="important"`), и через GFM-alert (`> [!IMPORTANT]`).
 - Related posts: партиал `_partials/related.html` + CSS-модуль `30-related.css`. Использует встроенный Hugo-механизм `site.RegularPages.Related` поверх `related:` конфига сайта. Опции: `params.ShowRelatedPosts` (по умолчанию `true`), `params.relatedMax` (по умолчанию `4`), per-page переопределение через frontmatter `related: false`.
