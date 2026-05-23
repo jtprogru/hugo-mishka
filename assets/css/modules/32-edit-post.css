@@ -1,0 +1,37 @@
+/* ============================================================================
+   32-edit-post.css — ссылка «Редактировать пост» под статьёй.
+   Маленький приглушённый блок, accent при hover, иконка слева.
+   ============================================================================ */
+
+.edit-post {
+  margin-top: var(--gap-lg);
+}
+
+.edit-post__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--text-subtle);
+  padding-bottom: 1px;
+  transition: color var(--transition, 0.18s ease),
+              border-color var(--transition, 0.18s ease);
+}
+
+.edit-post__link:hover,
+.edit-post__link:focus-visible {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+.edit-post__icon {
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .edit-post__link {
+    transition: none;
+  }
+}

@@ -53,6 +53,8 @@
       </ul>
       {{- end }}
 
+      {{- partial "edit_post.html" . }}
+
       {{- if site.Params.ShowPostNavLinks }}
       {{- partial "post_nav_links.html" . }}
       {{- end }}

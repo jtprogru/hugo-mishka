@@ -1,0 +1,42 @@
+{{- /* Edit-on-link: ссылка «Редактировать пост» под статьёй.
+
+       Конфиг в hugo.yaml (PaperMod-совместимая семантика):
+         params.editPost:
+           URL: "https://github.com/owner/repo/edit/main/content"
+           Text: "Suggest changes"        # опц. — переопределяет i18n.edit_post
+           appendFilePath: true           # опц. — если true, дописывает .File.Path
+
+       Frontmatter override:
+         editPost: false   → скрыть на конкретном посте
+         editPostURL: "…"  → полный URL вручную (тогда appendFilePath игнорируется)
+
+       Рендерим только для регулярных страниц. */ -}}
+{{- if not .IsPage -}}{{ return }}{{ end -}}
+{{- if eq .Params.editPost false -}}{{ return }}{{ end -}}
+
+{{- $cfg := site.Params.editPost | default dict -}}
+{{- $base := $cfg.URL -}}
+{{- $override := .Params.editPostURL -}}
+{{- $href := "" -}}
+
+{{- if $override -}}
+  {{- $href = $override -}}
+{{- else if $base -}}
+  {{- if $cfg.appendFilePath -}}
+    {{- with .File -}}
+      {{- $href = printf "%s/%s" (strings.TrimRight "/" $base) .Path -}}
+    {{- end -}}
+  {{- else -}}
+    {{- $href = $base -}}
+  {{- end -}}
+{{- end -}}
+
+{{- with $href -}}
+{{- $label := $cfg.Text | default (i18n "edit_post") -}}
+<div class="edit-post">
+  <a class="edit-post__link" href="{{ . | safeURL }}" target="_blank" rel="noopener noreferrer">
+    {{ partial "svg.html" (dict "name" "edit" "size" 16 "class" "edit-post__icon") }}
+    <span>{{ $label }}</span>
+  </a>
+</div>
+{{- end -}}

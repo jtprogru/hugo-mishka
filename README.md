@@ -120,6 +120,12 @@ params:
   # Кнопки «Поделиться» под статьёй: Telegram, X (Twitter), LinkedIn, Email, copy-link.
   ShowShareButtons: false
   ShareButtons: [telegram, twitter, linkedin, email, copy]
+
+  # Ссылка «Редактировать пост» под статьёй (PaperMod-совместимая семантика).
+  editPost:
+    URL: "https://github.com/<you>/<your-site>/edit/main/content"
+    Text: "Suggest changes"
+    appendFilePath: true
 ```
 
 ### Данные проекта

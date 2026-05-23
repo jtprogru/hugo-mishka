@@ -82,8 +82,8 @@ params:
   ShowPostNavLinks: true
   ShowBreadCrumbs: true
   ShowToc: true
-  ShowRelatedPosts: true
   ShowShareButtons: true
+  ShowRelatedPosts: true
   relatedMax: 4
   math: false
   mermaid: false
@@ -107,3 +107,8 @@ params:
       url: "https://github.com/jtprogru/hugo-mishka"
     - name: rss
       url: "/index.xml"
+
+  editPost:
+    URL: "https://github.com/jtprogru/hugo-mishka/edit/main/exampleSite/content"
+    Text: "Suggest changes"
+    appendFilePath: true
