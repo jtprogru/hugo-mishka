@@ -1,0 +1,18 @@
+{{- /* Тогглер темы: одна кнопка, три состояния (auto/light/dark).
+       Видимая иконка переключается чисто через CSS по data-theme-pref на <html>.
+       Логика циклического переключения — в assets/js/theme-toggle.js. */ -}}
+<button class="theme-toggle"
+        type="button"
+        data-theme-toggle
+        aria-label="{{ i18n "theme_toggle_label" | default "Переключить тему" }}"
+        title="{{ i18n "theme_toggle_label" | default "Переключить тему" }}">
+  <span class="theme-toggle__icon" data-icon="monitor" aria-hidden="true">
+    {{- partial "svg.html" (dict "name" "monitor" "size" 20) -}}
+  </span>
+  <span class="theme-toggle__icon" data-icon="sun" aria-hidden="true">
+    {{- partial "svg.html" (dict "name" "sun" "size" 20) -}}
+  </span>
+  <span class="theme-toggle__icon" data-icon="moon" aria-hidden="true">
+    {{- partial "svg.html" (dict "name" "moon" "size" 20) -}}
+  </span>
+</button>
