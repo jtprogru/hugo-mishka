@@ -5,6 +5,14 @@
 
 ## [Unreleased]
 
+### Added
+
+- SVG-иконки `mail`, `share`, `edit`, `link` в `_partials/svg.html`.
+
+### Fixed
+
+- `svg.html`: корректная обработка вызовов без `label` — раньше из-за `printf "%q"` на `nil` в HTML попадал мусор вида `aria-label=%!q(<nil>)`.
+
 ## [0.1.0] — 2026-05-23
 
 Первый публичный релиз.
