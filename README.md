@@ -134,6 +134,11 @@ params:
   # Рендерер математики: "mathjax" (по умолчанию) или "katex".
   # KaTeX легче и быстрее, MathJax — полный TeX/MathML.
   # mathRenderer: "katex"
+
+  # Короткий SHA коммита для футера (опционально). Можно подставлять
+  # вручную или через ENV HUGO_COMMIT=$(git rev-parse --short HEAD) hugo.
+  # commit: "abc1234"
+  # commitURL: "https://github.com/<you>/<repo>/commit/%s"
 ```
 
 ### Данные проекта
@@ -249,9 +254,25 @@ Fuse.js (v7, basic) подключается только на странице 
 
 В проекте, использующем тему, эти partial-хуки подхватываются без оверрайда всего шаблона:
 
-- `layouts/_partials/extend_head.html` — добавить своё в `<head>`.
-- `layouts/_partials/extend_footer.html` — добавить своё перед `</body>`.
-- `layouts/_partials/extend_post_content.html` — вставить блок сразу после контента поста.
+- `layouts/_partials/extend_head.html` — добавить своё в `<head>` (последним перед `</head>`).
+- `layouts/_partials/extend_footer.html` — добавить своё перед `</body>` (после всех скриптов темы).
+- `layouts/_partials/extend_post_content.html` — вставить блок сразу после статьи (и related-posts), внутри контейнера single-страницы.
+- `layouts/_partials/comments.html` — переопределить блок комментариев. По умолчанию в теме пустой stub; включается через `params.ShowComments: true` (глобально) или `comments: true` во фронтматтере (выключается `comments: false`). Тема не привязана ни к одной комментарной системе — вставь в этот файл свою (Giscus / Disqus / commento / самописное).
+
+Пример переопределения в проекте:
+
+```html
+{{- /* layouts/_partials/comments.html — пример Giscus */ -}}
+{{- if .IsPage -}}
+<section class="comments" aria-label="{{ i18n "comments_label" }}">
+  <script src="https://giscus.app/client.js"
+          data-repo="user/repo"
+          data-mapping="pathname"
+          data-theme="preferred_color_scheme"
+          crossorigin="anonymous" async></script>
+</section>
+{{- end -}}
+```
 
 ## Архитектура
 

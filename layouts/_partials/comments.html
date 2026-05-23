@@ -1,0 +1,22 @@
+{{- /* Comments hook — пустой по умолчанию.
+
+       Тема намеренно НЕ привязывается ни к Giscus, ни к Disqus, ни к
+       commento — выбор системы за пользователем. Переопредели этот
+       partial в своём проекте:
+
+         layouts/_partials/comments.html
+
+       …и положи туда любую интеграцию (Giscus script-tag, Disqus widget,
+       форма к своему бекенду и т.д.).
+
+       Включается из site.Params.ShowComments или frontmatter `comments: true`;
+       выключается `comments: false` per-page. */ -}}
+{{- if not .IsPage -}}{{ return }}{{ end -}}
+{{- $siteOn := eq (site.Params.ShowComments | default false) true -}}
+{{- if eq .Params.comments false -}}{{ $siteOn = false }}{{ end -}}
+{{- if eq .Params.comments true -}}{{ $siteOn = true }}{{ end -}}
+{{- if not $siteOn -}}{{ return }}{{ end -}}
+
+{{- /* Дефолт — пустой <section>, чтобы видны были аркады в HTML, но
+       визуально ничего не было. Реальная разметка приходит из проекта. */ -}}
+<section class="comments" aria-label="{{ i18n "comments_label" | default "Комментарии" }}"></section>

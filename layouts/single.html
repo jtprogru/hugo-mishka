@@ -69,6 +69,8 @@
 
   {{- partial "related.html" . }}
 
+  {{- partial "comments.html" . }}
+
   {{- if templates.Exists "_partials/extend_post_content.html" -}}
   {{- partial "extend_post_content.html" . -}}
   {{- end -}}

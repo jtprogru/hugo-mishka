@@ -7,6 +7,7 @@
 
 ### Added
 
+- Comments hook: партиал `_partials/comments.html` — пустой stub по умолчанию. Опт-ин через `params.ShowComments: true` или frontmatter `comments: true`. Тема не привязана к комментарной системе — переопредели partial в проекте под Giscus/Disqus/commento. i18n `comments_label` (ru/en). README дополнен примером переопределения и описанием всех extend-хуков (`extend_head`, `extend_footer`, `extend_post_content`, `comments`).
 - Archives page: `layouts/archives.html` + CSS-модуль `19-archive.css`. Подключается через `layout: "archives"` на контентной странице. Группирует посты из `mainSections` по году; на десктопе год прилипает слева sticky, посты идут справа. Поддержка i18n-плюрализации (`archives_total`). Демо: `exampleSite/content/archives.md`.
 - Шесть новых CSS-модулей: `13-kbd.css`, `14-footnotes.css`, `15-tags.css`, `20-404.css`, `90-utilities.css` (с `.visually-hidden` и базовыми утилитами), `95-print.css` (печатные стили — скрывает интерактив, разворачивает контент во всю ширину, добавляет URL ссылок после текста). Существующие правила вынесены из `07-post-card.css`, `08-post-single.css`, `10-callouts.css`, `31-share.css` без визуальных изменений.
 - 404-страница перерисована: `not-found__code` (крупный «404»), заголовок и текст из i18n, кнопки «Главная» / «Поиск». Без `style=""` в HTML.
