@@ -1,5 +1,8 @@
-/* TOC (table of contents) — на мобилке collapsible над контентом,
-   на десктопе sticky справа от контента. */
+/* TOC (table of contents) — в потоке статьи: collapsible-блок над контентом
+   на всех экранах. Sticky-sidebar требует двух-колоночного grid и пока
+   не реализован — без grid sticky превращался в overlay, перекрывающий
+   контент, что было багом. Вернуть sticky-sidebar — отдельной задачей,
+   вместе с .post-layout grid. */
 
 .toc {
   margin-block: var(--gap-md) var(--gap-lg);
@@ -63,13 +66,7 @@
   .toc__nav a { transition: none; }
 }
 
-/* Десктоп: sticky справа от контента. Single-пост сам должен переключиться в grid. */
+/* На десктопе TOC просто немного компактнее — без sticky-режима. */
 @media (min-width: 1024px) {
-  .post--with-toc { position: relative; }
-  .post--with-toc .toc {
-    position: sticky;
-    top: calc(var(--header-height) + var(--gap-md));
-    max-height: calc(100vh - var(--header-height) - var(--gap-lg));
-    overflow-y: auto;
-  }
+  .toc { max-width: var(--content-width); }
 }
