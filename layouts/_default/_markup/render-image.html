@@ -1,0 +1,59 @@
+{{- /* Render hook для изображений Markdown.
+       Если картинка — ресурс страницы (page bundle), даём её через <picture>
+       с WebP-fallback, lazy-loading и явными width/height.
+       Если внешний URL — простой <img>. */ -}}
+{{- $dest := .Destination -}}
+{{- $alt := .PlainText | default "" -}}
+{{- $title := .Title -}}
+{{- $page := .Page -}}
+
+{{- /* Пытаемся найти Resource страницы по имени файла */ -}}
+{{- $res := "" -}}
+{{- with $page -}}
+  {{- $res = .Resources.GetMatch (printf "**/%s" (path.Base $dest)) -}}
+  {{- if not $res -}}
+    {{- $res = .Resources.GetMatch $dest -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if $res -}}
+  {{- $w := $res.Width -}}
+  {{- $h := $res.Height -}}
+  {{- $isRaster := in (slice "image/jpeg" "image/png" "image/webp") $res.MediaType.Type -}}
+  {{- if $isRaster -}}
+    {{- $maxW := 1200 -}}
+    {{- $orig := $res -}}
+    {{- if gt $w $maxW -}}{{ $orig = $res.Resize (printf "%dx" $maxW) -}}{{ end -}}
+    {{- $webp := $orig.Resize (printf "%dx webp q85" $orig.Width) -}}
+    <figure class="post-figure">
+      <picture>
+        <source srcset="{{ $webp.RelPermalink }}" type="image/webp">
+        <img loading="lazy" decoding="async"
+             src="{{ $orig.RelPermalink }}"
+             alt="{{ $alt }}"
+             width="{{ $orig.Width }}" height="{{ $orig.Height }}"
+             {{- with $title }} title="{{ . }}"{{ end }}>
+      </picture>
+      {{- with $title }}<figcaption>{{ . }}</figcaption>{{ end -}}
+    </figure>
+  {{- else -}}
+    {{- /* SVG/GIF — без resize */ -}}
+    <figure class="post-figure">
+      <img loading="lazy" decoding="async"
+           src="{{ $res.RelPermalink }}"
+           alt="{{ $alt }}"
+           {{- with $w }} width="{{ . }}"{{ end }}
+           {{- with $h }} height="{{ . }}"{{ end }}
+           {{- with $title }} title="{{ . }}"{{ end }}>
+      {{- with $title }}<figcaption>{{ . }}</figcaption>{{ end -}}
+    </figure>
+  {{- end -}}
+{{- else -}}
+  <figure class="post-figure">
+    <img loading="lazy" decoding="async"
+         src="{{ $dest | safeURL }}"
+         alt="{{ $alt }}"
+         {{- with $title }} title="{{ . }}"{{ end }}>
+    {{- with $title }}<figcaption>{{ . }}</figcaption>{{ end -}}
+  </figure>
+{{- end -}}
