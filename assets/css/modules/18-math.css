@@ -1,0 +1,73 @@
+/* MathJax 4 CHTML output.
+
+   Display-формулы — оборачиваются JS-хуком в <div class="math-wrap">.
+   Wrapper берёт на себя горизонтальный скролл, а сам mjx-container остаётся
+   overflow: visible — иначе WebKit неявно режет верх/низ у дробей.
+   Если формула шире контейнера контента — появляется тонкий горизонтальный
+   скроллбар вместо обрезки правым краем.
+
+   Текст в \text{} рендерится шрифтом темы (mtextInheritFont: true) —
+   метрики STIX не учитывают высоту кириллических букв. */
+
+mjx-container { color: var(--text); }
+
+/* Inline-формулы — никаких рамок, без скролла */
+mjx-container[jax="CHTML"][display="false"] {
+  vertical-align: baseline;
+  overflow: visible;
+  max-width: 100%;
+}
+
+/* Display-формулы — block + max-width 100% + overflow-x: auto. WebKit при
+   overflow-x: auto принудительно клипит и overflow-y тоже, поэтому даём
+   вертикальный padding, чтобы дроби/индексы не упирались в край. */
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: var(--gap-md) 0;
+  padding: 0.6em 4px;
+  line-height: 1.5;
+  text-align: center;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--text) 28%, transparent) transparent;
+}
+mjx-container[jax="CHTML"][display="true"] > mjx-math {
+  display: inline-block;
+  vertical-align: middle;
+  max-width: none;
+}
+
+mjx-container[jax="CHTML"][display="true"]::-webkit-scrollbar { height: 8px; }
+mjx-container[jax="CHTML"][display="true"]::-webkit-scrollbar-track { background: transparent; }
+mjx-container[jax="CHTML"][display="true"]::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--text) 28%, transparent);
+  border-radius: 999px;
+}
+mjx-container[jax="CHTML"][display="true"]:hover::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--text) 45%, transparent);
+}
+
+/* Опциональный wrapper из старого JS-хука — оставлен для обратной совместимости,
+   но больше не обязателен: overflow живёт прямо на mjx-container. */
+.math-wrap {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  margin: var(--gap-md) 0;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+/* Скрываем assistive-MML (для screen-reader'ов) — не должен влиять на layout */
+mjx-assistive-mml {
+  position: absolute !important;
+  left: -10000px !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  clip: rect(1px, 1px, 1px, 1px) !important;
+}

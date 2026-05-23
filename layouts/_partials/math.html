@@ -1,0 +1,25 @@
+{{- /* MathJax 4: подключаем только если в посте есть `math: true`
+       (или site.Params.math = true). Конфиг минимальный — дефолтные
+       размеры math, без принудительного inherit-font. Горизонтальный
+       скролл широких display-формул — в 18-math.css. */ -}}
+{{- $enabled := or .Params.math site.Params.math -}}
+{{- if $enabled -}}
+{{- $src := site.Params.mathjaxSrc | default "https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js" -}}
+<script id="MathJax-script" async src="{{ $src }}"></script>
+<script>
+  window.MathJax = {
+    tex: {
+      displayMath: [['\\[', '\\]'], ['$$', '$$']],
+      inlineMath: [['\\(', '\\)'], ['$', '$']],
+      processEscapes: true
+    },
+    options: {
+      ignoreHtmlClass: 'no-mathjax',
+      processHtmlClass: 'math|mathjax'
+    },
+    loader: {
+      load: ['ui/safe']
+    }
+  };
+</script>
+{{- end -}}
