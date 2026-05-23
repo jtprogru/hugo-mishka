@@ -10,13 +10,9 @@
        форма к своему бекенду и т.д.).
 
        Включается из site.Params.ShowComments или frontmatter `comments: true`;
-       выключается `comments: false` per-page. */ -}}
-{{- if not .IsPage -}}{{ return }}{{ end -}}
-{{- $siteOn := eq (site.Params.ShowComments | default false) true -}}
-{{- if eq .Params.comments false -}}{{ $siteOn = false }}{{ end -}}
-{{- if eq .Params.comments true -}}{{ $siteOn = true }}{{ end -}}
-{{- if not $siteOn -}}{{ return }}{{ end -}}
+       выключается `comments: false` per-page.
 
-{{- /* Дефолт — пустой <section>, чтобы видны были аркады в HTML, но
-       визуально ничего не было. Реальная разметка приходит из проекта. */ -}}
-<section class="comments" aria-label="{{ i18n "comments_label" | default "Комментарии" }}"></section>
+       По умолчанию (без переопределения и без opt-in) — НИЧЕГО НЕ
+       РЕНДЕРИМ. Пустой `<section>` смущал пользователей чистой темы:
+       видна полоса-отступ, но контента нет. */ -}}
+{{- return -}}
