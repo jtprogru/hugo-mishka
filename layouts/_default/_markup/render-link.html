@@ -1,0 +1,7 @@
+{{- /* Render hook для inline-ссылок Markdown.
+       External — добавляем rel="noopener noreferrer" + target=_blank.
+       Internal — рендерим как обычно. */ -}}
+{{- $href := .Destination -}}
+{{- $isAbs := or (strings.HasPrefix $href "http://") (strings.HasPrefix $href "https://") -}}
+{{- $isExternal := and $isAbs (not (strings.HasPrefix $href site.BaseURL)) -}}
+<a href="{{ $href | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if $isExternal }} rel="noopener noreferrer" target="_blank"{{ end }}>{{ .Text | safeHTML }}</a>
