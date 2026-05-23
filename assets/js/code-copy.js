@@ -1,9 +1,9 @@
-/* Code-copy: кнопка «скопировать» на каждом codeblock.
-   Слушает клики через делегирование, чтобы работать с динамически
-   добавленными блоками (если такие появятся). */
+/* Clipboard-помощники темы:
+   - кнопка «скопировать код» внутри .codeblock ([data-copy])
+   - кнопка «скопировать ссылку» внутри post_share ([data-share-copy])
+   Используется одна универсальная writeText с fallback на execCommand. */
 (function () {
   var doneLabel = (document.documentElement.dataset.copyCodeDone) || 'Скопировано';
-  var copyLabel = (document.documentElement.dataset.copyCode) || 'Скопировать';
 
   function getCode(button) {
     var wrap = button.closest('.codeblock');
@@ -12,7 +12,28 @@
     return code ? code.innerText : null;
   }
 
-  function flash(button) {
+  function legacyCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); } catch (_) {}
+    document.body.removeChild(ta);
+  }
+
+  function writeText(text, done) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () {
+        legacyCopy(text);
+        done();
+      });
+    } else {
+      legacyCopy(text);
+      done();
+    }
+  }
+
+  function flashCode(button) {
     var prev = button.getAttribute('aria-label');
     button.classList.add('is-done');
     button.setAttribute('aria-label', doneLabel);
@@ -27,30 +48,30 @@
   }
 
   document.addEventListener('click', function (e) {
-    var button = e.target.closest && e.target.closest('[data-copy]');
-    if (!button) return;
-    var text = getCode(button);
-    if (text == null) return;
-    var done = function () { flash(button); };
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(text).then(done, function () {
-        /* fallback */
-        var ta = document.createElement('textarea');
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        try { document.execCommand('copy'); } catch (_) {}
-        document.body.removeChild(ta);
-        done();
+    /* Code-copy внутри codeblock */
+    var codeBtn = e.target.closest && e.target.closest('[data-copy]');
+    if (codeBtn) {
+      var text = getCode(codeBtn);
+      if (text == null) return;
+      writeText(text, function () { flashCode(codeBtn); });
+      return;
+    }
+
+    /* Share-copy: «скопировать ссылку» в post_share */
+    var shareBtn = e.target.closest && e.target.closest('[data-share-copy]');
+    if (shareBtn) {
+      var url = shareBtn.getAttribute('data-url') || window.location.href;
+      var label = shareBtn.querySelector('[data-share-copy-label]');
+      var shareDone = document.documentElement.dataset.shareCopyDone || 'Скопировано';
+      var prevText = label ? label.textContent : null;
+      writeText(url, function () {
+        shareBtn.classList.add('is-done');
+        if (label) label.textContent = shareDone;
+        setTimeout(function () {
+          shareBtn.classList.remove('is-done');
+          if (label && prevText !== null) label.textContent = prevText;
+        }, 1500);
       });
-    } else {
-      var ta = document.createElement('textarea');
-      ta.value = text;
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); } catch (_) {}
-      document.body.removeChild(ta);
-      done();
     }
   });
 })();

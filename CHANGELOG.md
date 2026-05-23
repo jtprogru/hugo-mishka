@@ -8,6 +8,7 @@
 ### Added
 
 - Related posts: партиал `_partials/related.html` + CSS-модуль `30-related.css`. Использует встроенный Hugo-механизм `site.RegularPages.Related` поверх `related:` конфига сайта. Опции: `params.ShowRelatedPosts` (по умолчанию `true`), `params.relatedMax` (по умолчанию `4`), per-page переопределение через frontmatter `related: false`.
+- Share buttons: партиал `_partials/post_share.html` + CSS `31-share.css`. Каналы: Telegram, X (Twitter), LinkedIn, Email, copy-link. Опт-ин через `params.ShowShareButtons`, выбор каналов — `params.ShareButtons`, per-page выкл — `share: false`. Copy-link использует общий clipboard-handler из `code-copy.js`. i18n-строки `share_*` (ru/en) и `data-share-copy-done` на `<html>`.
 - SVG-иконки `mail`, `share`, `edit`, `link` в `_partials/svg.html`.
 
 ### Fixed

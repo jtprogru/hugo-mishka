@@ -1,0 +1,85 @@
+/* ============================================================================
+   31-share.css — кнопки «Поделиться» под статьёй.
+
+   На мобиле — компактный flex с переносом, текст-лейбл скрыт (только иконки).
+   На ≥640px — иконка + текст, цвет hover подчёркивает канал.
+   ============================================================================ */
+
+.share {
+  margin-top: var(--gap-xl);
+  padding-top: var(--gap-lg);
+  border-top: 1px solid var(--border);
+}
+
+.share__heading {
+  font-size: var(--fs-md);
+  line-height: var(--lh-tight);
+  margin: 0 0 var(--gap-sm);
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+.share__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-sm);
+}
+
+.share__item {
+  margin: 0;
+}
+
+.share__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  padding: var(--gap-sm) var(--gap-md);
+  min-height: 44px; /* touch-target */
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--bg-elevated);
+  color: var(--text);
+  font: inherit;
+  font-size: var(--fs-sm);
+  text-decoration: none;
+  cursor: pointer;
+  transition: border-color var(--transition, 0.18s ease),
+              color var(--transition, 0.18s ease),
+              background var(--transition, 0.18s ease);
+}
+
+.share__btn:hover,
+.share__btn:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.share__icon {
+  flex-shrink: 0;
+}
+
+.share__btn span {
+  /* На мобиле прячем текст, оставляем только иконки */
+  display: none;
+}
+
+@media (min-width: 640px) {
+  .share__btn span {
+    display: inline;
+  }
+}
+
+/* Visual cue для done-состояния copy-кнопки */
+.share__btn--copy.is-done {
+  border-color: var(--success);
+  color: var(--success);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .share__btn {
+    transition: none;
+  }
+}

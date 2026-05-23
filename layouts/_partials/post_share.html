@@ -1,0 +1,87 @@
+{{- /* Share buttons: ссылки для «поделиться» в Telegram/Twitter(X)/LinkedIn/Email
+       + кнопка «скопировать ссылку».
+
+       Опт-ин:
+       - site.Params.ShowShareButtons: true|false (по умолчанию false)
+       - site.Params.ShareButtons: список включённых каналов
+           (по умолчанию: telegram, twitter, linkedin, email, copy)
+       - frontmatter `share: false` → выключает на конкретном посте
+
+       Рендерим только для регулярных страниц. */ -}}
+{{- if not .IsPage -}}{{ return }}{{ end -}}
+{{- $siteOn := eq (site.Params.ShowShareButtons | default false) true -}}
+{{- if eq .Params.share false -}}{{ $siteOn = false }}{{ end -}}
+{{- if not $siteOn -}}{{ return }}{{ end -}}
+
+{{- $defaults := slice "telegram" "twitter" "linkedin" "email" "copy" -}}
+{{- $channels := site.Params.ShareButtons | default $defaults -}}
+
+{{- $url := .Permalink -}}
+{{- $title := .Title -}}
+{{- $u := $url | urlquery -}}
+{{- $t := $title | urlquery -}}
+
+{{- $tg := printf "https://t.me/share/url?url=%s&text=%s" $u $t -}}
+{{- $tw := printf "https://twitter.com/intent/tweet?url=%s&text=%s" $u $t -}}
+{{- $li := printf "https://www.linkedin.com/sharing/share-offsite/?url=%s" $u -}}
+{{- $em := printf "mailto:?subject=%s&body=%s" $t $u -}}
+
+<aside class="share" aria-labelledby="share-heading">
+  <h2 id="share-heading" class="share__heading">{{ i18n "share_heading" }}</h2>
+  <ul class="share__list">
+    {{- range $channels -}}
+      {{- $c := . | lower -}}
+      {{- if eq $c "telegram" }}
+      <li class="share__item">
+        <a class="share__btn share__btn--telegram"
+           href="{{ $tg | safeURL }}"
+           target="_blank" rel="noopener noreferrer nofollow"
+           aria-label="{{ i18n "share_telegram" }}">
+          {{ partial "svg.html" (dict "name" "telegram" "size" 18 "class" "share__icon") }}
+          <span>{{ i18n "share_telegram" }}</span>
+        </a>
+      </li>
+      {{- else if eq $c "twitter" }}
+      <li class="share__item">
+        <a class="share__btn share__btn--twitter"
+           href="{{ $tw | safeURL }}"
+           target="_blank" rel="noopener noreferrer nofollow"
+           aria-label="{{ i18n "share_twitter" }}">
+          {{ partial "svg.html" (dict "name" "twitter" "size" 18 "class" "share__icon") }}
+          <span>{{ i18n "share_twitter" }}</span>
+        </a>
+      </li>
+      {{- else if eq $c "linkedin" }}
+      <li class="share__item">
+        <a class="share__btn share__btn--linkedin"
+           href="{{ $li | safeURL }}"
+           target="_blank" rel="noopener noreferrer nofollow"
+           aria-label="{{ i18n "share_linkedin" }}">
+          {{ partial "svg.html" (dict "name" "linkedin" "size" 18 "class" "share__icon") }}
+          <span>{{ i18n "share_linkedin" }}</span>
+        </a>
+      </li>
+      {{- else if eq $c "email" }}
+      <li class="share__item">
+        <a class="share__btn share__btn--email"
+           href="{{ $em | safeURL }}"
+           aria-label="{{ i18n "share_email" }}">
+          {{ partial "svg.html" (dict "name" "mail" "size" 18 "class" "share__icon") }}
+          <span>{{ i18n "share_email" }}</span>
+        </a>
+      </li>
+      {{- else if eq $c "copy" }}
+      <li class="share__item">
+        <button type="button"
+                class="share__btn share__btn--copy"
+                data-share-copy
+                data-url="{{ $url }}"
+                aria-label="{{ i18n "share_copy" }}">
+          {{ partial "svg.html" (dict "name" "link" "size" 18 "class" "share__icon") }}
+          <span data-share-copy-label>{{ i18n "share_copy" }}</span>
+        </button>
+      </li>
+      {{- end -}}
+    {{- end }}
+  </ul>
+</aside>

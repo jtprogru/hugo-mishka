@@ -83,6 +83,7 @@ params:
   ShowBreadCrumbs: true
   ShowToc: true
   ShowRelatedPosts: true
+  ShowShareButtons: true
   relatedMax: 4
   math: false
   mermaid: false

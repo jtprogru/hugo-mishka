@@ -116,6 +116,10 @@ params:
   # Конфигурация ранжирования — в верхнем `related:` блоке hugo.yaml.
   ShowRelatedPosts: true
   relatedMax: 4
+
+  # Кнопки «Поделиться» под статьёй: Telegram, X (Twitter), LinkedIn, Email, copy-link.
+  ShowShareButtons: false
+  ShareButtons: [telegram, twitter, linkedin, email, copy]
 ```
 
 ### Данные проекта
