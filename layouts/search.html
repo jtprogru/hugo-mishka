@@ -1,0 +1,41 @@
+{{- /* Страница поиска. Подключается контентом content/search.md
+       с frontmatter `layout: search` или маршрутизируется по path /search/. */ -}}
+{{- define "main" -}}
+<div class="container search">
+  <header class="search__header">
+    <h1 class="search__title">{{ i18n "search" | default "Поиск" }}</h1>
+    {{- with .Content }}<div class="md-content">{{ . }}</div>{{ end }}
+  </header>
+
+  <form class="search__form" role="search" onsubmit="return false">
+    <label class="search__label" for="search-input">{{ i18n "search" | default "Поиск" }}</label>
+    <div class="search__input-wrap">
+      {{- partial "svg.html" (dict "name" "search" "size" 18 "class" "search__icon") }}
+      <input id="search-input"
+             class="search__input"
+             type="search"
+             autocomplete="off"
+             spellcheck="false"
+             placeholder="{{ i18n "search_placeholder" | default "Найти пост…" }}"
+             aria-controls="search-results"
+             autofocus>
+    </div>
+  </form>
+
+  <div class="search__meta" id="search-meta" aria-live="polite"></div>
+  <ul class="search__results" id="search-results" aria-label="{{ i18n "search" | default "Поиск" }}"></ul>
+
+  <noscript>
+    <p class="search__noscript">{{ i18n "search_noscript" | default "Для поиска нужен включённый JavaScript." }}</p>
+  </noscript>
+</div>
+
+{{- /* Конфиг поиска передаём через data-атрибуты */ -}}
+{{- $fuseOpts := site.Params.fuseOpts | default dict -}}
+<script type="application/json" id="search-config">
+{
+  "indexUrl": {{ "/index.json" | relURL | jsonify }},
+  "fuse": {{ $fuseOpts | jsonify }}
+}
+</script>
+{{- end -}}

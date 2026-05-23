@@ -1,0 +1,20 @@
+{{- /* Поисковый индекс для Fuse.js. Активируется тем, что в hugo.yaml корня (или
+       exampleSite) добавлена JSON в outputs.home: ["HTML", "RSS", "JSON"]. */ -}}
+{{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections -}}
+{{- /* Можно расширить за счёт явного `searchHidden: true` — тогда страница пропускается */ -}}
+[
+{{- range $i, $p := $pages -}}
+{{- if not $p.Params.searchHidden -}}
+{{- if $i }},{{ end -}}
+{
+  "title":   {{ $p.Title | jsonify }},
+  "url":     {{ $p.RelPermalink | jsonify }},
+  "date":    {{ $p.Date.Format "2006-01-02" | jsonify }},
+  "tags":    {{ ($p.Params.tags | default (slice)) | jsonify }},
+  "categories": {{ ($p.Params.categories | default (slice)) | jsonify }},
+  "summary": {{ ($p.Description | default ($p.Summary | plainify)) | jsonify }},
+  "content": {{ $p.Plain | jsonify }}
+}
+{{- end -}}
+{{- end -}}
+]
