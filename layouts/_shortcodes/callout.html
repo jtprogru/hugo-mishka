@@ -1,0 +1,23 @@
+{{- /* Callout: рамка по типу + иконка слева.
+       Использование:
+         {{< callout type="note" title="Например" >}}
+         Содержимое в **markdown**.
+         {{< /callout >}}
+       Типы: note (default), tip, warn, danger. */ -}}
+{{- $type := .Get "type" | default "note" -}}
+{{- $title := .Get "title" -}}
+{{- $icons := dict
+  "note"   "info"
+  "tip"    "lightbulb"
+  "warn"   "alert-triangle"
+  "danger" "alert-octagon" -}}
+{{- $icon := index $icons $type | default "info" -}}
+<aside class="callout callout--{{ $type }}" role="note">
+  <div class="callout__icon" aria-hidden="true">
+    {{- partial "svg.html" (dict "name" $icon "size" 20) -}}
+  </div>
+  <div class="callout__body">
+    {{- with $title }}<p class="callout__title">{{ . }}</p>{{ end }}
+    <div class="callout__content">{{ .Inner | .Page.RenderString }}</div>
+  </div>
+</aside>
