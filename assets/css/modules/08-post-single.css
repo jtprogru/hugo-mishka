@@ -1,7 +1,5 @@
 /* Single post: типография, заголовки, цитаты, код, таблицы. */
 
-.main--narrow { max-width: var(--content-width); }
-
 .post { padding-block: var(--gap-lg) var(--gap-xl); }
 
 .post__header { margin-bottom: var(--gap-xl); }

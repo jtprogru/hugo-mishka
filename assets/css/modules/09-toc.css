@@ -65,8 +65,3 @@
   .toc__summary::before,
   .toc__nav a { transition: none; }
 }
-
-/* На десктопе TOC просто немного компактнее — без sticky-режима. */
-@media (min-width: 1024px) {
-  .toc { max-width: var(--content-width); }
-}

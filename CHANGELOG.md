@@ -12,6 +12,11 @@
 - Edit-on link: партиал `_partials/edit_post.html` + CSS `32-edit-post.css`. Конфиг через `params.editPost.{URL, Text, appendFilePath}` в духе PaperMod. Per-page override через `editPostURL`, выкл через `editPost: false`.
 - SVG-иконки `mail`, `share`, `edit`, `link` в `_partials/svg.html`.
 
+### Changed
+
+- Single-страница больше не ограничена `main--narrow` (узкая колонка `--content-width`) — пост рендерится во всю ширину `.container` (как шапка сайта).
+- TOC растягивается на полную ширину контейнера — раньше на десктопе принудительно ограничивался `--content-width` (720px), что после расширения single-страницы выглядело обрезанным.
+
 ### Fixed
 
 - `svg.html`: корректная обработка вызовов без `label` — раньше из-за `printf "%q"` на `nil` в HTML попадал мусор вида `aria-label=%!q(<nil>)`.

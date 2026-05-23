@@ -22,7 +22,7 @@
   {{- $tocEnabled = and $siteTocOn $isPost -}}
 {{- end -}}
 {{- $hasToc := and $tocEnabled (gt (len .TableOfContents) 50) -}}
-<div class="container main--narrow">
+<div class="container">
   {{- partial "breadcrumbs.html" . }}
 
   <article class="post{{ if $hasToc }} post--with-toc{{ end }}">
