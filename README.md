@@ -139,6 +139,14 @@ params:
   # вручную или через ENV HUGO_COMMIT=$(git rev-parse --short HEAD) hugo.
   # commit: "abc1234"
   # commitURL: "https://github.com/<you>/<repo>/commit/%s"
+
+  # AVIF в render-image (опт-ин). По умолчанию выключен, так как не все
+  # сборки Hugo Extended корректно его кодируют. Включи и проверь, что
+  # `.avif` файлы в public/ не пустые.
+  # renderImageAvif: true
+  # renderImageAvifQ: 60      # качество AVIF (1–100), 60 норм
+  # renderImageWebpQ: 85      # качество WebP, 85 норм
+  # renderImageMaxW:  1200    # max ширина после resize, px
 ```
 
 ### Данные проекта

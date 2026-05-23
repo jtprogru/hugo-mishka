@@ -1,6 +1,16 @@
 {{- /* Render hook для изображений Markdown.
-       Если картинка — ресурс страницы (page bundle), даём её через <picture>
-       с WebP-fallback, lazy-loading и явными width/height.
+       Если картинка — ресурс страницы (page bundle), даём её через
+       <picture> с AVIF + WebP source'ами и оригиналом в <img> как
+       fallback. Lazy-loading и явные width/height — для CLS.
+
+       Опт-ин AVIF: site.Params.renderImageAvif = true  (по умолчанию off,
+                    так как не все сборки Hugo Extended корректно его
+                    кодируют — без libheif/libavif результат может быть
+                    пустой файл. Проверь на своей версии прежде чем включать.)
+       Качество:    site.Params.renderImageAvifQ = 60 (по умолчанию)
+                    site.Params.renderImageWebpQ = 85 (по умолчанию)
+       Макс. ширина: site.Params.renderImageMaxW = 1200 (по умолчанию)
+
        Если внешний URL — простой <img>. */ -}}
 {{- $dest := .Destination -}}
 {{- $alt := .PlainText | default "" -}}
@@ -21,12 +31,22 @@
   {{- $h := $res.Height -}}
   {{- $isRaster := in (slice "image/jpeg" "image/png" "image/webp") $res.MediaType.Type -}}
   {{- if $isRaster -}}
-    {{- $maxW := 1200 -}}
+    {{- $maxW := site.Params.renderImageMaxW | default 1200 -}}
+    {{- $avifQ := site.Params.renderImageAvifQ | default 60 -}}
+    {{- $webpQ := site.Params.renderImageWebpQ | default 85 -}}
+    {{- $useAvif := eq (site.Params.renderImageAvif | default false) true -}}
     {{- $orig := $res -}}
     {{- if gt $w $maxW -}}{{ $orig = $res.Resize (printf "%dx" $maxW) -}}{{ end -}}
-    {{- $webp := $orig.Resize (printf "%dx webp q85" $orig.Width) -}}
+    {{- $webp := $orig.Resize (printf "%dx webp q%d" $orig.Width $webpQ) -}}
+    {{- $avif := "" -}}
+    {{- if $useAvif -}}
+      {{- $avif = $orig.Resize (printf "%dx avif q%d" $orig.Width $avifQ) -}}
+    {{- end -}}
     <figure class="post-figure">
       <picture>
+        {{- with $avif }}
+        <source srcset="{{ .RelPermalink }}" type="image/avif">
+        {{- end }}
         <source srcset="{{ $webp.RelPermalink }}" type="image/webp">
         <img loading="lazy" decoding="async"
              src="{{ $orig.RelPermalink }}"
