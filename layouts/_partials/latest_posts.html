@@ -1,0 +1,46 @@
+{{- /* Сетка свежих постов с превью. Cover ищется по .Params.cover.image:
+       сначала в page-bundle Resources, затем как абсолютный URL. */ -}}
+{{- $count := site.Params.profileMode.latestPostsCount | default 6 -}}
+{{- $dateFmt := site.Params.dateFormat | default "2 January 2006" -}}
+{{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections -}}
+{{- $pages = where $pages "Params.hiddenInHomeList" "!=" true -}}
+{{- $latest := first $count $pages -}}
+{{- with $latest }}
+<section class="latest-posts">
+  <h2 class="section-title">Свежие посты</h2>
+  <div class="latest-posts__grid">
+    {{- range . }}
+    {{- $cover := .Params.cover.image -}}
+    {{- $coverURL := "" -}}
+    {{- if $cover }}
+      {{- $bundleImg := (.Resources.ByType "image").GetMatch (printf "*%s*" $cover) -}}
+      {{- if $bundleImg -}}
+        {{- $coverURL = $bundleImg.RelPermalink -}}
+      {{- else -}}
+        {{- $coverURL = $cover | absURL -}}
+      {{- end -}}
+    {{- end -}}
+    <article class="lp-card">
+      {{- if $coverURL }}
+      <img class="lp-card__cover"
+           src="{{ $coverURL }}"
+           alt=""
+           loading="lazy"
+           decoding="async"
+           width="84" height="84">
+      {{- end }}
+      <div class="lp-card__meta">
+        <h3 class="lp-card__title">{{ .Title }}</h3>
+        <div class="lp-card__date">
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format $dateFmt }}</time>
+          {{- if site.Params.ShowReadingTime }} · {{ .ReadingTime }} мин{{ end }}
+        </div>
+      </div>
+      <a class="lp-card__link"
+         href="{{ .RelPermalink }}"
+         aria-label="{{ .Title | plainify }}"></a>
+    </article>
+    {{- end }}
+  </div>
+</section>
+{{- end }}

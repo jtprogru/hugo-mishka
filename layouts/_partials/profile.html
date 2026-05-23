@@ -1,0 +1,25 @@
+{{- /* Profile hero: аватар, заголовок, subtitle (markdown), social-иконки. */ -}}
+{{- with site.Params.profileMode }}
+<section class="profile">
+  {{- if .imageUrl }}
+  <img class="profile__avatar"
+       src="{{ .imageUrl | relURL }}"
+       alt="{{ .imageTitle | default site.Title }}"
+       width="{{ .imageWidth | default 160 }}"
+       height="{{ .imageHeight | default 160 }}"
+       draggable="false">
+  {{- end }}
+  <h1 class="profile__title">{{ .title | default site.Title | markdownify }}</h1>
+  {{- with .subtitle }}
+  <div class="profile__subtitle">{{ . | markdownify }}</div>
+  {{- end }}
+  {{- partial "social_icons.html" . }}
+  {{- with .buttons }}
+  <nav class="profile__buttons" aria-label="Быстрая навигация">
+    {{- range . }}
+    <a class="btn" href="{{ .url | relURL }}">{{ .name }}</a>
+    {{- end }}
+  </nav>
+  {{- end }}
+</section>
+{{- end }}

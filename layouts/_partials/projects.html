@@ -1,0 +1,22 @@
+{{- /* Сетка проектов из site.Data.projects. Yaml: [{name, url, desc, lang}, ...]. */ -}}
+{{- with site.Data.projects }}
+<section class="projects">
+  <h2 class="section-title">Мои проекты</h2>
+  <div class="projects__grid">
+    {{- range . }}
+    <article class="proj-card">
+      <header class="proj-card__head">
+        <h3 class="proj-card__name">{{ .name }}</h3>
+        {{- with .lang }}<span class="proj-card__lang">{{ . }}</span>{{ end }}
+      </header>
+      {{- with .desc }}<p class="proj-card__desc">{{ . }}</p>{{ end }}
+      <a class="proj-card__link"
+         href="{{ .url }}"
+         target="_blank"
+         rel="noopener noreferrer"
+         aria-label="{{ .name }} — открыть на GitHub"></a>
+    </article>
+    {{- end }}
+  </div>
+</section>
+{{- end }}

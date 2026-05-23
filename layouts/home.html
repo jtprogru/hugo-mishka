@@ -1,0 +1,25 @@
+{{- define "main" -}}
+{{- $profile := site.Params.profileMode.enabled -}}
+{{- $homeInfo := and (not $profile) site.Params.homeInfoParams -}}
+
+<div class="container home {{ if $profile }}home--profile{{ else }}home--list{{ end }}">
+  {{- if $profile }}
+    {{- partial "profile.html" . }}
+    {{- partial "projects.html" . }}
+    {{- partial "latest_posts.html" . }}
+  {{- else if $homeInfo }}
+    {{- partial "home_info.html" . }}
+    {{- partial "latest_posts.html" . }}
+  {{- else }}
+    {{- /* Просто заголовок сайта + список последних */ -}}
+    <h1>{{ site.Title }}</h1>
+    {{- with site.Params.description }}<p>{{ . }}</p>{{ end }}
+    {{- partial "latest_posts.html" . }}
+  {{- end }}
+
+  {{- /* Контент _index.md, если есть — после блоков */ -}}
+  {{- with .Content }}
+  <div class="home__content md-content">{{ . }}</div>
+  {{- end }}
+</div>
+{{- end -}}

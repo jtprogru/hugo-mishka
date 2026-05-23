@@ -1,0 +1,8 @@
+{{- /* Альтернатива profile-mode: hero-блок без аватара. */ -}}
+{{- with site.Params.homeInfoParams }}
+<section class="home-info">
+  {{- with .Title }}<h1 class="home-info__title">{{ . | markdownify }}</h1>{{ end }}
+  {{- with .Content }}<div class="home-info__content">{{ . | markdownify }}</div>{{ end }}
+  {{- partial "social_icons.html" . }}
+</section>
+{{- end }}
