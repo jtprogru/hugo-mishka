@@ -40,7 +40,7 @@
     {{- with .GetTerms "categories" }}
     <ul class="post-card__cats">
       {{- range . }}
-      {{- $color := index (site.Data.category_colors | default dict) .LinkTitle -}}
+      {{- $color := index (hugo.Data.category_colors | default dict) .LinkTitle -}}
       <li><a class="tag tag--cat" href="{{ .RelPermalink }}"{{ with $color }} style="--tag-bg: {{ . }}"{{ end }}>{{ .LinkTitle }}</a></li>
       {{- end }}
     </ul>

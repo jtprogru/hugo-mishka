@@ -9,7 +9,7 @@
 
   {{- /* Сортируем термы по количеству постов (от популярного к нечастому). */ -}}
   {{- $isCategory := eq .Data.Plural "categories" -}}
-  {{- $colors := site.Data.category_colors | default dict -}}
+  {{- $colors := hugo.Data.category_colors | default dict -}}
   <ul class="taxonomy__cloud">
     {{- range .Pages.ByTitle }}
     {{- $color := index $colors .LinkTitle -}}
