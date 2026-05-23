@@ -1,0 +1,15 @@
+{{- /* {{< kbd "Cmd+Shift+P" >}}  →  <kbd>Cmd</kbd>+<kbd>Shift</kbd>+<kbd>P</kbd>
+       Принимает либо позиционный аргумент, либо .Inner. */ -}}
+{{- $raw := "" -}}
+{{- if .IsNamedParams -}}
+  {{- $raw = .Get "keys" | default "" -}}
+{{- else if gt (len .Params) 0 -}}
+  {{- $raw = .Get 0 -}}
+{{- end -}}
+{{- $parts := split (trim $raw " ") "+" -}}
+<span class="kbd-combo">
+  {{- range $i, $k := $parts -}}
+    {{- if gt $i 0 }}<span class="kbd-combo__sep">+</span>{{ end -}}
+    <kbd>{{ trim $k " " }}</kbd>
+  {{- end -}}
+</span>
