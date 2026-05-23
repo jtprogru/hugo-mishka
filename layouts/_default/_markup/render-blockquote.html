@@ -8,20 +8,11 @@
 
 {{- if eq .Type "alert" -}}
 
-{{- /* Маппинг GFM-типов на наши .callout--*: */ -}}
-{{- $typeMap := dict
-  "note"      "note"
-  "tip"       "tip"
-  "important" "important"
-  "warning"   "warn"
-  "caution"   "danger" -}}
-
-{{- $iconMap := dict
-  "note"      "info"
-  "tip"       "lightbulb"
-  "important" "zap"
-  "warn"      "alert-triangle"
-  "danger"    "alert-octagon" -}}
+{{- /* Маппинги GFM-alert типов → наши .callout--* модификаторы и
+       иконки хранятся в data/callouts.yaml — общий источник правды
+       для render-blockquote и shortcode callout. */ -}}
+{{- $typeMap := hugo.Data.callouts.alert_map | default dict -}}
+{{- $iconMap := hugo.Data.callouts.icons | default dict -}}
 
 {{- $titleMap := dict
   "note"      (i18n "alert_note"      | default "Заметка")

@@ -1,0 +1,25 @@
+# Маппинг типов callout → иконка svg.
+# Используется как _shortcodes/callout.html, так и
+# _default/_markup/render-blockquote.html (GFM-alerts).
+#
+# Типы: note / tip / important / warn / danger. Если автор передаст
+# нестандартный type, оба места fallback'ят на "note" + "info"-иконку.
+#
+# Заголовки локализованы — берутся из i18n alert_{note,tip,important,
+# warning,danger}. См. также i18n/{ru,en}.yaml.
+
+icons:
+  note:      info
+  tip:       lightbulb
+  important: zap
+  warn:      alert-triangle
+  danger:    alert-octagon
+
+# Маппинг GFM-alert типов на наши .callout--* модификаторы.
+# Используется только в render-blockquote.html.
+alert_map:
+  note:      note
+  tip:       tip
+  important: important
+  warning:   warn
+  caution:   danger

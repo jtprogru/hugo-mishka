@@ -10,12 +10,9 @@
        обрабатывается layouts/_default/_markup/render-blockquote.html. */ -}}
 {{- $type := .Get "type" | default "note" -}}
 {{- $title := .Get "title" -}}
-{{- $icons := dict
-  "note"      "info"
-  "tip"       "lightbulb"
-  "important" "zap"
-  "warn"      "alert-triangle"
-  "danger"    "alert-octagon" -}}
+{{- /* Маппинг типов → иконка живёт в data/callouts.yaml — общий источник
+       правды для shortcode и render-blockquote. */ -}}
+{{- $icons := hugo.Data.callouts.icons | default dict -}}
 {{- $icon := index $icons $type | default "info" -}}
 <aside class="callout callout--{{ $type }}" role="note">
   <div class="callout__icon" aria-hidden="true">
