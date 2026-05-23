@@ -147,7 +147,29 @@ params:
   # renderImageAvifQ: 60      # качество AVIF (1–100), 60 норм
   # renderImageWebpQ: 85      # качество WebP, 85 норм
   # renderImageMaxW:  1200    # max ширина после resize, px
+
+  # PWA: manifest + service worker + offline-страница.
+  # PWA:
+  #   enabled: true
+  #   manifestPath: "/manifest.json"
+  #   themeColor: "#c2410c"
+
+  # RSS: полный текст постов + inline-CSS. По умолчанию on.
+  # rssFullContent: true
+  # rssLimit: 20
 ```
+
+## Pinned posts
+
+Поставь `pinned: true` во фронтматтере поста — он поднимется в начало `latest_posts` на главной и в `/posts/` (на текущей странице пагинации). В карточке появится `★`-badge и тонкая accent-полоска слева.
+
+## Reading mode
+
+Нажми `f` на странице любого поста — включится фокус-режим: скроет шапку, футер, share, related, toc, post-nav и cover, оставит только заголовок, мета и текст. Esc или повторное `f` — выйти. JS — ~30 строк, без зависимостей.
+
+## PWA
+
+Тема поставляется с готовым service worker'ом (`/sw.js`), offline-страницей и partial для регистрации SW + подключения manifest. Опт-ин через `params.PWA.enabled: true`. Manifest пользователь кладёт сам в `static/manifest.json` — пример в exampleSite. Стратегия SW: network-first для HTML, cache-first для статики, версия кэша регулируется константой `CACHE` в `assets/js/sw.js`.
 
 ### Данные проекта
 

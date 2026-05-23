@@ -7,6 +7,7 @@
 
 ### Added
 
+- RSS full-text: свой `layouts/index.rss.xml` отдаёт `.Content` целиком вместо `.Summary`, с inline-CSS (типографика, code, blockquote, картинки), `<dc:creator>`, `<media:thumbnail>` для cover, `<category>` из тегов и категорий, `<content:encoded>` в CDATA. Опции: `params.rssFullContent` (по умолчанию true) — false возвращает дефолтное поведение, `params.rssLimit` (по умолчанию 20).
 - PWA (manifest + service worker + offline): `assets/js/sw.js` с network-first для HTML и cache-first для статики, `layouts/offline.html` страница-fallback, partial `_partials/pwa_register.html` — регистрация SW и подключение manifest. Опт-ин через `params.PWA.enabled: true` + `params.PWA.manifestPath` + `params.PWA.themeColor`. Manifest пользователь кладёт в `static/manifest.json` (пример в exampleSite). SW отдаётся по стабильному `/sw.js` без minify/fingerprint, чтобы scope `'/'` не ломался между релизами. i18n `offline_*` (ru/en).
 - High-contrast палитра: `@media (prefers-contrast: more)` в `00-vars.css` для обеих тем — чистый чёрный/белый, усиленные границы, без полупрозрачности. Срабатывает автоматически у пользователей с системной настройкой high-contrast.
 - Pinned posts: фронтматтер `pinned: true` поднимает пост наверх в `latest_posts` на главной и в `list.html` (на текущей странице пагинации). Карточки получают `.post-card--pinned` (тонкая accent-полоска слева) и `★`-badge в заголовке. CSS `.badge` / `.badge--pinned` в `15-tags.css`. i18n `pinned` (ru/en).
