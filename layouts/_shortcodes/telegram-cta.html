@@ -1,0 +1,36 @@
+{{- /* Универсальный CTA с подпиской на канал/чат в Telegram.
+       Аргументы:
+         channel — @-handle или URL (если без @ и без https, добавим t.me/)
+         title   — заголовок (опц., есть дефолт)
+         text    — пояснение (опц.)
+       Использование:
+         {{< telegram-cta channel="@my_channel" >}}
+         или
+         {{< telegram-cta channel="my_channel" title="Подпишись" text="Свежие посты и заметки" >}} */ -}}
+{{- $channel := .Get "channel" | default site.Params.telegramChannel | default "" -}}
+{{- $title := .Get "title" | default "Подпишись в Telegram" -}}
+{{- $text := .Get "text" | default "Свежие посты и заметки из тонких мест разработки." -}}
+{{- $href := "" -}}
+{{- if $channel -}}
+  {{- if or (strings.HasPrefix $channel "http://") (strings.HasPrefix $channel "https://") -}}
+    {{- $href = $channel -}}
+  {{- else -}}
+    {{- $handle := strings.TrimPrefix "@" $channel -}}
+    {{- $href = printf "https://t.me/%s" $handle -}}
+  {{- end -}}
+{{- end -}}
+{{- if $href -}}
+<aside class="telegram-cta">
+  <div class="telegram-cta__icon" aria-hidden="true">
+    {{- partial "svg.html" (dict "name" "telegram" "size" 24) -}}
+  </div>
+  <div class="telegram-cta__body">
+    <p class="telegram-cta__title">{{ $title }}</p>
+    {{- with $text }}<p class="telegram-cta__text">{{ . }}</p>{{ end }}
+  </div>
+  <a class="telegram-cta__link" href="{{ $href }}" target="_blank" rel="noopener noreferrer">
+    Открыть
+    {{- partial "svg.html" (dict "name" "arrow-right" "size" 16) -}}
+  </a>
+</aside>
+{{- end -}}
