@@ -1,0 +1,44 @@
+{{- /* PWA: регистрация service worker'а и линки на manifest.
+
+       Опт-ин: site.Params.PWA.enabled = true. Без него тема не пытается
+       зарегистрировать SW и не подключает manifest — то есть никаких
+       runtime-эффектов на сайтах, не желающих PWA.
+
+       Что делает:
+         - подключает <link rel="manifest"> на путь site.Params.PWA.manifestPath
+           (по умолчанию /manifest.json — пользователь кладёт файл в static/).
+         - бандлит и фингерпринтит sw.js, регистрирует его inline-скриптом.
+
+       Sw.js живёт в assets/js/sw.js (см. модуль). Стратегия — network-first
+       для HTML, cache-first для статики (см. файл).
+
+       Manifest.json: тема его НЕ генерирует, поскольку для него нужен
+       output format и Hugo-конфиг сайта. README документирует пример. */ -}}
+
+{{- $enabled := eq (site.Params.PWA.enabled | default false) true -}}
+{{- if not $enabled -}}{{ return }}{{ end -}}
+
+{{- $manifestPath := site.Params.PWA.manifestPath | default "/manifest.json" -}}
+<link rel="manifest" href="{{ $manifestPath | relURL }}">
+
+{{- with site.Params.PWA.themeColor -}}
+<meta name="theme-color" content="{{ . }}">
+{{- end -}}
+
+{{- /* SW нужно отдавать с корня сайта (scope: '/'), и под стабильным
+       именем /sw.js — чтобы старые клиенты не остались с висящим
+       зарегистрированным воркером по неактуальному URL. Поэтому не
+       минифицируем и не фингерпринтим: версии регулируем через
+       константу CACHE внутри самого sw.js. */ -}}
+{{- $sw := resources.Get "js/sw.js" -}}
+{{- if $sw -}}
+  {{- $sw = $sw | resources.Copy "/sw.js" -}}
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('{{ $sw.RelPermalink }}', { scope: '/' })
+        .catch(function (e) { console.warn('SW register failed:', e); });
+    });
+  }
+</script>
+{{- end -}}

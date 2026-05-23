@@ -1,0 +1,20 @@
+{
+  "name": "Mishka — демо",
+  "short_name": "Mishka",
+  "description": "Демо-сайт для разработки Hugo-темы Mishka.",
+  "lang": "ru",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#fafaf7",
+  "theme_color": "#c2410c",
+  "icons": [
+    {
+      "src": "/images/avatar.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

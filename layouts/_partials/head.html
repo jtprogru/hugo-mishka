@@ -30,6 +30,9 @@
 {{- end -}}
 <link rel="stylesheet" href="{{ $bundle.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $bundle.Data.Integrity }}"{{ end }}>
 
+{{- /* PWA: manifest + SW (опт-ин через site.Params.PWA.enabled) */ -}}
+{{- partial "pwa_register.html" . }}
+
 {{- /* Хук для проекта */ -}}
 {{- if templates.Exists "_partials/extend_head.html" -}}
 {{- partial "extend_head.html" . -}}

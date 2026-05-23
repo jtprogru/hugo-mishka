@@ -1,0 +1,17 @@
+{{- define "main" -}}
+<div class="container">
+  <section class="not-found">
+    <p class="not-found__code">⚡</p>
+    <h1 class="not-found__title">{{ i18n "offline_title" | default "Нет интернета" }}</h1>
+    <p class="not-found__text">{{ i18n "offline_message" | default "Эта страница ещё не была закэширована. Подключитесь к интернету и попробуйте снова." }}</p>
+    <div class="not-found__actions">
+      <a class="not-found__action" href="{{ site.BaseURL | relURL }}">
+        {{ i18n "home" | default "Главная" }}
+      </a>
+      <button class="not-found__action" type="button" onclick="location.reload()">
+        {{ i18n "offline_retry" | default "Повторить" }}
+      </button>
+    </div>
+  </section>
+</div>
+{{- end -}}
