@@ -1,0 +1,18 @@
+{{- /* MathJax 4 — конкретный рендерер для математики.
+       Подключается из math.html (диспетчер) при mathRenderer == "mathjax".
+       Не вызывай напрямую — используй math.html. */ -}}
+
+{{- $src := site.Params.mathjaxSrc | default "https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js" -}}
+<script>
+  window.MathJax = {
+    tex: {
+      displayMath: [['\\[', '\\]'], ['$$', '$$']],
+      inlineMath: [['\\(', '\\)'], ['$', '$']],
+      processEscapes: true
+    },
+    loader: {
+      load: ['ui/safe']
+    }
+  };
+</script>
+<script id="MathJax-script" async src="{{ $src }}"></script>

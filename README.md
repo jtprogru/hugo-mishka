@@ -130,6 +130,10 @@ params:
   # Telegram-канал — выводится как <meta property="te:channel">.
   # Используется Telegram Instant View и при превью ссылок в Telegram.
   telegramChannel: "@your_channel"
+
+  # Рендерер математики: "mathjax" (по умолчанию) или "katex".
+  # KaTeX легче и быстрее, MathJax — полный TeX/MathML.
+  # mathRenderer: "katex"
 ```
 
 ### Данные проекта

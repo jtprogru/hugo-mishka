@@ -1,0 +1,27 @@
+{{- /* KaTeX — конкретный рендерер для математики (альтернатива MathJax).
+       Подключается из math.html (диспетчер) при mathRenderer == "katex".
+       Не вызывай напрямую — используй math.html.
+
+       KaTeX легче MathJax (~280 KB gzipped vs ~1 MB у MathJax 4), быстрее
+       рендерит — но поддерживает чуть меньше LaTeX (нет \tag, \label,
+       сложных диаграмм). Для технических постов с обычной алгеброй и
+       стандартными формулами — отличный выбор. */ -}}
+
+{{- $katexVer := site.Params.katexVersion | default "0.16.11" -}}
+{{- $cssSrc := site.Params.katexCssSrc | default (printf "https://cdn.jsdelivr.net/npm/katex@%s/dist/katex.min.css" $katexVer) -}}
+{{- $jsSrc := site.Params.katexJsSrc | default (printf "https://cdn.jsdelivr.net/npm/katex@%s/dist/katex.min.js" $katexVer) -}}
+{{- $autoSrc := site.Params.katexAutoRenderSrc | default (printf "https://cdn.jsdelivr.net/npm/katex@%s/dist/contrib/auto-render.min.js" $katexVer) -}}
+
+<link rel="stylesheet" href="{{ $cssSrc }}">
+<script defer src="{{ $jsSrc }}"></script>
+<script defer src="{{ $autoSrc }}" onload="
+  renderMathInElement(document.body, {
+    delimiters: [
+      { left: '$$',   right: '$$',   display: true },
+      { left: '\\[',  right: '\\]',  display: true },
+      { left: '\\(',  right: '\\)',  display: false },
+      { left: '$',    right: '$',    display: false }
+    ],
+    throwOnError: false
+  });
+"></script>
