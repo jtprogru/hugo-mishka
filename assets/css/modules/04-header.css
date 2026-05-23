@@ -1,0 +1,142 @@
+/* Header: лого, навигация, тогглер темы. */
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: saturate(180%) blur(8px);
+  -webkit-backdrop-filter: saturate(180%) blur(8px);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--transition);
+}
+
+.header.is-scrolled { border-bottom-color: var(--border); }
+
+.header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--gap-md);
+  height: var(--header-height);
+}
+
+.header__logo {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm);
+  font-weight: 700;
+  font-size: var(--fs-lg);
+  color: var(--text);
+  letter-spacing: -0.02em;
+}
+.header__logo:hover { color: var(--text); text-decoration: none; opacity: 0.85; }
+.header__logo-icon { height: 32px; width: auto; }
+.header__logo-text { display: none; }
+@media (min-width: 480px) { .header__logo-text { display: inline; } }
+
+.header__nav {
+  display: none;
+  gap: var(--gap-md);
+}
+.header__nav a {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  padding: var(--gap-xs) var(--gap-sm);
+  border-radius: var(--radius-sm);
+}
+.header__nav a:hover { color: var(--text); background: var(--bg-sunken); text-decoration: none; }
+.header__nav a.is-active { color: var(--accent); }
+
+@media (min-width: 768px) {
+  .header__nav { display: flex; }
+}
+
+/* Бургер для мобилы (без JS, через details/summary) */
+.header__menu {
+  position: relative;
+}
+.header__menu summary {
+  list-style: none;
+  cursor: pointer;
+  padding: var(--gap-xs);
+  border-radius: var(--radius-sm);
+}
+.header__menu summary::-webkit-details-marker { display: none; }
+.header__menu summary:hover { background: var(--bg-sunken); }
+.header__menu[open] summary { background: var(--bg-sunken); }
+.header__menu-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 4px);
+  min-width: 200px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  padding: var(--gap-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.header__menu-panel a {
+  padding: var(--gap-sm);
+  color: var(--text);
+  border-radius: var(--radius-sm);
+}
+.header__menu-panel a:hover { background: var(--bg-sunken); text-decoration: none; }
+
+@media (min-width: 768px) {
+  .header__menu { display: none; }
+}
+
+/* Группа справа — навигация, тогглер, доп.кнопки */
+.header__actions {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-sm);
+}
+
+/* Тогглер темы: одна кнопка, три иконки, видна только активная по data-theme-pref */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  min-height: 40px;
+  padding: var(--gap-xs);
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  position: relative;
+  transition: color var(--transition), background var(--transition), border-color var(--transition);
+}
+.theme-toggle:hover {
+  color: var(--text);
+  background: var(--bg-sunken);
+  border-color: var(--border);
+}
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.theme-toggle__icon {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+/* CSS-логика трёх состояний — определяется по data-theme-pref на <html> */
+:root[data-theme-pref="auto"]  .theme-toggle__icon[data-icon="monitor"] { display: inline-flex; }
+:root[data-theme-pref="light"] .theme-toggle__icon[data-icon="sun"]     { display: inline-flex; }
+:root[data-theme-pref="dark"]  .theme-toggle__icon[data-icon="moon"]    { display: inline-flex; }
+/* По дефолту (до прихода JS / pref ещё не выставлен) показываем monitor */
+:root:not([data-theme-pref]) .theme-toggle__icon[data-icon="monitor"]   { display: inline-flex; }
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle { transition: none; }
+}

@@ -1,0 +1,41 @@
+{{- /* Header: лого слева, навигация справа (десктоп) или бургер (мобила). */ -}}
+
+<header class="header">
+  <div class="container header__inner">
+    <a class="header__logo" href="{{ site.BaseURL | relURL }}" aria-label="{{ site.Title }} — на главную">
+      {{- with site.Params.label -}}
+        {{- with .icon -}}
+        <img class="header__logo-icon"
+             src="{{ . | relURL }}"
+             alt=""
+             height="{{ $.Site.Params.label.iconHeight | default 32 }}"
+             aria-hidden="true">
+        {{- end -}}
+        <span class="header__logo-text">{{ .text | default site.Title }}</span>
+      {{- else -}}
+        <span class="header__logo-text">{{ site.Title }}</span>
+      {{- end -}}
+    </a>
+
+    <nav class="header__nav" aria-label="Главная навигация">
+      {{- range site.Menus.main }}
+      <a href="{{ .URL | relURL }}"{{ if $.IsMenuCurrent "main" . }} class="is-active" aria-current="page"{{ end }}>{{ .Name }}</a>
+      {{- end }}
+    </nav>
+
+    <div class="header__actions">
+      {{- partial "header_theme_toggle.html" . }}
+
+      <details class="header__menu" aria-label="Меню">
+      <summary aria-label="Открыть меню">
+        {{- partial "svg.html" (dict "name" "menu" "size" 24 "label" "Меню") }}
+      </summary>
+        <div class="header__menu-panel">
+          {{- range site.Menus.main }}
+          <a href="{{ .URL | relURL }}"{{ if $.IsMenuCurrent "main" . }} class="is-active" aria-current="page"{{ end }}>{{ .Name }}</a>
+          {{- end }}
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
