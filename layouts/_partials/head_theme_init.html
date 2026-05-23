@@ -1,0 +1,20 @@
+{{- /* Анти-FOUC: до загрузки CSS синхронно проставляем data-theme и data-theme-pref.
+       Если в localStorage пусто — берём site.Params.defaultTheme или "auto".
+       Если pref = auto, эффективная тема выводится из prefers-color-scheme. */ -}}
+{{- $default := site.Params.defaultTheme | default "auto" -}}
+<script>
+(function(){
+  try {
+    var stored = localStorage.getItem('theme');
+    var pref = stored || {{ $default | jsonify | safeJS }};
+    if (pref !== 'auto' && pref !== 'light' && pref !== 'dark') { pref = 'auto'; }
+    var effective = pref;
+    if (pref === 'auto') {
+      effective = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+    }
+    var html = document.documentElement;
+    html.setAttribute('data-theme', effective);
+    html.setAttribute('data-theme-pref', pref);
+  } catch(e) {}
+})();
+</script>

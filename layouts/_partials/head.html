@@ -1,0 +1,36 @@
+{{- /* <head> темы. CSS склеивается, минифицируется, фингерпринтится. */ -}}
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fafaf7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1a1b1e" media="(prefers-color-scheme: dark)">
+
+{{- partial "head_theme_init.html" . }}
+{{- partial "head_meta.html" . }}
+
+{{- /* Favicons */ -}}
+{{- with site.Params.assets }}
+  {{- with .favicon }}<link rel="icon" href="{{ . | relURL }}">{{ end }}
+  {{- with .favicon16x16 }}<link rel="icon" type="image/png" sizes="16x16" href="{{ . | relURL }}">{{ end }}
+  {{- with .favicon32x32 }}<link rel="icon" type="image/png" sizes="32x32" href="{{ . | relURL }}">{{ end }}
+  {{- with .apple_touch_icon }}<link rel="apple-touch-icon" href="{{ . | relURL }}">{{ end }}
+  {{- with .safari_pinned_tab }}<link rel="mask-icon" href="{{ . | relURL }}" color="#c2410c">{{ end }}
+{{- end }}
+
+{{- /* RSS autodiscovery */ -}}
+{{- with .OutputFormats.Get "RSS" }}
+<link rel="alternate" type="application/rss+xml" title="{{ site.Title }}" href="{{ .Permalink }}">
+{{- end }}
+
+{{- /* CSS: модули склеиваются в один файл через resources.Concat (порядок — алфавитный по имени) */ -}}
+{{- $modules := resources.Match "css/modules/*.css" -}}
+{{- $bundle := $modules | resources.Concat "css/mishka.css" -}}
+{{- if hugo.IsProduction -}}
+  {{- $bundle = $bundle | minify | fingerprint -}}
+{{- end -}}
+<link rel="stylesheet" href="{{ $bundle.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $bundle.Data.Integrity }}"{{ end }}>
+
+{{- /* Хук для проекта */ -}}
+{{- if templates.Exists "_partials/extend_head.html" -}}
+{{- partial "extend_head.html" . -}}
+{{- end -}}
