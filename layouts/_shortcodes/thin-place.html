@@ -1,0 +1,9 @@
+{{- /* «Тонкое место»: эпиграф / врезка с особой типографикой.
+       {{< thin-place author="Кто это сказал" >}}Текст{{< /thin-place >}} */ -}}
+{{- $author := .Get "author" -}}
+<figure class="thin-place">
+  <blockquote class="thin-place__quote">
+    {{ .Inner | .Page.RenderString }}
+  </blockquote>
+  {{- with $author }}<figcaption class="thin-place__author">— {{ . }}</figcaption>{{ end }}
+</figure>
