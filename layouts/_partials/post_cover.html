@@ -1,0 +1,82 @@
+{{- /* Cover-картинка поста.
+       Порядок резолва image (как в PaperMod):
+       1. Если файл лежит в page-bundle (рядом с index.md) — используем Resource.
+       2. Если cover.relative = true — считаем путь относительным от поста.
+       3. Иначе (по умолчанию) — считаем что путь от корня сайта (`/`), т.е. файл в static/.
+       4. Абсолютные URL (http/https/начинается с /) — без изменений.
+
+       Видимостью управляет:
+       - .Params.cover.hidden                          — скрыть везде
+       - .Params.cover.hiddenInSingle / site.Params... — скрыть только в single
+       - .Params.cover.hiddenInList   / site.Params... — скрыть в list
+
+       Параметры partial:
+       - context  — текущая Page
+       - location — "single" | "list" (по умолчанию single) */ -}}
+{{- $ctx := .context -}}
+{{- $location := .location | default "single" -}}
+{{- $cover := $ctx.Params.cover -}}
+{{- $img := "" -}}
+{{- $hidden := false -}}
+
+{{- with $cover -}}
+  {{- $img = .image -}}
+  {{- $hidden = .hidden -}}
+  {{- if eq $location "single" -}}
+    {{- $hidden = or $hidden .hiddenInSingle (eq site.Params.cover.hiddenInSingle true) -}}
+  {{- else if eq $location "list" -}}
+    {{- $hidden = or $hidden .hiddenInList (eq site.Params.cover.hiddenInList true) -}}
+  {{- end -}}
+{{- end -}}
+
+{{- if and $img (not $hidden) -}}
+  {{- $alt := $cover.alt | default $cover.caption | default $ctx.Title -}}
+  {{- $caption := $cover.caption -}}
+  {{- $relative := $cover.relative | default false -}}
+  {{- $linkFullImages := $cover.linkFullImages | default false -}}
+
+  {{- /* 1) Page-bundle resource */ -}}
+  {{- $res := $ctx.Resources.GetMatch (printf "*%s*" $img) -}}
+
+  {{- if $res -}}
+    {{- $isRaster := in (slice "image/jpeg" "image/png" "image/webp") $res.MediaType.Type -}}
+    {{- $orig := $res -}}
+    {{- $webp := "" -}}
+    {{- if $isRaster -}}
+      {{- $maxW := 1280 -}}
+      {{- if gt $orig.Width $maxW -}}{{ $orig = $res.Resize (printf "%dx" $maxW) }}{{ end -}}
+      {{- $webp = $orig.Resize (printf "%dx webp q85" $orig.Width) -}}
+    {{- end -}}
+    <figure class="post-cover">
+      {{- if $linkFullImages }}<a href="{{ $res.RelPermalink }}" target="_blank" rel="noopener noreferrer">{{- end }}
+      <picture>
+        {{- with $webp }}<source srcset="{{ .RelPermalink }}" type="image/webp">{{ end }}
+        <img loading="eager" decoding="async"
+             src="{{ $orig.RelPermalink }}"
+             alt="{{ $alt }}"
+             width="{{ $orig.Width }}" height="{{ $orig.Height }}">
+      </picture>
+      {{- if $linkFullImages }}</a>{{- end }}
+      {{- with $caption }}<figcaption>{{ . | $ctx.RenderString }}</figcaption>{{ end -}}
+    </figure>
+  {{- else -}}
+    {{- /* 2) Внешний URL / абсолютный путь / relative */ -}}
+    {{- $href := $img -}}
+    {{- if or (strings.HasPrefix $img "http://") (strings.HasPrefix $img "https://") (strings.HasPrefix $img "/") -}}
+      {{- /* как есть */ -}}
+    {{- else if $relative -}}
+      {{- $href = printf "%s%s" $ctx.RelPermalink $img -}}
+    {{- else -}}
+      {{- /* PaperMod-семантика: путь от корня сайта (static/) */ -}}
+      {{- $href = printf "/%s" $img -}}
+    {{- end -}}
+    <figure class="post-cover">
+      {{- if $linkFullImages }}<a href="{{ $href | safeURL }}" target="_blank" rel="noopener noreferrer">{{- end }}
+      <img loading="eager" decoding="async"
+           src="{{ $href | safeURL }}"
+           alt="{{ $alt }}">
+      {{- if $linkFullImages }}</a>{{- end }}
+      {{- with $caption }}<figcaption>{{ . | $ctx.RenderString }}</figcaption>{{ end -}}
+    </figure>
+  {{- end -}}
+{{- end -}}

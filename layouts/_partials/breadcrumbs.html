@@ -1,0 +1,18 @@
+{{- /* Breadcrumbs: главная → секция → пост. На главной не показываем. */ -}}
+{{- if and (not .IsHome) site.Params.ShowBreadCrumbs }}
+{{- $home := site.Home -}}
+<nav class="breadcrumbs" aria-label="Хлебные крошки">
+  <ol class="breadcrumbs__list">
+    <li><a href="{{ $home.RelPermalink }}">{{ i18n "home" | default "Главная" }}</a></li>
+    {{- $ancestors := .Ancestors.Reverse -}}
+    {{- range $i, $a := $ancestors -}}
+      {{- if $a.IsSection }}
+    <li><a href="{{ $a.RelPermalink }}">{{ $a.Title }}</a></li>
+      {{- end }}
+    {{- end }}
+    {{- if not .IsSection }}
+    <li aria-current="page">{{ .Title }}</li>
+    {{- end }}
+  </ol>
+</nav>
+{{- end }}

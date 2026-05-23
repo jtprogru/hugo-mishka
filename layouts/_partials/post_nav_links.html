@@ -1,0 +1,25 @@
+{{- /* Навигация между постами: prev / next в текущей секции. */ -}}
+{{- $section := .Section -}}
+{{- $pages := where site.RegularPages "Section" $section -}}
+{{- $prev := $pages.Prev . -}}
+{{- $next := $pages.Next . -}}
+{{- if or $prev $next }}
+<nav class="post-nav" aria-label="Соседние посты">
+  <div class="post-nav__prev">
+    {{- with $prev }}
+    <a href="{{ .RelPermalink }}" rel="prev">
+      <span class="post-nav__label">← Предыдущий</span>
+      <span class="post-nav__title">{{ .Title }}</span>
+    </a>
+    {{- end }}
+  </div>
+  <div class="post-nav__next">
+    {{- with $next }}
+    <a href="{{ .RelPermalink }}" rel="next">
+      <span class="post-nav__label">Следующий →</span>
+      <span class="post-nav__title">{{ .Title }}</span>
+    </a>
+    {{- end }}
+  </div>
+</nav>
+{{- end }}
