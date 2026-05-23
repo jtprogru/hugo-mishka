@@ -1,0 +1,53 @@
+/* ============================================================================
+   33-translation.css — список переводов поста.
+   Появляется только когда у страницы есть .Translations (в моноязычных
+   сайтах partial не рендерит ничего, и блок не виден).
+   ============================================================================ */
+
+.translation-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--gap-xs);
+  margin-top: var(--gap-sm);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
+.translation-list__heading {
+  font-weight: 500;
+}
+
+.translation-list__items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-xs);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.translation-list__item:not(:last-child)::after {
+  content: "·";
+  margin-left: var(--gap-xs);
+  color: var(--text-subtle);
+}
+
+.translation-list a {
+  color: var(--text-muted);
+  text-decoration: none;
+  border-bottom: 1px dotted var(--text-subtle);
+  padding-bottom: 1px;
+  transition: color var(--transition, 0.18s ease),
+              border-color var(--transition, 0.18s ease);
+}
+
+.translation-list a:hover,
+.translation-list a:focus-visible {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .translation-list a { transition: none; }
+}

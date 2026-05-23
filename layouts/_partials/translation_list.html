@@ -1,0 +1,26 @@
+{{- /* Translation list: ссылки на переводы текущей страницы.
+
+       Hugo предоставляет .Translations — срез страниц на других языках,
+       сопоставленных через translationKey или общий path. Если переводов
+       нет, partial ничего не рендерит.
+
+       Используется на single-страницах (внутри post_meta или header), но
+       работает и на любой странице с переводами. */ -}}
+
+{{- with .Translations -}}
+<nav class="translation-list" aria-label="{{ i18n "translations_label" | default "Перевод" }}">
+  <span class="translation-list__heading">{{ i18n "translations_label" | default "Перевод" }}:</span>
+  <ul class="translation-list__items">
+    {{- range . }}
+    <li class="translation-list__item">
+      <a href="{{ .RelPermalink }}"
+         hreflang="{{ .Language.Lang }}"
+         lang="{{ .Language.Lang }}"
+         rel="alternate">
+        {{- .Language.LanguageName | default .Language.Lang -}}
+      </a>
+    </li>
+    {{- end }}
+  </ul>
+</nav>
+{{- end -}}
