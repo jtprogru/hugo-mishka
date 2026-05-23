@@ -46,6 +46,22 @@
   color: var(--text-subtle);
 }
 
+.footer__commit {
+  font-family: var(--font-mono);
+  font-size: 0.95em;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--bg-sunken);
+  color: var(--text-muted);
+}
+
+.footer__commit-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+.footer__commit-link:hover { color: var(--accent); text-decoration: none; }
+
 .footer__nav ul {
   list-style: none;
   margin: 0;

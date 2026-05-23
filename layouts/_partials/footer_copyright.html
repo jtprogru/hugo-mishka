@@ -1,4 +1,19 @@
-{{- /* Левая колонка футера: copyright + кредиты. */ -}}
+{{- /* Левая колонка футера: copyright + кредиты + (опц.) git-commit.
+
+       Commit-SHA берётся в таком приоритете:
+         1. ENV: HUGO_COMMIT  (например: HUGO_COMMIT=$(git rev-parse --short HEAD) hugo)
+            Используем префикс HUGO_, чтобы попадать в дефолтный whitelist
+            Hugo security.funcs.getenv (не требует кастомного hugo.yaml).
+         2. site.Params.commit  (если на стороне проекта подставляется через Taskfile/CI)
+
+       Ссылка на коммит формируется из site.Params.commitURL — это
+       printf-шаблон с %s, например:
+         commitURL: "https://github.com/user/repo/commit/%s"
+*/ -}}
+
+{{- $commit := os.Getenv "HUGO_COMMIT" -}}
+{{- if not $commit }}{{ $commit = site.Params.commit | default "" }}{{ end -}}
+
 <p class="footer__copy">
   {{- with site.Copyright -}}
     {{ . | markdownify }}
@@ -9,4 +24,13 @@
 <p class="footer__powered">
   Powered by <a href="https://gohugo.io" rel="noopener">Hugo</a>
   · Theme <a href="https://github.com/jtprogru/hugo-mishka" rel="noopener">Mishka</a>
+  {{- with $commit -}}
+    · <span class="footer__commit" title="{{ i18n "footer_commit_title" | default "Текущая сборка" }}">
+      {{- with site.Params.commitURL -}}
+        <a href="{{ printf . $commit | safeURL }}" rel="noopener" class="footer__commit-link">{{ $commit }}</a>
+      {{- else -}}
+        {{ $commit }}
+      {{- end -}}
+    </span>
+  {{- end -}}
 </p>

@@ -7,6 +7,7 @@
 
 ### Added
 
+- Footer git-commit info: `footer_copyright.html` опционально выводит короткий SHA текущей сборки. Источник: ENV `HUGO_COMMIT` (приоритет, в whitelist Hugo по умолчанию) или `params.commit`. Если задан `params.commitURL` (printf-шаблон с `%s`) — SHA становится ссылкой. CSS-стили в `05-footer.css`. i18n `footer_commit_title` (ru/en).
 - Comments hook: партиал `_partials/comments.html` — пустой stub по умолчанию. Опт-ин через `params.ShowComments: true` или frontmatter `comments: true`. Тема не привязана к комментарной системе — переопредели partial в проекте под Giscus/Disqus/commento. i18n `comments_label` (ru/en). README дополнен примером переопределения и описанием всех extend-хуков (`extend_head`, `extend_footer`, `extend_post_content`, `comments`).
 - OpenGraph и Twitter cards вынесены в отдельные partials темы (`_partials/opengraph.html`, `_partials/twitter_cards.html`). Проект может переопределить любой из них. Фиксы поверх builtin: `og:locale` в формате `ll_CC` (например `ru_RU` вместо `ru`), `og:image:alt` / `og:image:width` / `og:image:height` из `cover`, `article:author`, динамический `twitter:card` (`summary_large_image` при наличии cover).
 - Archives page: `layouts/archives.html` + CSS-модуль `19-archive.css`. Подключается через `layout: "archives"` на контентной странице. Группирует посты из `mainSections` по году; на десктопе год прилипает слева sticky, посты идут справа. Поддержка i18n-плюрализации (`archives_total`). Демо: `exampleSite/content/archives.md`.

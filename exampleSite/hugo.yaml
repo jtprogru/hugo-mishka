@@ -115,3 +115,8 @@ params:
 
   # Telegram-канал для IV-метатега te:channel (опционально).
   telegramChannel: "@hugo_mishka_demo"
+
+  # Git-commit в футере (опционально). Можно задать вручную или через
+  # ENV MISHKA_COMMIT (приоритет у env). commitURL — printf-шаблон с %s.
+  commit: "abc1234"
+  commitURL: "https://github.com/jtprogru/hugo-mishka/commit/%s"
