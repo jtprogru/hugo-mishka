@@ -1,0 +1,30 @@
+/* ============================================================================
+   90-utilities.css — небольшие утилитарные классы для шаблонов.
+   ============================================================================ */
+
+/* Текст для скринридеров — визуально скрыт, но доступен ассистивной технике. */
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Полное скрытие — недоступно даже скринридерам. */
+.is-hidden {
+  display: none !important;
+}
+
+/* Выравнивание в одну строку при центрировании в flex/grid. */
+.text-center { text-align: center; }
+.text-right  { text-align: right; }
+.text-left   { text-align: left; }
+
+/* Отступы-маркеры — для редких ad-hoc случаев в content-pages. */
+.mt-0 { margin-top: 0 !important; }
+.mb-0 { margin-bottom: 0 !important; }

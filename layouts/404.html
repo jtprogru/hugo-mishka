@@ -1,6 +1,18 @@
 {{- define "main" -}}
-<div class="container main--narrow" style="text-align:center;padding-block:var(--gap-2xl)">
-  <h1 style="font-size:var(--fs-4xl)">404</h1>
-  <p>Страница не найдена. <a href="{{ site.BaseURL | relURL }}">Вернуться на главную</a>.</p>
+<div class="container">
+  <section class="not-found">
+    <p class="not-found__code">404</p>
+    <h1 class="not-found__title">{{ i18n "404_title" | default "Страница не найдена" }}</h1>
+    <p class="not-found__text">{{ i18n "404_message" | default "Тут пусто. Возможно, страница переехала или была удалена." }}</p>
+    <div class="not-found__actions">
+      <a class="not-found__action" href="{{ site.BaseURL | relURL }}">
+        {{ i18n "home" | default "Главная" }}
+      </a>
+      <a class="not-found__action" href="{{ "/search/" | relURL }}">
+        {{ partial "svg.html" (dict "name" "search" "size" 16) }}
+        {{ i18n "search" | default "Поиск" }}
+      </a>
+    </div>
+  </section>
 </div>
 {{- end -}}

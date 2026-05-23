@@ -61,18 +61,8 @@
   flex-shrink: 0;
 }
 
-/* Скрываем текст внутри copy-кнопки визуально, но оставляем для скринридеров. */
-.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
+/* .visually-hidden переехал в 90-utilities.css — используется copy-кнопкой
+   и любыми другими элементами, скрытыми только визуально. */
 
 /* Visual cue для done-состояния copy-кнопки */
 .share__btn--copy.is-done {

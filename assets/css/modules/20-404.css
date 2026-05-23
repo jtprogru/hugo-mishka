@@ -1,0 +1,64 @@
+/* ============================================================================
+   20-404.css — страница «не найдено» (layouts/404.html).
+   ============================================================================ */
+
+.not-found {
+  max-width: var(--content-width);
+  margin-inline: auto;
+  padding-block: var(--gap-2xl);
+  text-align: center;
+}
+
+.not-found__code {
+  font-size: clamp(4rem, 12vw, 8rem);
+  line-height: 1;
+  margin: 0 0 var(--gap-md);
+  color: var(--accent);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.not-found__title {
+  font-size: var(--fs-xl);
+  margin: 0 0 var(--gap-sm);
+  color: var(--text);
+}
+
+.not-found__text {
+  font-size: var(--fs-md);
+  color: var(--text-muted);
+  margin: 0 0 var(--gap-lg);
+}
+
+.not-found__actions {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--gap-sm);
+  justify-content: center;
+}
+
+.not-found__action {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--gap-xs);
+  padding: var(--gap-sm) var(--gap-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  color: var(--text);
+  background: var(--bg-elevated);
+  text-decoration: none;
+  font-size: var(--fs-sm);
+  transition: border-color var(--transition, 0.18s ease),
+              color var(--transition, 0.18s ease);
+}
+
+.not-found__action:hover,
+.not-found__action:focus-visible {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .not-found__action { transition: none; }
+}

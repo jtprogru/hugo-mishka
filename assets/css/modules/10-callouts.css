@@ -167,30 +167,7 @@
   color: var(--text-muted);
 }
 
-/* ===== kbd combo ===== */
-.kbd-combo {
-  display: inline-flex;
-  align-items: center;
-  gap: 2px;
-  vertical-align: baseline;
-}
-.kbd-combo__sep {
-  color: var(--text-subtle);
-  font-size: 0.85em;
-}
-.kbd-combo kbd {
-  display: inline-block;
-  padding: 0.1em 0.5em;
-  font-family: var(--font-mono);
-  font-size: 0.85em;
-  color: var(--text);
-  background: var(--bg-elevated);
-  border: 1px solid var(--border-strong);
-  border-bottom-width: 2px;
-  border-radius: var(--radius-sm);
-  box-shadow: 0 1px 0 var(--border);
-  line-height: 1.2;
-}
+/* .kbd-combo переехал в 13-kbd.css */
 
 @media (prefers-reduced-motion: reduce) {
   .collapse__summary::before,

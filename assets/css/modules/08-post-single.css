@@ -55,22 +55,7 @@
   gap: var(--gap-lg);
 }
 
-.post__tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--gap-xs);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-.post__tags a {
-  font-size: var(--fs-sm);
-  padding: 4px 12px;
-  border-radius: var(--radius-pill);
-  background: var(--bg-sunken);
-  color: var(--text-muted);
-}
-.post__tags a:hover { background: var(--accent-soft); color: var(--text); text-decoration: none; }
+/* .post__tags переехал в 15-tags.css */
 
 /* === Контент поста (md-content) === */
 
@@ -230,30 +215,7 @@ h6:hover .heading-anchor { opacity: 1; }
   margin-top: var(--gap-xs);
 }
 
-/* === kbd === */
-.md-content kbd {
-  display: inline-block;
-  padding: 0.1em 0.5em;
-  font-family: var(--font-mono);
-  font-size: 0.85em;
-  color: var(--text);
-  background: var(--bg-elevated);
-  border: 1px solid var(--border-strong);
-  border-bottom-width: 2px;
-  border-radius: var(--radius-sm);
-  box-shadow: 0 1px 0 var(--border);
-  line-height: 1.2;
-}
-
-/* === Footnotes === */
-.footnotes {
-  margin-top: var(--gap-2xl);
-  padding-top: var(--gap-md);
-  border-top: 1px solid var(--border);
-  font-size: var(--fs-sm);
-  color: var(--text-muted);
-}
-.footnote-ref { color: var(--accent); }
+/* kbd и footnotes переехали в 13-kbd.css и 14-footnotes.css */
 
 /* === Breadcrumbs === */
 

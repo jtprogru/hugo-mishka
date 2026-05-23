@@ -89,25 +89,7 @@
   padding: 0;
 }
 
-.tag {
-  display: inline-block;
-  font-size: var(--fs-xs);
-  padding: 2px 10px;
-  border-radius: var(--radius-pill);
-  background: var(--bg-sunken);
-  color: var(--text-muted);
-  text-decoration: none;
-  position: relative;
-  z-index: 1;
-}
-.tag:hover { background: var(--accent-soft); color: var(--text); text-decoration: none; }
-
-.tag--cat {
-  background: var(--tag-bg, var(--bg-sunken));
-  color: var(--bg);
-  font-weight: 600;
-}
-.tag--cat:hover { color: var(--bg); opacity: 0.85; text-decoration: none; }
+/* .tag и .tag--cat переехали в 15-tags.css */
 
 /* Десктоп: cover слева, текст справа */
 @media (min-width: 768px) {
@@ -145,47 +127,7 @@
   flex-wrap: wrap;
   gap: var(--gap-sm);
 }
-.tag--cloud {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--gap-xs);
-  padding: 4px 12px;
-  font-size: var(--fs-sm);
-  border-radius: var(--radius-pill);
-  background: var(--bg-sunken);
-  color: var(--text);
-  border: 1px solid var(--border);
-  text-decoration: none;
-  transition: var(--transition);
-  transition-property: background, border-color, color, transform;
-}
-.tag--cloud:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); text-decoration: none; }
-.tag--cloud .tag__count {
-  display: inline-block;
-  min-width: 1.6em;
-  padding: 0 6px;
-  font-size: var(--fs-xs);
-  background: var(--bg-elevated);
-  color: var(--text-muted);
-  border-radius: var(--radius-pill);
-  border: 1px solid var(--border);
-  text-align: center;
-}
-.tag--cloud.tag--cat {
-  background: var(--tag-bg, var(--bg-sunken));
-  color: var(--bg);
-  border-color: transparent;
-}
-.tag--cloud.tag--cat:hover {
-  color: var(--bg);
-  opacity: 0.85;
-  transform: translateY(-1px);
-}
-.tag--cloud.tag--cat .tag__count {
-  background: rgba(255,255,255,0.15);
-  color: inherit;
-  border-color: transparent;
-}
+/* .tag--cloud и связанные стили переехали в 15-tags.css */
 
 /* List header — общий заголовок */
 .list__kicker {
