@@ -2,7 +2,7 @@
 {{ errorf "Hugo >= 0.146.0 required for theme mishka" }}
 {{- end -}}
 <!DOCTYPE html>
-<html lang="{{ site.Language.Lang }}" dir="{{ site.Language.LanguageDirection | default "ltr" }}">
+<html lang="{{ site.Language.Lang }}" dir="{{ site.Language.Direction | default "ltr" }}">
 <head>
   {{- partial "head.html" . }}
 </head>
