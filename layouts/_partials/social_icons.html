@@ -1,0 +1,16 @@
+{{- /* Соцссылки из site.Params.socialIcons. Каждая иконка — через svg.html. */ -}}
+{{- with site.Params.socialIcons }}
+<ul class="social-icons" aria-label="Социальные сети">
+  {{- range . }}
+  {{- $external := not (strings.HasPrefix .url "/") -}}
+  <li>
+    <a class="social-icons__item"
+       href="{{ .url }}"
+       aria-label="{{ .name }}"
+       {{ if $external }}target="_blank" rel="noopener noreferrer"{{ end }}>
+      {{ partial "svg.html" (dict "name" .name "size" 22 "label" .name "class" "icon social-icons__svg") }}
+    </a>
+  </li>
+  {{- end }}
+</ul>
+{{- end }}
