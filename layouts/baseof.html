@@ -1,0 +1,52 @@
+{{- if lt hugo.Version "0.146.0" -}}
+{{ errorf "Hugo >= 0.146.0 required for theme mishka" }}
+{{- end -}}
+<!DOCTYPE html>
+<html lang="{{ site.Language.Lang }}" dir="{{ site.Language.LanguageDirection | default "ltr" }}">
+<head>
+  {{- partial "head.html" . }}
+</head>
+<body class="site">
+  <a class="skip-link" href="#content">К содержимому</a>
+  {{- partial "header.html" . }}
+  <main id="content" class="main">
+    {{- block "main" . }}{{ end }}
+  </main>
+  {{- partial "footer.html" . }}
+
+  {{- /* MathJax — рендерится только если страница опт-ин. Подключаем рано, чтобы
+         формулы успели обработаться. */ -}}
+  {{- partial "math.html" . }}
+
+  {{- /* JS темы: theme-toggle обязателен, остальные JS добавляются модулями ниже. */ -}}
+  {{- $jsParts := slice -}}
+  {{- with resources.Get "js/theme-toggle.js" }}{{ $jsParts = $jsParts | append . }}{{ end -}}
+  {{- with resources.Get "js/code-copy.js" }}{{ $jsParts = $jsParts | append . }}{{ end -}}
+  {{- with resources.Get "js/toc-active.js" }}{{ $jsParts = $jsParts | append . }}{{ end -}}
+  {{- if $jsParts -}}
+    {{- $bundle := $jsParts | resources.Concat "js/mishka.js" -}}
+    {{- if hugo.IsProduction -}}{{ $bundle = $bundle | minify | fingerprint }}{{ end -}}
+    <script src="{{ $bundle.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $bundle.Data.Integrity }}"{{ end }} defer></script>
+  {{- end -}}
+
+  {{- /* Mermaid: инициализируется в конце страницы, чтобы DOM был готов */ -}}
+  {{- partial "mermaid_init.html" . }}
+
+  {{- /* Поиск: только на странице /search/ — Fuse.js + search.js */ -}}
+  {{- $isSearch := or (eq .Layout "search") (eq .RelPermalink "/search/") (eq .Kind "section" | and (eq .Section "search")) -}}
+  {{- if $isSearch -}}
+    {{- $searchParts := slice -}}
+    {{- with resources.Get "js/vendor/fuse.basic.min.js" }}{{ $searchParts = $searchParts | append . }}{{ end -}}
+    {{- with resources.Get "js/search.js" }}{{ $searchParts = $searchParts | append . }}{{ end -}}
+    {{- if $searchParts -}}
+      {{- $sb := $searchParts | resources.Concat "js/mishka-search.js" -}}
+      {{- if hugo.IsProduction -}}{{ $sb = $sb | minify | fingerprint }}{{ end -}}
+      <script src="{{ $sb.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $sb.Data.Integrity }}"{{ end }} defer></script>
+    {{- end -}}
+  {{- end -}}
+
+  {{- if templates.Exists "_partials/extend_footer.html" -}}
+  {{- partial "extend_footer.html" . -}}
+  {{- end -}}
+</body>
+</html>
