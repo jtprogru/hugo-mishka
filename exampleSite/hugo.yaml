@@ -1,0 +1,106 @@
+baseURL: "https://example.org/"
+defaultContentLanguage: "ru"
+languages:
+  ru:
+    label: "Русский"
+    locale: "ru-RU"
+    weight: 1
+title: "Mishka — демо"
+theme: "hugo-mishka"
+
+# При локальной разработке темы Hugo подтягивает её отсюда же.
+# Если запускаешь exampleSite извне (вне monorepo темы), используй
+# либо submodule в themes/hugo-mishka, либо hugo mod get.
+themesDir: "../.."
+
+enableEmoji: true
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+summaryLength: 20
+
+pagination:
+  pagerSize: 10
+
+outputs:
+  home:
+    - HTML
+    - RSS
+    - JSON
+  page:
+    - HTML
+
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    noClasses: false
+    lineNos: false
+    codeFences: true
+    guessSyntax: true
+    tabWidth: 2
+  tableOfContents:
+    startLevel: 2
+    endLevel: 4
+    ordered: false
+
+related:
+  includeNewer: true
+  threshold: 60
+  toLower: true
+  indices:
+    - name: tags
+      weight: 100
+    - name: categories
+      weight: 70
+
+menu:
+  main:
+    - identifier: posts
+      name: "Посты"
+      url: "/posts/"
+      weight: 10
+    - identifier: tags
+      name: "Теги"
+      url: "/tags/"
+      weight: 20
+    - identifier: search
+      name: "Поиск"
+      url: "/search/"
+      weight: 30
+
+params:
+  env: development
+  author: "Mishka Demo"
+  description: "Демо-сайт для разработки Hugo-темы Mishka."
+  mainSections: ["posts"]
+
+  defaultTheme: auto
+  ShowReadingTime: true
+  ShowCodeCopyButtons: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowToc: true
+  math: false
+  mermaid: false
+
+  profileMode:
+    enabled: true
+    title: "Mishka"
+    subtitle: "Демо-сайт для тестирования Hugo-темы."
+    imageUrl: "/images/avatar.svg"
+    imageHeight: 150
+    imageWidth: 150
+    latestPostsCount: 6
+
+  cover:
+    hidden: false
+    hiddenInList: false
+    hiddenInSingle: false
+
+  socialIcons:
+    - name: github
+      url: "https://github.com/jtprogru/hugo-mishka"
+    - name: rss
+      url: "/index.xml"

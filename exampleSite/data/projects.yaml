@@ -1,0 +1,16 @@
+- name: hugo-mishka
+  url: https://github.com/jtprogru/hugo-mishka
+  desc: "Самостоятельная Hugo-тема для технического блога: mobile-first, дарк-мод, profile-mode."
+  lang: Hugo
+- name: srekit
+  url: https://github.com/jtprogru/srekit
+  desc: "Генератор текстовых SRE-артефактов: задачи, постмортемы, RFC, runbook'и."
+  lang: Go
+- name: jtsekret
+  url: https://github.com/jtprogru/jtsekret
+  desc: "CLI для централизованного управления личными секретами."
+  lang: Go
+- name: cubic-root
+  url: https://github.com/jtprogru/cubic-root
+  desc: "Учебное Go-приложение с Docker multi-stage и Helm-чартом."
+  lang: Go
