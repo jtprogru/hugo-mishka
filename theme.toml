@@ -1,0 +1,13 @@
+name = "Mishka"
+license = "MIT"
+licenselink = "https://github.com/jtprogru/hugo-mishka/blob/main/LICENSE"
+description = "Самостоятельная Hugo-тема для технического блога: mobile-first, светлая/тёмная с 3-state-тогглером, тёплая бумажная палитра, callouts, profile-mode с сеткой проектов, render-hooks для кода и картинок."
+homepage = "https://jtprog.ru"
+demosite = "https://jtprog.ru"
+tags = ["blog", "personal", "russian", "sre", "devops", "mobile-first", "dark-mode"]
+features = ["dark-mode", "profile-mode", "search", "mermaid", "mathjax", "callouts", "responsive", "a11y"]
+min_version = "0.146.0"
+
+[author]
+  name = "Mikhail (jtprogru) Savin"
+  homepage = "https://jtprog.ru"

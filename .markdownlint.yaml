@@ -1,0 +1,8 @@
+default: true
+
+MD013: false   # line length — отключаем, длинные строки нормально
+MD033: false   # inline HTML — нужен для шорткодов и table
+MD041: false   # first line h1 — не всегда верно для Hugo-front-matter
+MD024:
+  siblings_only: true   # дубли h# разрешаем в разных разделах
+MD034: false   # bare URLs — Hugo нормально их обработает
