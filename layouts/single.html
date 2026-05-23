@@ -1,0 +1,66 @@
+{{- define "main" -}}
+{{- /* TOC: по умолчанию рендерим только для постов (Type == "post" или Section в mainSections).
+       На «обычных» страницах (donations, about, ...) TOC выключен, если явно не включён frontmatter'ом.
+
+       Приоритет (от сильного к слабому):
+       1. frontmatter `disableToc: true`  → нет TOC (PaperMod-совместимый legacy-флаг)
+       2. frontmatter `toc: false`        → нет TOC
+       3. frontmatter `toc: true` или `ShowToc: true` → TOC принудительно
+       4. site.Params.ShowToc == false    → нет TOC
+       5. авто: TOC, если страница — пост (Type == "post" или Section ∈ mainSections). */ -}}
+{{- $mainSections := site.Params.mainSections | default (slice "posts") -}}
+{{- $isPost := or (eq .Type "post") (in $mainSections .Section) -}}
+{{- $siteTocOn := ne (site.Params.ShowToc | default true) false -}}
+{{- $tocEnabled := false -}}
+{{- if eq .Params.disableToc true -}}
+  {{- $tocEnabled = false -}}
+{{- else if eq .Params.toc false -}}
+  {{- $tocEnabled = false -}}
+{{- else if or (eq .Params.toc true) (eq .Params.ShowToc true) -}}
+  {{- $tocEnabled = true -}}
+{{- else -}}
+  {{- $tocEnabled = and $siteTocOn $isPost -}}
+{{- end -}}
+{{- $hasToc := and $tocEnabled (gt (len .TableOfContents) 50) -}}
+<div class="container main--narrow">
+  {{- partial "breadcrumbs.html" . }}
+
+  <article class="post{{ if $hasToc }} post--with-toc{{ end }}">
+    <header class="post__header">
+      <h1 class="post__title">{{ .Title }}</h1>
+      {{- with .Description }}<p class="post__description">{{ . }}</p>{{ end }}
+      {{- partial "post_meta.html" . }}
+    </header>
+
+    {{- partial "post_cover.html" (dict "context" . "location" "single") }}
+
+    {{- if $hasToc }}{{ partial "toc.html" . }}{{ end }}
+
+    <div class="post__content md-content">
+      {{- if .Params.disableAnchoredHeadings -}}
+        {{ .Content }}
+      {{- else -}}
+        {{ partial "anchored_headings.html" .Content }}
+      {{- end -}}
+    </div>
+
+    <footer class="post__footer">
+      {{- with .GetTerms "tags" }}
+      <ul class="post__tags">
+        {{- range . }}
+        <li><a href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a></li>
+        {{- end }}
+      </ul>
+      {{- end }}
+
+      {{- if site.Params.ShowPostNavLinks }}
+      {{- partial "post_nav_links.html" . }}
+      {{- end }}
+    </footer>
+  </article>
+
+  {{- if templates.Exists "_partials/extend_post_content.html" -}}
+  {{- partial "extend_post_content.html" . -}}
+  {{- end -}}
+</div>
+{{- end -}}
