@@ -1,0 +1,65 @@
+{{- /* Video: HTML5 <video> с одним или несколькими source.
+
+       Использование:
+         {{< video src="/video/demo.mp4" poster="/img/demo.jpg" >}}
+         {{< video src="/video/demo" sources="mp4,webm" poster="/img/demo.jpg" >}}
+         {{< video src="/video/demo.mp4" caption="Демо v1.0" >}}
+
+       Атрибуты:
+         src       — путь к файлу (или базовый путь без расширения, если задан sources)
+         sources   — список расширений через запятую (mp4,webm,ogv,mov)
+         type      — MIME-тип единственного источника
+         poster    — постер до старта воспроизведения
+         caption   — подпись под видео (markdown)
+         preload   — none|metadata|auto (по умолчанию metadata)
+         autoplay  — false (по умолчанию)
+         loop      — false (по умолчанию)
+         muted     — false (по умолчанию; для autoplay чаще всего нужно true)
+         playsinline — true (по умолчанию для мобильных)
+         controls  — true (по умолчанию)
+         width / height — опционально */ -}}
+
+{{- $src       := .Get "src" -}}
+{{- $sources   := .Get "sources" -}}
+{{- $type      := .Get "type" -}}
+{{- $poster    := .Get "poster" -}}
+{{- $caption   := .Get "caption" -}}
+{{- $preload   := .Get "preload" | default "metadata" -}}
+{{- $autoplay  := eq (.Get "autoplay") "true" -}}
+{{- $loop      := eq (.Get "loop") "true" -}}
+{{- $muted     := eq (.Get "muted") "true" -}}
+{{- $inline    := ne (.Get "playsinline") "false" -}}
+{{- $controls  := ne (.Get "controls") "false" -}}
+{{- $width     := .Get "width" -}}
+{{- $height    := .Get "height" -}}
+
+{{- $mimes := dict
+  "mp4"  "video/mp4"
+  "webm" "video/webm"
+  "ogv"  "video/ogg"
+  "mov"  "video/quicktime" -}}
+
+<figure class="media media--video">
+  <video
+    {{- if $controls }} controls{{ end }}
+    {{- if $autoplay }} autoplay{{ end }}
+    {{- if $loop }} loop{{ end }}
+    {{- if $muted }} muted{{ end }}
+    {{- if $inline }} playsinline{{ end }}
+    preload="{{ $preload }}"
+    {{- with $poster }} poster="{{ . | safeURL }}"{{ end }}
+    {{- with $width }} width="{{ . }}"{{ end }}
+    {{- with $height }} height="{{ . }}"{{ end }}>
+    {{- if $sources -}}
+      {{- range split $sources "," -}}
+        {{- $ext := trim . " " | lower -}}
+        {{- $mime := index $mimes $ext | default (printf "video/%s" $ext) -}}
+    <source src="{{ printf "%s.%s" $src $ext | safeURL }}" type="{{ $mime }}">
+      {{- end -}}
+    {{- else -}}
+    <source src="{{ $src | safeURL }}"{{ with $type }} type="{{ . }}"{{ end }}>
+    {{- end }}
+    {{ i18n "video_unsupported" | default "Ваш браузер не поддерживает <video>." | safeHTML }}
+  </video>
+  {{- with $caption }}<figcaption>{{ . | $.Page.RenderString }}</figcaption>{{ end -}}
+</figure>

@@ -1,0 +1,11 @@
+{{- /* Принудительный LTR-блок.
+
+       Использование (на RTL-сайте, когда нужно вставить кусок LTR-текста,
+       например URL или фрагмент кода в обратной вёрстке):
+
+         {{< ltr >}}
+         https://example.com/some/path
+         {{< /ltr >}}
+
+       Inline-вариант доступен через `<span dir="ltr">…</span>` напрямую. */ -}}
+<div dir="ltr" lang="{{ .Get "lang" | default "en" }}">{{ .Inner | $.Page.RenderString }}</div>

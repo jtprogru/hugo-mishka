@@ -35,6 +35,8 @@ archives_total:
   other: "{{ .Count }} posts"
 comments_label: "Comments"
 footer_commit_title: "Current build"
+audio_unsupported: "Your browser does not support the <audio> element."
+video_unsupported: "Your browser does not support the <video> element."
 toc_title: "Contents"
 copy_code: "Copy"
 copy_code_done: "Copied"

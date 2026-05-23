@@ -56,6 +56,42 @@ categories: ["hugo"]
 
 Чтобы открыть Spotlight: {{< kbd "Cmd+Space" >}}. Чтобы открыть Command Palette в VS Code: {{< kbd "Cmd+Shift+P" >}}.
 
+## Audio / Video
+
+Аудио (один источник):
+
+{{< audio src="/media/sample.mp3" caption="Демо-эпизод" >}}
+
+Аудио (несколько форматов от одного базового пути):
+
+{{< audio src="/media/sample" sources="mp3,ogg" caption="Несколько форматов сразу" >}}
+
+Видео с постером:
+
+{{< video src="/media/sample.mp4" poster="/media/sample.jpg" caption="Демо-ролик" >}}
+
+## Raw HTML
+
+{{< rawhtml >}}
+<div style="padding: 8px 12px; border: 1px dashed #888; border-radius: 6px;">
+  Это <strong>сырой HTML</strong>, который не проходит через markdown.
+</div>
+{{< /rawhtml >}}
+
+## Bidi (LTR / RTL)
+
+Принудительный LTR-блок (полезно на RTL-сайтах для URL/кода):
+
+{{< ltr >}}
+https://example.com/very/long/path/that-should-stay-left-to-right
+{{< /ltr >}}
+
+Принудительный RTL-блок (арабский на LTR-сайте):
+
+{{< rtl lang="ar" >}}
+مرحبا بالعالم — это правый-в-левый текст внутри обычного русского поста.
+{{< /rtl >}}
+
 ## Collapse
 
 {{< collapse summary="Развернуть длинное объяснение" >}}

@@ -248,7 +248,26 @@ Fuse.js (v7, basic) подключается только на странице 
 {{< kbd "Cmd+Shift+P" >}}
 {{< telegram-cta channel="@your_channel" title="Подпишись" >}}
 {{< figure src="/img/x.png" alt="…" caption="…" >}}
+{{< audio src="/media/episode.mp3" caption="Эпизод 12" >}}
+{{< video src="/media/demo.mp4" poster="/media/demo.jpg" >}}
 ```
+
+Bidi-обёртки (для смешанных направлений в одном посте):
+
+```markdown
+{{< ltr >}}https://example.com/path{{< /ltr >}}
+{{< rtl lang="ar" >}}مرحبا{{< /rtl >}}
+```
+
+Raw HTML — когда нужно вставить произвольный фрагмент без markdown-обработки:
+
+```markdown
+{{< rawhtml >}}
+<div class="embed">…любой HTML…</div>
+{{< /rawhtml >}}
+```
+
+Требует `markup.goldmark.renderer.unsafe: true` в `hugo.yaml`.
 
 ## Хуки для расширения
 

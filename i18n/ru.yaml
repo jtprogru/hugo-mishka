@@ -39,6 +39,8 @@ archives_total:
   other: "{{ .Count }} публикаций"
 comments_label: "Комментарии"
 footer_commit_title: "Текущая сборка"
+audio_unsupported: "Ваш браузер не поддерживает <audio>."
+video_unsupported: "Ваш браузер не поддерживает <video>."
 toc_title: "Содержание"
 copy_code: "Скопировать"
 copy_code_done: "Скопировано"

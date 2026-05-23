@@ -1,0 +1,15 @@
+{{- /* Raw HTML passthrough.
+
+       Используй, когда нужно вставить произвольный HTML-фрагмент
+       внутри markdown — например, embed-iframe, виджет, кастомную
+       вёрстку. Содержимое не экранируется и не проходит через markdown.
+
+       Пример:
+         {{< rawhtml >}}
+         <div class="my-embed">
+           <iframe src="https://example.com/embed" loading="lazy"></iframe>
+         </div>
+         {{< /rawhtml >}}
+
+       Требует `markup.goldmark.renderer.unsafe: true` в hugo.yaml. */ -}}
+{{- .Inner | safeHTML -}}

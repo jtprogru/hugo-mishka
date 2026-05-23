@@ -208,6 +208,26 @@ h6:hover .heading-anchor { opacity: 1; }
   border-radius: var(--radius-md);
 }
 
+/* Audio / video shortcodes — обёртка <figure class="media">. */
+.media {
+  margin: var(--gap-lg) 0;
+  text-align: center;
+}
+.media audio,
+.media video {
+  display: block;
+  max-width: 100%;
+  margin-inline: auto;
+  border-radius: var(--radius-md);
+  background: var(--bg-sunken);
+}
+.media--audio audio { width: 100%; }
+.media figcaption {
+  margin-top: var(--gap-xs);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+}
+
 .md-content figure { margin: var(--gap-md) 0; text-align: center; }
 .md-content figcaption {
   font-size: var(--fs-sm);

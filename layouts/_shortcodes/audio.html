@@ -1,0 +1,59 @@
+{{- /* Audio: HTML5 <audio> с одним или несколькими source.
+
+       Использование:
+         {{< audio src="/audio/episode.mp3" >}}
+         {{< audio src="/audio/episode.ogg" type="audio/ogg" >}}
+         {{< audio src="/audio/episode" sources="mp3,ogg" >}}     // несколько форматов
+         {{< audio src="/audio/episode.mp3" caption="Эпизод 12" preload="metadata" >}}
+
+       Атрибуты:
+         src        — путь к файлу (или базовый путь без расширения, если задан sources)
+         sources    — список расширений через запятую (mp3,ogg,wav,flac,m4a)
+         type       — MIME-тип одного источника (если src содержит расширение)
+         caption    — подпись под плеером (markdown поддерживается)
+         preload    — none|metadata|auto (по умолчанию metadata)
+         autoplay   — false (по умолчанию). НЕ ставь true в продакшене — bad UX.
+         loop       — false (по умолчанию)
+         muted      — false (по умолчанию)
+         controls   — true (по умолчанию) */ -}}
+
+{{- $src      := .Get "src" -}}
+{{- $sources  := .Get "sources" -}}
+{{- $type     := .Get "type" -}}
+{{- $caption  := .Get "caption" -}}
+{{- $preload  := .Get "preload" | default "metadata" -}}
+{{- $autoplay := eq (.Get "autoplay") "true" -}}
+{{- $loop     := eq (.Get "loop") "true" -}}
+{{- $muted    := eq (.Get "muted") "true" -}}
+{{- $controls := ne (.Get "controls") "false" -}}
+
+{{- /* Маппинг расширения → MIME, чтобы пользователь мог писать sources="mp3,ogg" */ -}}
+{{- $mimes := dict
+  "mp3"  "audio/mpeg"
+  "ogg"  "audio/ogg"
+  "oga"  "audio/ogg"
+  "wav"  "audio/wav"
+  "flac" "audio/flac"
+  "m4a"  "audio/mp4"
+  "aac"  "audio/aac" -}}
+
+<figure class="media media--audio">
+  <audio
+    {{- if $controls }} controls{{ end }}
+    {{- if $autoplay }} autoplay{{ end }}
+    {{- if $loop }} loop{{ end }}
+    {{- if $muted }} muted{{ end }}
+    preload="{{ $preload }}">
+    {{- if $sources -}}
+      {{- range split $sources "," -}}
+        {{- $ext := trim . " " | lower -}}
+        {{- $mime := index $mimes $ext | default (printf "audio/%s" $ext) -}}
+    <source src="{{ printf "%s.%s" $src $ext | safeURL }}" type="{{ $mime }}">
+      {{- end -}}
+    {{- else -}}
+    <source src="{{ $src | safeURL }}"{{ with $type }} type="{{ . }}"{{ end }}>
+    {{- end }}
+    {{ i18n "audio_unsupported" | default "Ваш браузер не поддерживает <audio>." | safeHTML }}
+  </audio>
+  {{- with $caption }}<figcaption>{{ . | $.Page.RenderString }}</figcaption>{{ end -}}
+</figure>
