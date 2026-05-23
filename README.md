@@ -1,0 +1,216 @@
+# Mishka
+
+Самостоятельная Hugo-тема для [jtprog.ru](https://jtprog.ru) — без зависимостей от других тем, с акцентом на читаемость длинных технических постов, mobile-first вёрстку и оригинальный дизайн.
+
+> **Статус:** в разработке, до релиза `v0.1.0`. API params и набор шорткодов могут меняться без депрекейшена.
+
+## Особенности
+
+- Mobile-first вёрстка, отзывчивая от 320px до широких десктопов.
+- Светлая / тёмная тема: авто по `prefers-color-scheme` + ручной 3-state-тогглер (`auto / light / dark`), сохраняется в `localStorage`, без FOUC.
+- Тёплая «бумажная» палитра со ржаво-оранжевым акцентом — не клон серого PaperMod.
+- Type scale 1.250 (Major Third), читаемая колонка 720px для постов, межстрочный 1.65.
+- Главная: profile-hero + сетка проектов из `data/projects.yaml` + сетка свежих постов с превью.
+- Render-hooks для codeblock (язык в углу + copy-кнопка) и изображений (`<picture>` с AVIF/WebP).
+- Sticky-TOC с активной секцией по scroll.
+- Шорткоды: `callout` (note/tip/warn/danger), `refresh-banner`, `telegram-cta`, `thin-place`, `kbd`, `figure`, `audio`, `video`, `collapse`.
+- Подсветка кода через Chroma с собственной палитрой (отдельные `chroma-light.css` / `chroma-dark.css`).
+- Поиск через Fuse.js (опционально).
+- Mermaid и MathJax/KaTeX — опт-ин через `params.math` / `params.mermaid` или фронтматтер.
+- Категории с цветом из `data/category-colors.yaml`.
+- Self-hosted шрифты (Inter + JetBrains Mono), `font-display: swap`, без Google Fonts.
+- A11y: keyboard nav, focus-visible, ARIA-разметка, `prefers-reduced-motion`, контрасты ≥ AA.
+- Производительность: главная без cover < 100 КБ gzip, Lighthouse mobile ≥ 95.
+- Только Hugo Pipes, никаких сборщиков и `node_modules`.
+
+## Требования
+
+- Hugo Extended `>= 0.146.0`.
+
+## Установка
+
+Mishka работает и как git-submodule, и как Hugo Module — выбирайте удобный путь.
+
+### Hugo Modules (рекомендуется)
+
+В корне сайта инициализируйте модули, если ещё не:
+
+```bash
+hugo mod init github.com/<you>/<your-site>
+```
+
+Подключите тему:
+
+```bash
+hugo mod get github.com/jtprogru/hugo-mishka@latest
+```
+
+В `hugo.yaml`:
+
+```yaml
+module:
+  imports:
+    - path: github.com/jtprogru/hugo-mishka
+```
+
+Обновление:
+
+```bash
+hugo mod get -u github.com/jtprogru/hugo-mishka
+hugo mod tidy
+```
+
+### Git submodule
+
+```bash
+git submodule add https://github.com/jtprogru/hugo-mishka themes/mishka
+```
+
+В `hugo.yaml`:
+
+```yaml
+theme: mishka
+```
+
+Обновление:
+
+```bash
+git submodule update --remote themes/mishka
+```
+
+## Конфигурация
+
+Минимальный набор `params` в `hugo.yaml`:
+
+```yaml
+params:
+  author: "Your Name"
+  defaultTheme: auto         # auto | light | dark — стартовое значение тогглера
+  ShowReadingTime: true
+  ShowCodeCopyButtons: true
+  ShowPostNavLinks: true
+  math: false                # глобально; можно переопределить во фронтматтере: math: true
+  mermaid: false             # то же
+
+  profileMode:
+    enabled: true
+    title: "Заголовок"
+    subtitle: "Подзаголовок (markdown)"
+    imageUrl: "/avatar.jpg"
+    imageHeight: 150
+    imageWidth: 150
+    latestPostsCount: 6      # сколько свежих постов показывать в сетке
+
+  cover:
+    hidden: false
+    hiddenInList: false
+    hiddenInSingle: false
+
+  socialIcons:
+    - name: github
+      url: "https://github.com/<you>"
+    - name: telegram
+      url: "https://t.me/<you>"
+```
+
+### Данные проекта
+
+- `data/projects.yaml` — список проектов для сетки на главной:
+
+  ```yaml
+  - name: my-tool
+    url: https://github.com/user/my-tool
+    desc: "Описание одной строкой."
+    lang: Go
+  ```
+
+- `data/category-colors.yaml` (опционально) — цвета пилюль категорий:
+
+  ```yaml
+  OS:      "#0ea5e9"
+  Tools:   "#22c55e"
+  SRE:     "#ef4444"
+  DevOps:  "#a855f7"
+  ```
+
+## Поиск
+
+1. Добавь `JSON` в `outputs.home` в `hugo.yaml`:
+
+   ```yaml
+   outputs:
+     home: [HTML, RSS, JSON]
+   ```
+
+2. Создай `content/search.md`:
+
+   ```markdown
+   ---
+   title: "Поиск"
+   layout: "search"
+   url: "/search/"
+   ---
+   ```
+
+3. По желанию — переопредели Fuse-настройки через `params.fuseOpts`:
+
+   ```yaml
+   params:
+     fuseOpts:
+       threshold: 0.35
+       includeMatches: false
+   ```
+
+Fuse.js (v7, basic) подключается только на странице `/search/`.
+
+## Шорткоды
+
+```markdown
+{{< callout type="note" title="Заголовок (опц.)" >}}
+Текст с **markdown**.
+{{< /callout >}}
+```
+
+Доступные `type`: `note`, `tip`, `warn`, `danger`.
+
+Парные (с `.Inner`):
+
+```markdown
+{{< refresh-banner date="2026-05-23" >}}Что обновилось.{{< /refresh-banner >}}
+{{< collapse summary="Показать детали" >}}…{{< /collapse >}}
+{{< thin-place author="Кто-то" >}}Эпиграф.{{< /thin-place >}}
+```
+
+Одиночные:
+
+```markdown
+{{< kbd "Cmd+Shift+P" >}}
+{{< telegram-cta channel="@your_channel" title="Подпишись" >}}
+{{< figure src="/img/x.png" alt="…" caption="…" >}}
+```
+
+## Хуки для расширения
+
+В проекте, использующем тему, эти partial-хуки подхватываются без оверрайда всего шаблона:
+
+- `layouts/_partials/extend_head.html` — добавить своё в `<head>`.
+- `layouts/_partials/extend_footer.html` — добавить своё перед `</body>`.
+- `layouts/_partials/extend_post_content.html` — вставить блок сразу после контента поста.
+
+## Архитектура
+
+- `layouts/baseof.html` — каркас (doctype, head, body, header/main/footer).
+- `layouts/{home,list,single,404,search,taxonomy,term}.html` — страницы.
+- `layouts/_partials/` — header, footer, profile, projects, latest_posts, post_card, toc, breadcrumbs, ...
+- `layouts/_shortcodes/` — все шорткоды темы.
+- `layouts/_default/_markup/` — render-hooks для codeblock, image, link, mermaid.
+- `assets/css/main.css` + `modules/00-vars.css … 99-a11y.css` — модульный CSS, склеивается через Hugo Pipes (`resources.Match css/modules/*.css | resources.Concat`).
+- `assets/css/modules/12-chroma.css` — палитра подсветки кода (catppuccin-latte для light, catppuccin-mocha для dark), префиксы `:root[data-theme="..."]`.
+- `assets/js/` — `theme-toggle.js`, `code-copy.js`, `toc-active.js`, `search.js` + `vendor/fuse.basic.min.js`.
+- SVG-иконки — встроены в `_partials/svg.html` (path-карта по именам).
+- `static/fonts/` — self-hosted Inter + JetBrains Mono.
+- `i18n/{ru,en}.yaml` — строки интерфейса.
+
+## Лицензия
+
+MIT — см. [LICENSE](./LICENSE).
