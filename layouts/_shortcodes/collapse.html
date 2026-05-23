@@ -1,0 +1,7 @@
+{{- /* {{< collapse summary="Показать детали" >}} ... {{< /collapse >}} */ -}}
+{{- $summary := .Get "summary" | default (.Get 0) | default "Подробнее" -}}
+{{- $open := eq (.Get "open" | default "false") "true" -}}
+<details class="collapse"{{ if $open }} open{{ end }}>
+  <summary class="collapse__summary">{{ $summary }}</summary>
+  <div class="collapse__content">{{ .Inner | .Page.RenderString }}</div>
+</details>
