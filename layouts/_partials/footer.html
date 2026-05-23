@@ -1,0 +1,18 @@
+{{- /* Footer: трёхколоночный на десктопе (copyright | nav | social), стек на мобиле.
+       Содержимое колонок выделено в footer_copyright/footer_nav/footer_social,
+       чтобы проекты могли переопределять отдельные блоки. */ -}}
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__col footer__col--copy">
+      {{- partial "footer_copyright.html" . -}}
+    </div>
+
+    <div class="footer__col footer__col--nav">
+      {{- partial "footer_nav.html" . -}}
+    </div>
+
+    <div class="footer__col footer__col--social">
+      {{- partial "footer_social.html" . -}}
+    </div>
+  </div>
+</footer>

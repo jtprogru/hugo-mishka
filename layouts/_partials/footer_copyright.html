@@ -1,0 +1,12 @@
+{{- /* Левая колонка футера: copyright + кредиты. */ -}}
+<p class="footer__copy">
+  {{- with site.Copyright -}}
+    {{ . | markdownify }}
+  {{- else -}}
+    © {{ now.Year }} {{ site.Title }}
+  {{- end -}}
+</p>
+<p class="footer__powered">
+  Powered by <a href="https://gohugo.io" rel="noopener">Hugo</a>
+  · Theme <a href="https://github.com/jtprogru/hugo-mishka" rel="noopener">Mishka</a>
+</p>

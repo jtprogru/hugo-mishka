@@ -1,0 +1,12 @@
+{{- /* Средняя колонка футера: меню footer (если задано) или main. */ -}}
+{{- $menu := site.Menus.footer | default site.Menus.main -}}
+{{- with $menu }}
+<nav class="footer__nav" aria-label="{{ i18n "footer_nav_label" | default "Дополнительно" }}">
+  <p class="footer__heading">{{ i18n "footer_nav_label" | default "Навигация" }}</p>
+  <ul>
+    {{- range . }}
+    <li><a href="{{ .URL | relURL }}">{{ .Name }}</a></li>
+    {{- end }}
+  </ul>
+</nav>
+{{- end }}

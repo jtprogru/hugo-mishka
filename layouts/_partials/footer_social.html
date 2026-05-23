@@ -1,0 +1,7 @@
+{{- /* Правая колонка футера: соц-иконки. Берём из site.Params.socialIcons. */ -}}
+{{- with site.Params.socialIcons }}
+<div class="footer__social">
+  <p class="footer__heading">{{ i18n "social_heading" | default "Где ещё я" }}</p>
+  {{ partial "social_icons.html" . }}
+</div>
+{{- end }}
