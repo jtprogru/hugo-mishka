@@ -1,0 +1,27 @@
+{{- define "main" -}}
+<div class="container taxonomy">
+  <header class="taxonomy__header">
+    <h1 class="taxonomy__title">{{ i18n .Data.Plural | default (.Title) }}</h1>
+    {{- with .Content }}<div class="md-content">{{ . }}</div>{{ end }}
+    {{- $count := len .Pages -}}
+    <p class="taxonomy__count">{{ $count }} {{ if eq .Data.Plural "tags" }}тегов{{ else if eq .Data.Plural "categories" }}категорий{{ else }}{{ .Data.Plural }}{{ end }}</p>
+  </header>
+
+  {{- /* Сортируем термы по количеству постов (от популярного к нечастому). */ -}}
+  {{- $isCategory := eq .Data.Plural "categories" -}}
+  {{- $colors := site.Data.category_colors | default dict -}}
+  <ul class="taxonomy__cloud">
+    {{- range .Pages.ByTitle }}
+    {{- $color := index $colors .LinkTitle -}}
+    <li>
+      <a class="tag tag--cloud{{ if $isCategory }} tag--cat{{ end }}"
+         href="{{ .RelPermalink }}"
+         {{- with $color }} style="--tag-bg: {{ . }}"{{ end }}>
+        <span class="tag__name">{{ .LinkTitle }}</span>
+        <span class="tag__count">{{ len .Pages }}</span>
+      </a>
+    </li>
+    {{- end }}
+  </ul>
+</div>
+{{- end -}}

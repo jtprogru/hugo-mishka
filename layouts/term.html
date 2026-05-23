@@ -1,0 +1,29 @@
+{{- /* Term page: посты с этим тегом/категорией.
+       Используем тот же шаблон, что и для list (post-card grid + пагинация). */ -}}
+{{- define "main" -}}
+<div class="container list">
+  <header class="list__header">
+    <p class="list__kicker">
+      {{- if eq .Data.Singular "tag" }}Тег{{ else if eq .Data.Singular "category" }}Категория{{ else }}{{ .Data.Singular | humanize }}{{ end }}
+    </p>
+    <h1 class="list__title">{{ .Title }}</h1>
+    {{- with .Content }}<div class="md-content">{{ . }}</div>{{ end }}
+    <p class="list__count">{{ len .Pages }} {{ if eq (len .Pages) 1 }}пост{{ else }}постов{{ end }}</p>
+  </header>
+
+  {{- $paginator := .Paginate .Pages -}}
+  <div class="post-list">
+    {{- range $paginator.Pages }}
+      {{- partial "post_card.html" . }}
+    {{- end }}
+  </div>
+
+  {{- if gt $paginator.TotalPages 1 }}
+  <nav class="pagination" aria-label="Пагинация">
+    {{- if $paginator.HasPrev }}<a class="pagination__prev" href="{{ $paginator.Prev.URL }}" rel="prev">← Назад</a>{{ end }}
+    <span class="pagination__pos">{{ $paginator.PageNumber }} / {{ $paginator.TotalPages }}</span>
+    {{- if $paginator.HasNext }}<a class="pagination__next" href="{{ $paginator.Next.URL }}" rel="next">Вперёд →</a>{{ end }}
+  </nav>
+  {{- end }}
+</div>
+{{- end -}}

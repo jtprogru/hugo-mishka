@@ -1,0 +1,26 @@
+{{- define "main" -}}
+<div class="container list">
+  <header class="list__header">
+    <h1 class="list__title">{{ .Title }}</h1>
+    {{- with .Content }}<div class="md-content">{{ . }}</div>{{ end }}
+  </header>
+
+  {{- $pages := .Pages -}}
+  {{- if .IsHome }}{{ $pages = where site.RegularPages "Type" "in" site.Params.mainSections }}{{ end -}}
+  {{- $paginator := .Paginate $pages -}}
+
+  <div class="post-list">
+    {{- range $paginator.Pages }}
+      {{- partial "post_card.html" . }}
+    {{- end }}
+  </div>
+
+  {{- if gt $paginator.TotalPages 1 }}
+  <nav class="pagination" aria-label="Пагинация">
+    {{- if $paginator.HasPrev }}<a class="pagination__prev" href="{{ $paginator.Prev.URL }}" rel="prev">← Назад</a>{{ end }}
+    <span class="pagination__pos">{{ $paginator.PageNumber }} / {{ $paginator.TotalPages }}</span>
+    {{- if $paginator.HasNext }}<a class="pagination__next" href="{{ $paginator.Next.URL }}" rel="next">Вперёд →</a>{{ end }}
+  </nav>
+  {{- end }}
+</div>
+{{- end -}}

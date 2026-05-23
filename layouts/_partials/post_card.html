@@ -1,0 +1,49 @@
+{{- /* Карточка поста для list-страниц. На десктопе cover слева, текст справа. */ -}}
+{{- $page := . -}}
+{{- $dateFmt := site.Params.dateFormat | default "2 January 2006" -}}
+{{- $cover := .Params.cover.image -}}
+{{- $coverURL := "" -}}
+{{- $coverAlt := .Params.cover.alt | default .Title -}}
+{{- $relative := .Params.cover.relative | default false -}}
+{{- if $cover -}}
+  {{- $bundleImg := (.Resources.ByType "image").GetMatch (printf "*%s*" $cover) -}}
+  {{- if $bundleImg -}}
+    {{- $coverURL = $bundleImg.RelPermalink -}}
+  {{- else if or (strings.HasPrefix $cover "http://") (strings.HasPrefix $cover "https://") (strings.HasPrefix $cover "/") -}}
+    {{- $coverURL = $cover -}}
+  {{- else if $relative -}}
+    {{- $coverURL = printf "%s%s" .RelPermalink $cover -}}
+  {{- else -}}
+    {{- /* По умолчанию — путь от корня сайта (static/) */ -}}
+    {{- $coverURL = printf "/%s" $cover -}}
+  {{- end -}}
+{{- end -}}
+{{- $hideCover := or .Params.cover.hidden site.Params.cover.hiddenInList -}}
+
+<article class="post-card">
+  {{- if and $coverURL (not $hideCover) }}
+  <a class="post-card__cover-wrap" href="{{ .RelPermalink }}" tabindex="-1" aria-hidden="true">
+    <img class="post-card__cover" src="{{ $coverURL }}" alt="{{ $coverAlt }}" loading="lazy" decoding="async">
+  </a>
+  {{- end }}
+  <div class="post-card__body">
+    <header class="post-card__head">
+      <h2 class="post-card__title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+      <div class="post-card__meta">
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format $dateFmt }}</time>
+        {{- if site.Params.ShowReadingTime }} · {{ .ReadingTime }} мин{{ end }}
+      </div>
+    </header>
+    {{- with .Description | default .Summary }}
+    <p class="post-card__excerpt">{{ . | plainify | truncate 220 }}</p>
+    {{- end }}
+    {{- with .GetTerms "categories" }}
+    <ul class="post-card__cats">
+      {{- range . }}
+      {{- $color := index (site.Data.category_colors | default dict) .LinkTitle -}}
+      <li><a class="tag tag--cat" href="{{ .RelPermalink }}"{{ with $color }} style="--tag-bg: {{ . }}"{{ end }}>{{ .LinkTitle }}</a></li>
+      {{- end }}
+    </ul>
+    {{- end }}
+  </div>
+</article>
