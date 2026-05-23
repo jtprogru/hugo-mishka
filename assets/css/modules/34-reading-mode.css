@@ -1,0 +1,60 @@
+/* ============================================================================
+   34-reading-mode.css — focus-режим чтения (body.is-reading-mode).
+   Скрываем всё, кроме заголовка, мета и контента поста.
+   ============================================================================ */
+
+body.is-reading-mode .header,
+body.is-reading-mode .footer,
+body.is-reading-mode .breadcrumbs,
+body.is-reading-mode .toc,
+body.is-reading-mode .share,
+body.is-reading-mode .related,
+body.is-reading-mode .comments,
+body.is-reading-mode .edit-post,
+body.is-reading-mode .post-nav,
+body.is-reading-mode .post-cover,
+body.is-reading-mode .post__tags,
+body.is-reading-mode .translation-list {
+  display: none !important;
+}
+
+body.is-reading-mode .main {
+  padding-block: var(--gap-2xl);
+}
+
+body.is-reading-mode .post__header {
+  margin-bottom: var(--gap-xl);
+}
+
+body.is-reading-mode .post {
+  /* Дополнительный воздух вокруг текста, как в Readability-апликухах. */
+  max-width: 720px;
+  margin-inline: auto;
+}
+
+/* Маленькая подсказка о клавише — появляется внизу при включённом
+   режиме (только при hover, чтобы не мешать чтению). */
+body.is-reading-mode::after {
+  content: "f / esc";
+  position: fixed;
+  bottom: var(--gap-md);
+  right: var(--gap-md);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--text-subtle);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition, 0.18s ease);
+}
+
+body.is-reading-mode:hover::after {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.is-reading-mode::after { transition: none; }
+}

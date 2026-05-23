@@ -7,6 +7,7 @@
 
 ### Added
 
+- Reading mode: клавиша `f` переключает body-класс `is-reading-mode`, скрывающий header/footer/share/related/edit/toc/cover/nav. Esc выходит. `assets/js/reading-mode.js` (~30 строк) + CSS `34-reading-mode.css`. Подсказка `f / esc` появляется в углу при hover. Активируется только на single-страницах поста.
 - AVIF в render-image: render-hook теперь умеет генерировать `<source type="image/avif">` как первый источник в `<picture>`, перед WebP и оригинальным JPG/PNG. Опт-ин через `params.renderImageAvif: true` (по умолчанию off — Hugo Extended на некоторых платформах кодирует AVIF в 0-байтные файлы). Качество и max-width настраиваются: `renderImageAvifQ` (60), `renderImageWebpQ` (85), `renderImageMaxW` (1200).
 - Шорткоды `audio`, `video`, `rawhtml`, `ltr`, `rtl`. `audio`/`video` оборачивают HTML5-плееры в `<figure class="media">` с подписью; поддержка нескольких форматов через `sources="mp3,ogg"` или `sources="mp4,webm"`. `rawhtml` — passthrough `safeHTML`. `ltr`/`rtl` — обёртки `<div dir="...">` с `lang`. CSS `.media` в `08-post-single.css`; i18n `audio_unsupported` / `video_unsupported` (ru/en). Демо: `exampleSite/content/posts/all-shortcodes.md`.
 - Footer git-commit info: `footer_copyright.html` опционально выводит короткий SHA текущей сборки. Источник: ENV `HUGO_COMMIT` (приоритет, в whitelist Hugo по умолчанию) или `params.commit`. Если задан `params.commitURL` (printf-шаблон с `%s`) — SHA становится ссылкой. CSS-стили в `05-footer.css`. i18n `footer_commit_title` (ru/en).

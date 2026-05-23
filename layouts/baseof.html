@@ -23,6 +23,7 @@
   {{- with resources.Get "js/theme-toggle.js" }}{{ $jsParts = $jsParts | append . }}{{ end -}}
   {{- with resources.Get "js/code-copy.js" }}{{ $jsParts = $jsParts | append . }}{{ end -}}
   {{- with resources.Get "js/toc-active.js" }}{{ $jsParts = $jsParts | append . }}{{ end -}}
+  {{- with resources.Get "js/reading-mode.js" }}{{ $jsParts = $jsParts | append . }}{{ end -}}
   {{- if $jsParts -}}
     {{- $bundle := $jsParts | resources.Concat "js/mishka.js" -}}
     {{- if hugo.IsProduction -}}{{ $bundle = $bundle | minify | fingerprint }}{{ end -}}
