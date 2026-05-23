@@ -29,7 +29,10 @@
     <header class="post__header">
       <h1 class="post__title">{{ .Title }}</h1>
       {{- with .Description }}<p class="post__description">{{ . }}</p>{{ end }}
-      {{- partial "post_meta.html" . }}
+      <div class="post__header-meta">
+        {{- partial "post_meta.html" . }}
+        {{- partial "edit_post.html" . }}
+      </div>
     </header>
 
     {{- partial "post_cover.html" (dict "context" . "location" "single") }}
@@ -52,8 +55,6 @@
         {{- end }}
       </ul>
       {{- end }}
-
-      {{- partial "edit_post.html" . }}
 
       {{- if site.Params.ShowPostNavLinks }}
       {{- partial "post_nav_links.html" . }}
