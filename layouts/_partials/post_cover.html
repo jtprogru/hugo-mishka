@@ -70,6 +70,11 @@
       {{- /* PaperMod-семантика: путь от корня сайта (static/) */ -}}
       {{- $href = printf "/%s" $img -}}
     {{- end -}}
+    {{- /* Cache-bust для static-обложек — тот же helper, что и в
+           cover_og_image.html. Нужен, чтобы XPath-правила IV-шаблона
+           забирали URL с `?v=<mtime>` и обходили залипший кеш
+           Telegram-овского image-proxy. */ -}}
+    {{- $href = printf "%s%s" $href (partial "static_cache_bust.html" $img) -}}
     <figure class="post-cover">
       {{- if $linkFullImages }}<a href="{{ $href | safeURL }}" target="_blank" rel="noopener noreferrer">{{- end }}
       <img loading="eager" decoding="async"
