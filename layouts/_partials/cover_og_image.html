@@ -38,7 +38,11 @@
     {{- if $.IsPage -}}
       {{- with $.Resources.GetMatch $path -}}{{ $res = . }}{{- end -}}
     {{- end -}}
-    {{- /* 2. Если не нашли — пробуем глобальный assets/ */ -}}
+    {{- /* 2. Если не нашли — пробуем глобальный assets/covers/<name>,
+              затем assets/<name> (legacy / прочие случаи). */ -}}
+    {{- if not $res -}}
+      {{- with resources.Get (printf "covers/%s" $path) -}}{{ $res = . }}{{- end -}}
+    {{- end -}}
     {{- if not $res -}}
       {{- with resources.Get $path -}}{{ $res = . }}{{- end -}}
     {{- end -}}

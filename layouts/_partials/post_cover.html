@@ -35,22 +35,56 @@
   {{- $relative := $cover.relative | default false -}}
   {{- $linkFullImages := $cover.linkFullImages | default false -}}
 
-  {{- /* 1) Page-bundle resource */ -}}
+  {{- /* 1) Page-bundle resource (preferred — relative cover.image like
+            "cover.png" living next to index.md) */ -}}
   {{- $res := $ctx.Resources.GetMatch (printf "*%s*" $img) -}}
+
+  {{- /* 2) Global assets/covers/<name> — shared topical covers
+            (e.g. cover.image: howto.png references assets/covers/howto.png).
+            We try this before falling back to static/, because assets-resources
+            can be resized + transcoded to WebP and emitted with srcset. */ -}}
+  {{- if not $res -}}
+    {{- with resources.Get (printf "covers/%s" $img) -}}{{ $res = . }}{{- end -}}
+  {{- end -}}
 
   {{- if $res -}}
     {{- $isRaster := in (slice "image/jpeg" "image/png" "image/webp") $res.MediaType.Type -}}
     {{- $orig := $res -}}
     {{- $webp := "" -}}
+    {{- $srcsetWebp := "" -}}
+    {{- $srcsetOrig := "" -}}
     {{- if $isRaster -}}
       {{- $maxW := 1280 -}}
       {{- if gt $orig.Width $maxW -}}{{ $orig = $res.Resize (printf "%dx" $maxW) }}{{ end -}}
       {{- $webp = $orig.Resize (printf "%dx webp q85" $orig.Width) -}}
+
+      {{- /* Responsive srcset: 480w / 800w / 1200w (capped at $orig.Width).
+              We only generate entries whose width is <= the original to avoid
+              upscaling. WebP entries are independent from the original-format
+              ones so the browser can pick best by both size and format. */ -}}
+      {{- $widths := slice -}}
+      {{- range slice 480 800 1200 -}}
+        {{- if le . $orig.Width -}}{{ $widths = $widths | append . }}{{- end -}}
+      {{- end -}}
+      {{- $widths = $widths | append $orig.Width | uniq -}}
+
+      {{- $webpEntries := slice -}}
+      {{- $origEntries := slice -}}
+      {{- range $widths -}}
+        {{- $w := . -}}
+        {{- $variant := $orig.Resize (printf "%dx q85" $w) -}}
+        {{- $variantWebp := $orig.Resize (printf "%dx webp q85" $w) -}}
+        {{- $origEntries = $origEntries | append (printf "%s %dw" $variant.RelPermalink $w) -}}
+        {{- $webpEntries = $webpEntries | append (printf "%s %dw" $variantWebp.RelPermalink $w) -}}
+      {{- end -}}
+      {{- $srcsetOrig = delimit $origEntries ", " -}}
+      {{- $srcsetWebp = delimit $webpEntries ", " -}}
     {{- end -}}
     <figure class="post-cover">
       {{- if $linkFullImages }}<a href="{{ $res.RelPermalink }}" target="_blank" rel="noopener noreferrer">{{- end }}
       <picture>
-        {{- with $webp }}<source srcset="{{ .RelPermalink }}" type="image/webp">{{ end }}
+        {{- if $srcsetWebp }}<source srcset="{{ $srcsetWebp }}" sizes="(max-width: 800px) 100vw, 800px" type="image/webp">{{ else if $webp }}<source srcset="{{ $webp.RelPermalink }}" type="image/webp">{{ end }}
+        {{- if $srcsetOrig }}<source srcset="{{ $srcsetOrig }}" sizes="(max-width: 800px) 100vw, 800px" type="{{ $orig.MediaType.Type }}">{{ end }}
         <img loading="eager" decoding="async"
              src="{{ $orig.RelPermalink }}"
              alt="{{ $alt }}"
