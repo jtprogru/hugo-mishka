@@ -33,6 +33,12 @@
 {{- /* PWA: manifest + SW (опт-ин через site.Params.PWA.enabled) */ -}}
 {{- partial "pwa_register.html" . }}
 
+{{- /* Analytics: GA4 + Yandex Metrica.
+       Рендерится только при hugo.IsProduction == true и при наличии
+       соответствующих ID в hugo.yaml. Локальный `hugo server` ничего
+       не вызывает. См. analytics.html. */ -}}
+{{- partial "analytics.html" . }}
+
 {{- /* Хук для проекта */ -}}
 {{- if templates.Exists "_partials/extend_head.html" -}}
 {{- partial "extend_head.html" . -}}

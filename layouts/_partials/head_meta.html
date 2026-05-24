@@ -86,3 +86,20 @@
 {{- if or (eq .Layout "offline") (eq .Layout "404") (eq .RelPermalink "/offline/") .Params.robotsNoIndex -}}
 <meta name="robots" content="noindex, nofollow">
 {{- end -}}
+
+{{- /* Search Console / Яндекс.Вебмастер / Bing — verification meta-теги.
+       Структура конфига:
+         params.analytics.google.SiteVerificationTag
+         params.analytics.yandex.SiteVerificationTag
+         params.analytics.bing.SiteVerificationTag                          */ -}}
+{{- with site.Params.analytics }}
+  {{- with .google.SiteVerificationTag }}
+<meta name="google-site-verification" content="{{ . }}">
+  {{- end }}
+  {{- with .yandex.SiteVerificationTag }}
+<meta name="yandex-verification" content="{{ . }}">
+  {{- end }}
+  {{- with .bing.SiteVerificationTag }}
+<meta name="msvalidate.01" content="{{ . }}">
+  {{- end }}
+{{- end -}}
