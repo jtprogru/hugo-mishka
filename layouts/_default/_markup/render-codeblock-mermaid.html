@@ -1,21 +1,34 @@
 {{- /* Render hook для кодоблока с языком mermaid.
 
        Стратегия:
-       1) Сначала пытаемся найти заранее отрендеренный SVG в
-          `assets/mermaid/<sha256(code)>.svg`. Если он есть — inline'им SVG
-          и НЕ помечаем страницу как нуждающуюся в mermaid.esm bundle.
-       2) Если SVG-кэша нет — fallback на runtime: оставляем <pre class="mermaid">,
-          mermaid_init.html подгружает 330KB ESM bundle и рендерит на клиенте.
+       1) Сначала пытаемся найти заранее отрендеренные SVG в
+          `assets/mermaid/<sha256(code)>.svg`     — light theme
+          `assets/mermaid/<sha256(code)>.dark.svg` — dark  theme
+          Если есть оба — inline'им обе версии внутри одной <figure>;
+          CSS переключает видимость через `:root[data-theme="..."]`.
+          Если есть только light — inline'им её одну (на dark-странице
+          может выглядеть бледно, но это лучше, чем CDN-fetch).
+       2) Если SVG-кэша нет совсем — fallback на runtime: оставляем
+          <pre class="mermaid">, mermaid_init.html подгружает 330KB
+          ESM bundle и рендерит на клиенте.
 
        Хэширование: sha256 от `strings.TrimSpace .Inner`. То же самое делает
        scripts/mermaid-prerender.py в проекте jtprog.ru. Любое расхождение
        пробелов/нормализации между этими двумя местами сломает lookup. */ -}}
 {{- $code := strings.TrimSpace .Inner -}}
 {{- $hash := sha256 $code -}}
-{{- $svg := resources.Get (printf "mermaid/%s.svg" $hash) -}}
-{{- if $svg -}}
+{{- $light := resources.Get (printf "mermaid/%s.svg"      $hash) -}}
+{{- $dark  := resources.Get (printf "mermaid/%s.dark.svg" $hash) -}}
+{{- if $light -}}
 <figure class="mermaid mermaid--prerendered" aria-label="Mermaid diagram">
-{{ $svg.Content | safeHTML }}
+<div class="mermaid-svg mermaid-svg--light">
+{{ $light.Content | safeHTML }}
+</div>
+{{- with $dark }}
+<div class="mermaid-svg mermaid-svg--dark">
+{{ .Content | safeHTML }}
+</div>
+{{- end }}
 </figure>
 {{- else -}}
 <pre class="mermaid">

@@ -21,3 +21,12 @@ pre.mermaid:not([data-processed="true"]) {
 }
 
 .mermaid svg { max-width: 100%; height: auto; }
+
+/* Pre-rendered SVG-варианты под light/dark тему сайта.
+   Скрипт scripts/mermaid-prerender.py генерит две версии (<hash>.svg +
+   <hash>.dark.svg), render hook вставляет обе — здесь прячем неактивную.
+   Поведение по умолчанию (нет data-theme — мгновение до FOUC-скрипта):
+   показываем light, чтобы не было прыжка контента. */
+.mermaid-svg--dark { display: none; }
+:root[data-theme="dark"] .mermaid-svg--light { display: none; }
+:root[data-theme="dark"] .mermaid-svg--dark  { display: block; }
