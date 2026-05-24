@@ -10,10 +10,16 @@
        превышала 1200px — это рекомендованный OG-размер и одновременно
        «безопасный» для Telegram (далеко от лимита по мегапикселям).
 
-       Если обложка лежит в `static/` (или это внешний URL) — Hugo её
-       обрабатывать не может, и мы просто отдаём ссылку как есть. В этом
-       случае ответственность за корректный формат (RGB, ~1200px, разумный
-       размер, не grayscale+alpha) лежит на авторе сайта.
+       Если обложка лежит в `static/`, Hugo её обрабатывать не может, но
+       мы приклеиваем `?v=<mtime>` как cache-bust. Это нужно, потому что
+       Telegram-овский IV-proxy (ivwebcontent.telegram.org) при условном
+       GET'е получает 304 без тела и не всегда умеет восстановить тело
+       из своего же кеша, из-за чего IV рендерит «Resource fetch failed».
+       Меняем содержимое файла → меняется mtime → меняется query string →
+       IV-proxy делает свежий запрос и получает 200 с актуальным телом.
+
+       Если cover — внешний URL (`http(s)://...`) или файла нет в static/,
+       URL отдаётся как есть.
 
        Возвращает пустой dict, если у страницы нет cover.image. */ -}}
 
@@ -52,8 +58,23 @@
         {{- $url = $path | absURL -}}
       {{- end -}}
     {{- else -}}
-      {{- /* Resource не нашли — скорее всего, файл в static/ или внешний URL. */ -}}
-      {{- $url = $path | absURL -}}
+      {{- /* Resource не нашли — внешний URL или файл в static/. */ -}}
+      {{- if hasPrefix $path "http" -}}
+        {{- $url = $path -}}
+      {{- else -}}
+        {{- /* Static-файл: приклеиваем cache-bust по mtime, чтобы залипший
+               кеш IV-proxy инвалидировался при изменении содержимого. */ -}}
+        {{- $bareURL    := $path | absURL -}}
+        {{- $cleanPath  := strings.TrimPrefix "/" $path -}}
+        {{- $staticPath := printf "static/%s" $cleanPath -}}
+        {{- $bust := "" -}}
+        {{- if fileExists $staticPath -}}
+          {{- with (os.Stat $staticPath) -}}
+            {{- $bust = printf "?v=%d" .ModTime.Unix -}}
+          {{- end -}}
+        {{- end -}}
+        {{- $url = printf "%s%s" $bareURL $bust -}}
+      {{- end -}}
     {{- end -}}
 
     {{- $result = dict "url" $url "width" $w "height" $h "alt" $alt -}}
