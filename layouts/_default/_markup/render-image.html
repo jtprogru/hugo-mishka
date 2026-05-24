@@ -69,9 +69,16 @@
     </figure>
   {{- end -}}
 {{- else -}}
+  {{- /* Внешний URL или файл из /static/. Для static-картинок приклеиваем
+         cache-bust по mtime (тот же helper, что и для обложек), чтобы
+         Telegram IV image-proxy не залипал на старой версии файла. */ -}}
+  {{- $src := $dest -}}
+  {{- if not (hasPrefix $dest "http") -}}
+    {{- $src = printf "%s%s" $dest (partial "static_cache_bust.html" $dest) -}}
+  {{- end -}}
   <figure class="post-figure">
     <img loading="lazy" decoding="async"
-         src="{{ $dest | safeURL }}"
+         src="{{ $src | safeURL }}"
          alt="{{ $alt }}"
          {{- with $title }} title="{{ . }}"{{ end }}>
     {{- with $title }}<figcaption>{{ . }}</figcaption>{{ end -}}
