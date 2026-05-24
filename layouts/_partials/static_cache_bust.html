@@ -1,0 +1,36 @@
+{{- /* static_cache_bust.html — returnable partial.
+
+       Возвращает query string вида `?v=<unix-mtime>` для файла,
+       лежащего в `/static/<path>`, либо пустую строку, если файла
+       нет (например, для внешнего URL, для абсолютного URL с другого
+       домена, или просто если такой файл отсутствует).
+
+       Используется в `cover_og_image.html` (для og:image) и в
+       `post_cover.html` (для in-page <img>), чтобы URL обложки
+       автоматически менялся при изменении содержимого файла. Это
+       нужно для обхода залипшего кеша Telegram IV image-proxy
+       (`ivwebcontent.telegram.org`), который при 304 Not Modified
+       не всегда корректно восстанавливает тело из своего кеша.
+
+       Вход: строка `$path` (значение `cover.image` из frontmatter
+       или аналогичное). Внешние URL (`http(s)://...`) — игнорируются.
+
+       Использование:
+         {{- $bust := partial "static_cache_bust.html" $path -}}
+         <img src="{{ $path | absURL }}{{ $bust }}">
+*/ -}}
+
+{{- $bust := "" -}}
+{{- $path := . -}}
+
+{{- if and $path (not (hasPrefix $path "http")) -}}
+  {{- $cleanPath  := strings.TrimPrefix "/" $path -}}
+  {{- $staticPath := printf "static/%s" $cleanPath -}}
+  {{- if fileExists $staticPath -}}
+    {{- with (os.Stat $staticPath) -}}
+      {{- $bust = printf "?v=%d" .ModTime.Unix -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $bust -}}

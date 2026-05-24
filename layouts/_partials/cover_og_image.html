@@ -58,22 +58,13 @@
         {{- $url = $path | absURL -}}
       {{- end -}}
     {{- else -}}
-      {{- /* Resource не нашли — внешний URL или файл в static/. */ -}}
+      {{- /* Resource не нашли — внешний URL или файл в static/.
+             Для static прикладываем cache-bust через общий helper. */ -}}
       {{- if hasPrefix $path "http" -}}
         {{- $url = $path -}}
       {{- else -}}
-        {{- /* Static-файл: приклеиваем cache-bust по mtime, чтобы залипший
-               кеш IV-proxy инвалидировался при изменении содержимого. */ -}}
-        {{- $bareURL    := $path | absURL -}}
-        {{- $cleanPath  := strings.TrimPrefix "/" $path -}}
-        {{- $staticPath := printf "static/%s" $cleanPath -}}
-        {{- $bust := "" -}}
-        {{- if fileExists $staticPath -}}
-          {{- with (os.Stat $staticPath) -}}
-            {{- $bust = printf "?v=%d" .ModTime.Unix -}}
-          {{- end -}}
-        {{- end -}}
-        {{- $url = printf "%s%s" $bareURL $bust -}}
+        {{- $bust := partial "static_cache_bust.html" $path -}}
+        {{- $url = printf "%s%s" ($path | absURL) $bust -}}
       {{- end -}}
     {{- end -}}
 
