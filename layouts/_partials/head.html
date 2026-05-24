@@ -8,6 +8,12 @@
 {{- partial "head_theme_init.html" . }}
 {{- partial "head_meta.html" . }}
 
+{{- /* Performance hints — preconnect к CDN'ам и preload LCP-картинки.
+       Оба партиала эмитят теги только если они реально применимы к
+       текущей странице, чтобы не раздувать <head> мёртвыми hint'ами. */ -}}
+{{- partial "head_preconnect.html" . }}
+{{- partial "head_preload_cover.html" . }}
+
 {{- /* Favicons */ -}}
 {{- with site.Params.assets }}
   {{- with .favicon }}<link rel="icon" href="{{ . | relURL }}">{{ end }}

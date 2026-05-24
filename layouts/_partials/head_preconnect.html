@@ -1,0 +1,25 @@
+{{- /* DNS-prefetch + TCP/TLS preconnect для CDN, реально используемых
+       на этой странице. На страницах без формул/диаграмм ничего не шлём
+       — лишний hint раздувает <head> и тратит RTT впустую.
+
+       jsdelivr.net хостит:
+         - KaTeX (CSS + JS + auto-render) при mathRenderer: katex
+         - Mermaid ESM bundle (fallback, если SVG-pre-render отсутствует)
+
+       KaTeX подключается если site.Params.math или .Params.math и
+       mathRenderer = katex. (mathjax-вариант тоже на jsdelivr — для него
+       hint тоже валиден.)
+
+       Mermaid runtime подключается только если в контенте есть код-блок
+       ```mermaid``` И для него НЕТ pre-rendered SVG. Это сложно понять
+       из head (render hook ещё не отработал), поэтому простой sniff
+       по .RawContent — достаточно. False-positive максимум один dns
+       lookup, что копейки. */ -}}
+
+{{- $usesMath := or site.Params.math .Params.math -}}
+{{- $hasMermaidBlock := and .IsPage (strings.Contains (.RawContent | default "") "```mermaid") -}}
+
+{{- if or $usesMath $hasMermaidBlock -}}
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="dns-prefetch" href="//cdn.jsdelivr.net">
+{{- end -}}

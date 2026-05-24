@@ -1,0 +1,48 @@
+{{- /* Preload для LCP-картинки (cover поста).
+
+       Зачем: preloader скачивает cover параллельно с CSS, не дожидаясь
+       парсинга <body>. Для мобильных пользователей это обычно −100..300 мс
+       к LCP, потому что cover у нас выше fold и почти всегда LCP-элемент.
+
+       Скоп: только single-страницы (.IsPage), где есть cover, cover не
+       скрыт и резолвится как Hugo-ресурс (page-bundle или assets/covers/).
+       Внешние URL и static-fallback не предзагружаем (preload без срабатывания
+       тратит трафик и помечается в DevTools как warning).
+
+       Резолвлю те же widths/transforms, что post_cover.html — Hugo
+       дедуплицирует resource transformations, так что preload reuse'ит
+       уже сгенерированные файлы (новых вариантов не плодит). */ -}}
+
+{{- if .IsPage -}}
+{{- with .Params.cover -}}
+  {{- $hidden := or .hidden .hiddenInSingle (eq site.Params.cover.hiddenInSingle true) -}}
+  {{- if and .image (not $hidden) -}}
+    {{- $img := .image -}}
+    {{- $res := "" -}}
+    {{- with $.Resources.GetMatch (printf "*%s*" $img) }}{{ $res = . }}{{ end -}}
+    {{- if not $res }}{{ with resources.Get (printf "covers/%s" $img) }}{{ $res = . }}{{ end }}{{ end -}}
+    {{- if $res -}}
+      {{- $isRaster := in (slice "image/jpeg" "image/png" "image/webp") $res.MediaType.Type -}}
+      {{- if $isRaster -}}
+        {{- $orig := $res -}}
+        {{- if gt $orig.Width 1280 }}{{ $orig = $res.Resize "1280x" }}{{ end -}}
+        {{- $entries := slice -}}
+        {{- range slice 480 800 1200 -}}
+          {{- if le . $orig.Width -}}
+            {{- $v := $orig.Resize (printf "%dx webp q85" .) -}}
+            {{- $entries = $entries | append (printf "%s %dw" $v.RelPermalink .) -}}
+          {{- end -}}
+        {{- end -}}
+        {{- $vFull := $orig.Resize (printf "%dx webp q85" $orig.Width) -}}
+        {{- $entries = $entries | append (printf "%s %dw" $vFull.RelPermalink $orig.Width) | uniq -}}
+        {{- $srcset := delimit $entries ", " -}}
+        {{- /* Заворачиваем весь <link> в safeHTML: иначе canonifyURLs +
+              Hugo HTML-encoder URL-encode'ят пробелы в imagesrcset как
+              %20, и preloader получает невалидный srcset. */ -}}
+        {{- $tag := printf `<link rel="preload" as="image" type="image/webp" imagesrcset="%s" imagesizes="(max-width: 800px) 100vw, 800px">` $srcset -}}
+        {{ $tag | safeHTML }}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- end -}}
