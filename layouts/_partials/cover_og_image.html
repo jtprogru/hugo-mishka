@@ -1,0 +1,63 @@
+{{- /* cover_og_image.html — returnable partial.
+
+       Возвращает dict с описанием OG-картинки для текущей страницы:
+
+         { url: string, width: int, height: int, alt: string }
+
+       Если обложку (`.Params.cover.image`) удаётся резолвнуть как Hugo-ресурс
+       (Page Bundle через `.Resources.GetMatch` или глобальный `assets/` через
+       `resources.Get`), она автоматически ресайзится так, чтобы ширина не
+       превышала 1200px — это рекомендованный OG-размер и одновременно
+       «безопасный» для Telegram (далеко от лимита по мегапикселям).
+
+       Если обложка лежит в `static/` (или это внешний URL) — Hugo её
+       обрабатывать не может, и мы просто отдаём ссылку как есть. В этом
+       случае ответственность за корректный формат (RGB, ~1200px, разумный
+       размер, не grayscale+alpha) лежит на авторе сайта.
+
+       Возвращает пустой dict, если у страницы нет cover.image. */ -}}
+
+{{- $result := dict -}}
+
+{{- with .Params.cover -}}
+  {{- $path := .image -}}
+  {{- $alt  := .alt | default "" -}}
+  {{- $w    := int (.width | default 0) -}}
+  {{- $h    := int (.height | default 0) -}}
+  {{- $url  := "" -}}
+
+  {{- if $path -}}
+    {{- /* 1. Пытаемся найти как Page Bundle resource */ -}}
+    {{- $res := "" -}}
+    {{- if $.IsPage -}}
+      {{- with $.Resources.GetMatch $path -}}{{ $res = . }}{{- end -}}
+    {{- end -}}
+    {{- /* 2. Если не нашли — пробуем глобальный assets/ */ -}}
+    {{- if not $res -}}
+      {{- with resources.Get $path -}}{{ $res = . }}{{- end -}}
+    {{- end -}}
+
+    {{- if $res -}}
+      {{- /* Обработка только если это image MIME. */ -}}
+      {{- $isImage := and $res.MediaType (eq $res.MediaType.MainType "image") -}}
+      {{- if $isImage -}}
+        {{- $proc := $res -}}
+        {{- if gt $res.Width 1200 -}}
+          {{- $proc = $res.Resize "1200x q85" -}}
+        {{- end -}}
+        {{- $url = $proc.Permalink -}}
+        {{- $w   = $proc.Width -}}
+        {{- $h   = $proc.Height -}}
+      {{- else -}}
+        {{- $url = $path | absURL -}}
+      {{- end -}}
+    {{- else -}}
+      {{- /* Resource не нашли — скорее всего, файл в static/ или внешний URL. */ -}}
+      {{- $url = $path | absURL -}}
+    {{- end -}}
+
+    {{- $result = dict "url" $url "width" $w "height" $h "alt" $alt -}}
+  {{- end -}}
+{{- end -}}
+
+{{- return $result -}}

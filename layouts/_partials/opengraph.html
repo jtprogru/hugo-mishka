@@ -52,14 +52,17 @@
 <meta property="og:type" content="website">
 {{- end }}
 
-{{- /* Cover-картинка и её метрики/alt */ -}}
-{{- with .Params.cover }}
-  {{- with .image }}
-<meta property="og:image" content="{{ . | absURL }}">
-  {{- end }}
-  {{- with .alt }}
-<meta property="og:image:alt" content="{{ . }}">
-  {{- end }}
-  {{- with .width }}<meta property="og:image:width" content="{{ . }}">{{- end }}
-  {{- with .height }}<meta property="og:image:height" content="{{ . }}">{{- end }}
+{{- /* Cover-картинка и её метрики/alt.
+       URL, ширина и высота вычисляются в `cover_og_image.html`. Если
+       cover — Hugo-ресурс (Page Bundle / assets/), он автоматически
+       ресайзится до 1200px по ширине под OG-превью. Для cover'ов в
+       static/ отдаётся ссылка как есть. */ -}}
+{{- $cover := partial "cover_og_image.html" . }}
+{{- with $cover.url }}
+<meta property="og:image" content="{{ . }}">
 {{- end }}
+{{- with $cover.alt }}
+<meta property="og:image:alt" content="{{ . }}">
+{{- end }}
+{{- if gt ($cover.width | default 0) 0 }}<meta property="og:image:width" content="{{ $cover.width }}">{{- end }}
+{{- if gt ($cover.height | default 0) 0 }}<meta property="og:image:height" content="{{ $cover.height }}">{{- end }}

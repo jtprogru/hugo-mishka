@@ -9,12 +9,12 @@
 {{- $title := .Title | default site.Title -}}
 {{- $desc  := or .Description .Summary site.Params.description | plainify | htmlUnescape | chomp -}}
 
-{{- $img := "" -}}
-{{- $alt := "" -}}
-{{- with .Params.cover -}}
-  {{- with .image }}{{ $img = . | absURL }}{{ end -}}
-  {{- with .alt }}{{ $alt = . }}{{ end -}}
-{{- end -}}
+{{- /* OG-картинка вычисляется единожды в cover_og_image.html: если cover —
+       Hugo-ресурс, он автоматически ресайзится до 1200px по ширине. Для
+       static/-обложек URL отдаётся как есть. */ -}}
+{{- $cover := partial "cover_og_image.html" . -}}
+{{- $img := $cover.url -}}
+{{- $alt := $cover.alt -}}
 
 <meta name="twitter:card" content="{{ if $img }}summary_large_image{{ else }}summary{{ end }}">
 <meta name="twitter:title" content="{{ $title }}">
