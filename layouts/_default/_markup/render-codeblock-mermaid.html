@@ -1,6 +1,25 @@
-{{- /* Render hook для кодоблока с языком mermaid. Заменяет <pre><code> на <pre class="mermaid">.
-       Помечает страницу как «нужен Mermaid» — partial mermaid_init.html инициализирует библиотеку. */ -}}
+{{- /* Render hook для кодоблока с языком mermaid.
+
+       Стратегия:
+       1) Сначала пытаемся найти заранее отрендеренный SVG в
+          `assets/mermaid/<sha256(code)>.svg`. Если он есть — inline'им SVG
+          и НЕ помечаем страницу как нуждающуюся в mermaid.esm bundle.
+       2) Если SVG-кэша нет — fallback на runtime: оставляем <pre class="mermaid">,
+          mermaid_init.html подгружает 330KB ESM bundle и рендерит на клиенте.
+
+       Хэширование: sha256 от `strings.TrimSpace .Inner`. То же самое делает
+       scripts/mermaid-prerender.py в проекте jtprog.ru. Любое расхождение
+       пробелов/нормализации между этими двумя местами сломает lookup. */ -}}
+{{- $code := strings.TrimSpace .Inner -}}
+{{- $hash := sha256 $code -}}
+{{- $svg := resources.Get (printf "mermaid/%s.svg" $hash) -}}
+{{- if $svg -}}
+<figure class="mermaid mermaid--prerendered" aria-label="Mermaid diagram">
+{{ $svg.Content | safeHTML }}
+</figure>
+{{- else -}}
 <pre class="mermaid">
 {{- .Inner | safeHTML -}}
 </pre>
-{{ .Page.Store.Set "hasMermaid" true }}
+{{ .Page.Store.Set "hasMermaid" true -}}
+{{- end -}}
