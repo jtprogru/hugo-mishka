@@ -79,3 +79,10 @@
     {{- end }}
   {{- end }}
 {{- end }}
+
+{{- /* noindex для служебных страниц: offline (PWA fallback), 404, и любой
+       страницы с robotsNoIndex: true во фронтматтере. Страховка от ботов,
+       игнорирующих robots.txt. */ -}}
+{{- if or (eq .Layout "offline") (eq .Layout "404") (eq .RelPermalink "/offline/") .Params.robotsNoIndex -}}
+<meta name="robots" content="noindex, nofollow">
+{{- end -}}
