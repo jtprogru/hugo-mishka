@@ -28,13 +28,47 @@
 <link rel="alternate" type="application/rss+xml" title="{{ site.Title }}" href="{{ .Permalink }}">
 {{- end }}
 
-{{- /* CSS: модули склеиваются в один файл через resources.Concat (порядок — алфавитный по имени) */ -}}
-{{- $modules := resources.Match "css/modules/*.css" -}}
-{{- $bundle := $modules | resources.Concat "css/mishka.css" -}}
-{{- if hugo.IsProduction -}}
-  {{- $bundle = $bundle | minify | fingerprint -}}
+{{- /* CSS: critical-набор inline в <head>, остальное грузится async.
+
+       Critical = модули, нужные до first paint (CSS-переменные, reset, типографика,
+       базовый layout, header, footer). Inline'ятся в <style> — применяются мгновенно,
+       рендер не блокируется загрузкой полного bundle.
+
+       Non-critical (post-card, single, code, callouts, и т.д.) собираются в отдельный
+       bundle и грузятся через rel="preload" + media-swap onload. Старые браузеры
+       без onload получают <noscript> fallback. */ -}}
+{{- $criticalNames := slice
+    "css/modules/00-vars.css"
+    "css/modules/01-reset.css"
+    "css/modules/02-typography.css"
+    "css/modules/03-layout.css"
+    "css/modules/04-header.css"
+    "css/modules/05-footer.css"
+-}}
+{{- $criticalSet := dict -}}
+{{- range $criticalNames -}}{{- $criticalSet = merge $criticalSet (dict . true) -}}{{- end -}}
+
+{{- $criticalResources := slice -}}
+{{- range $criticalNames -}}
+  {{- with resources.Get . -}}
+    {{- $criticalResources = $criticalResources | append . -}}
+  {{- end -}}
 {{- end -}}
-<link rel="stylesheet" href="{{ $bundle.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $bundle.Data.Integrity }}"{{ end }}>
+{{- $critical := $criticalResources | resources.Concat "css/mishka-critical.css" -}}
+{{- if hugo.IsProduction -}}{{- $critical = $critical | minify -}}{{- end -}}
+<style>{{ $critical.Content | safeCSS }}</style>
+
+{{- $allModules := resources.Match "css/modules/*.css" -}}
+{{- $nonCritical := slice -}}
+{{- range $allModules -}}
+  {{- if not (index $criticalSet .Name) -}}
+    {{- $nonCritical = $nonCritical | append . -}}
+  {{- end -}}
+{{- end -}}
+{{- $bundle := $nonCritical | resources.Concat "css/mishka.css" -}}
+{{- if hugo.IsProduction -}}{{- $bundle = $bundle | minify | fingerprint -}}{{- end -}}
+<link rel="preload" href="{{ $bundle.RelPermalink }}" as="style"{{ if hugo.IsProduction }} integrity="{{ $bundle.Data.Integrity }}"{{ end }} onload="this.onload=null;this.rel='stylesheet'">
+<noscript><link rel="stylesheet" href="{{ $bundle.RelPermalink }}"{{ if hugo.IsProduction }} integrity="{{ $bundle.Data.Integrity }}"{{ end }}></noscript>
 
 {{- /* PWA: manifest + SW (опт-ин через site.Params.PWA.enabled) */ -}}
 {{- partial "pwa_register.html" . }}
