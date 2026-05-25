@@ -1,5 +1,11 @@
-{{- /* Сетка свежих постов с превью. Cover ищется по .Params.cover.image:
-       сначала в page-bundle Resources, затем как абсолютный URL. */ -}}
+{{- /* Сетка свежих постов с превью. Cover ищется по .Params.cover.image
+       в том же порядке, что и в `post_cover.html` / `cover_og_image.html`:
+       1) page-bundle resource (когда обложка лежит рядом с index.md);
+       2) глобальный `assets/covers/<name>` — общий тематический cover,
+          который Hugo сам процессит (resize + WebP);
+       3) static / external URL как есть.
+       Если cover-ресурс — растровая картинка из assets, превью отдаётся
+       как WebP 168×168 (тумба 84×84 @2x). */ -}}
 {{- $count := site.Params.profileMode.latestPostsCount | default 6 -}}
 {{- $dateFmt := site.Params.dateFormat | default "2 January 2006" -}}
 {{- $pages := where site.RegularPages "Type" "in" site.Params.mainSections -}}
@@ -23,11 +29,21 @@
     {{- $cover := .Params.cover.image -}}
     {{- $coverURL := "" -}}
     {{- if $cover }}
-      {{- $bundleImg := (.Resources.ByType "image").GetMatch (printf "*%s*" $cover) -}}
-      {{- if $bundleImg -}}
-        {{- $coverURL = $bundleImg.RelPermalink -}}
+      {{- $res := (.Resources.ByType "image").GetMatch (printf "*%s*" $cover) -}}
+      {{- if not $res -}}
+        {{- with resources.Get (printf "covers/%s" $cover) -}}{{ $res = . }}{{- end -}}
+      {{- end -}}
+      {{- if $res -}}
+        {{- $isRaster := and $res.MediaType (in (slice "image/jpeg" "image/png" "image/webp") $res.MediaType.Type) -}}
+        {{- if $isRaster -}}
+          {{- $coverURL = ($res.Fill "168x168 webp q85").RelPermalink -}}
+        {{- else -}}
+          {{- $coverURL = $res.RelPermalink -}}
+        {{- end -}}
+      {{- else if or (strings.HasPrefix $cover "http://") (strings.HasPrefix $cover "https://") (strings.HasPrefix $cover "/") -}}
+        {{- $coverURL = $cover -}}
       {{- else -}}
-        {{- $coverURL = $cover | absURL -}}
+        {{- $coverURL = printf "/%s" $cover -}}
       {{- end -}}
     {{- end -}}
     <article class="lp-card{{ if .Params.pinned }} lp-card--pinned{{ end }}">

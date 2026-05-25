@@ -6,15 +6,21 @@
 {{- $coverAlt := .Params.cover.alt | default .Title -}}
 {{- $relative := .Params.cover.relative | default false -}}
 {{- if $cover -}}
-  {{- $bundleImg := (.Resources.ByType "image").GetMatch (printf "*%s*" $cover) -}}
-  {{- if $bundleImg -}}
-    {{- $coverURL = $bundleImg.RelPermalink -}}
+  {{- /* Резолв в том же порядке, что и в `post_cover.html`:
+         page-bundle → assets/covers/<name> → external/static fallback.
+         Без этого общие тематические cover'ы (`opinions.png`, `devops.png`, ...)
+         после переезда из static/ в assets/covers/ ломались на list-страницах. */ -}}
+  {{- $res := (.Resources.ByType "image").GetMatch (printf "*%s*" $cover) -}}
+  {{- if not $res -}}
+    {{- with resources.Get (printf "covers/%s" $cover) -}}{{ $res = . }}{{- end -}}
+  {{- end -}}
+  {{- if $res -}}
+    {{- $coverURL = $res.RelPermalink -}}
   {{- else if or (strings.HasPrefix $cover "http://") (strings.HasPrefix $cover "https://") (strings.HasPrefix $cover "/") -}}
     {{- $coverURL = $cover -}}
   {{- else if $relative -}}
     {{- $coverURL = printf "%s%s" .RelPermalink $cover -}}
   {{- else -}}
-    {{- /* По умолчанию — путь от корня сайта (static/) */ -}}
     {{- $coverURL = printf "/%s" $cover -}}
   {{- end -}}
 {{- end -}}
