@@ -5,6 +5,12 @@
 
 ## [Unreleased]
 
+### Fixed
+
+- Search: `indexUrl` в `<script id="search-config">` больше не получает двойной JSON-escape — внутри `<script type="application/json">` Go html/template сам JSON-escape'ит значения, а отдельные `jsonify` поверх давали `"indexUrl":"\"/index.json\""`. После `JSON.parse` получалась строка с кавычками внутри, fetch шёл на `/search/%22/index.json%22` → 404. Чиним: dict собирается один раз и отдаётся через `jsonify | safeJS`.
+- Search: опции Fuse.js теперь читаются из `site.Data.fuse` (приоритет) с fallback на `site.Params.fuseOpts`. Hugo lower-case'ит ключи в Params (`isCaseSensitive` → `iscasesensitive`), и Fuse такие ключи игнорировал — поиск работал на дефолтах. Data-файлы сохраняют case как написано. Пример — `exampleSite/data/fuse.yaml`.
+- PWA: `_partials/pwa_register.html` обёрнут в `{{- if $enabled -}}…{{- end -}}` — `{{ return }}` в Hugo не делает early-exit (только задаёт возвращаемое значение partial'а), поэтому при `params.PWA.enabled: false` partial всё равно выводил `<link rel=manifest>` и `<script>register>` и копировал `sw.js` в output. Теперь без PWA partial действительно ничего не выводит.
+
 ### Added
 
 - Projects: отдельная страница `/projects/` и опциональный блок «Мои проекты» на главной. Новый layout `layouts/projects.html` — полная сетка из `data/projects.yaml` с группировкой по `status` (`active` / `maintenance` / `archived`) и фильтром по языку (чипы + inline-JS, скрывает пустые группы). Партиал `_partials/projects.html` для главной респектит лимит и сортирует `featured` → `active` → остальное, рисует ссылку «Все проекты →». Карточка вынесена в `_partials/proj_card.html` и переиспользуется обоими местами; новые модификаторы `.proj-card--featured` (accent-полоска слева), `.proj-card--archived` (приглушённая), `.proj-card__badge--{featured,maintenance,archived}`. Конфиг блока на главной — `params.homeSections.projects.{enabled,featuredOnly,limit,moreLink}`: `enabled` (дефолт `true`) включает блок, `featuredOnly: true` показывает только `featured: true` (иначе featured→active→остальное), `limit` (дефолт 6) — потолок карточек, `moreLink` — ссылка под сеткой. Расширенная schema yaml: `status`, `featured: true`, `tags: [...]` (все опциональны, обратно-совместимо). i18n-строки `projects_*` (ru/en) с плюрализацией для счётчика. exampleSite дополнен `content/projects.md` и конфигом.

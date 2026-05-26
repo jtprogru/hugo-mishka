@@ -1,0 +1,17 @@
+# Пример конфигурации Fuse.js для страницы /search/.
+# См. https://www.fusejs.io/api/options.html
+#
+# ВАЖНО: файл лежит в data/, а не в hugo.yaml params, потому что Hugo
+# принудительно lower-case'ит ключи в Params.* — Fuse в таком виде их
+# не понимает. Data-файлы сохраняют case как написано.
+#
+# search.html сначала смотрит site.Data.fuse, потом fallback на
+# site.Params.fuseOpts (legacy). Если нет ни того ни другого —
+# поиск использует Fuse-дефолты.
+isCaseSensitive: false
+shouldSort: true
+location: 1
+distance: 1000
+threshold: 0.2
+minMatchCharLength: 0
+keys: ["title", "permalink", "summary", "content"]

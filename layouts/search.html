@@ -34,10 +34,17 @@
        Используем готовый jsonify целиком + safeJS, чтобы html/template
        не делал второй JSON-escape поверх (контекст <script type=application/json>
        сам по себе JSON-escape'ит значения — без safeJS получаем
-       "indexUrl":"\"/index.json\"" вместо "/index.json"). */ -}}
+       "indexUrl":"\"/index.json\"" вместо "/index.json").
+
+       Fuse-опции читаем из site.Data.fuse (приоритет) или
+       site.Params.fuseOpts (legacy fallback). Hugo lower-case'ит
+       ключи в Params.* (isCaseSensitive → iscasesensitive), и Fuse.js
+       их не распознаёт. Data-файлы (data/fuse.yaml) сохраняют case
+       как написано — это рабочий способ кастомизировать Fuse. */ -}}
+{{- $fuse := or site.Data.fuse site.Params.fuseOpts | default dict -}}
 {{- $cfg := dict
     "indexUrl" ("/index.json" | relURL)
-    "fuse"     (site.Params.fuseOpts | default dict)
+    "fuse"     $fuse
 -}}
 <script type="application/json" id="search-config">{{ $cfg | jsonify | safeJS }}</script>
 {{- end -}}
