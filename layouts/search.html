@@ -30,12 +30,14 @@
   </noscript>
 </div>
 
-{{- /* Конфиг поиска передаём через data-атрибуты */ -}}
-{{- $fuseOpts := site.Params.fuseOpts | default dict -}}
-<script type="application/json" id="search-config">
-{
-  "indexUrl": {{ "/index.json" | relURL | jsonify }},
-  "fuse": {{ $fuseOpts | jsonify }}
-}
-</script>
+{{- /* Конфиг поиска — JSON-блок, парсится в assets/js/search.js.
+       Используем готовый jsonify целиком + safeJS, чтобы html/template
+       не делал второй JSON-escape поверх (контекст <script type=application/json>
+       сам по себе JSON-escape'ит значения — без safeJS получаем
+       "indexUrl":"\"/index.json\"" вместо "/index.json"). */ -}}
+{{- $cfg := dict
+    "indexUrl" ("/index.json" | relURL)
+    "fuse"     (site.Params.fuseOpts | default dict)
+-}}
+<script type="application/json" id="search-config">{{ $cfg | jsonify | safeJS }}</script>
 {{- end -}}
