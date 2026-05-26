@@ -189,6 +189,145 @@
 }
 .proj-card__link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
+.proj-card__foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-xs);
+  margin-top: auto;
+  padding-top: var(--gap-xs);
+}
+
+.proj-card__badge {
+  display: inline-block;
+  font-size: var(--fs-xs);
+  padding: 1px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--bg-sunken);
+  color: var(--text-muted);
+  white-space: nowrap;
+  line-height: 1.6;
+}
+.proj-card__badge--featured {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  color: var(--accent);
+}
+.proj-card__badge--maintenance {
+  background: color-mix(in srgb, var(--warning, #d97706) 14%, transparent);
+  color: color-mix(in srgb, var(--warning, #d97706) 85%, var(--text));
+}
+.proj-card__badge--archived {
+  background: var(--bg-sunken);
+  color: var(--text-subtle);
+  text-decoration: line-through;
+  text-decoration-color: var(--text-subtle);
+  text-decoration-thickness: 1px;
+}
+
+.proj-card--featured {
+  border-left: 3px solid var(--accent);
+}
+.proj-card--archived {
+  opacity: 0.78;
+}
+
+/* «Все проекты →» под сеткой на главной */
+.projects__more {
+  margin-top: var(--gap-md);
+  text-align: center;
+}
+.projects__more-link {
+  display: inline-block;
+  font-size: var(--fs-sm);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  background: transparent;
+  transition: var(--transition);
+  transition-property: color, background, border-color, transform;
+}
+.projects__more-link:hover {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+/* === Projects page === */
+
+.projects-page {
+  max-width: 1200px;
+  padding-block: var(--gap-xl);
+}
+
+.projects-page__header {
+  margin-bottom: var(--gap-xl);
+}
+.projects-page__title {
+  font-size: var(--fs-3xl);
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--gap-sm);
+}
+.projects-page__lede {
+  color: var(--text-muted);
+  font-size: var(--fs-md);
+  margin: 0 0 var(--gap-sm);
+}
+.projects-page__intro { margin-bottom: var(--gap-sm); }
+.projects-page__count {
+  font-size: var(--fs-sm);
+  color: var(--text-subtle);
+  margin: 0;
+}
+.projects-page__empty {
+  padding: var(--gap-xl);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.projects-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-xs);
+  margin-bottom: var(--gap-lg);
+}
+.projects-filter {
+  font: inherit;
+  font-size: var(--fs-sm);
+  padding: 4px 12px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: var(--transition);
+  transition-property: color, background, border-color;
+}
+.projects-filter:hover {
+  color: var(--text);
+  border-color: var(--accent);
+}
+.projects-filter.is-active {
+  color: var(--bg);
+  background: var(--accent);
+  border-color: var(--accent);
+}
+.projects-filter:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.projects-group {
+  margin-bottom: var(--gap-xl);
+}
+.projects-group .section-title {
+  margin-top: 0;
+}
+.projects-group[hidden] { display: none; }
+
 /* === Latest posts === */
 
 .latest-posts__grid {

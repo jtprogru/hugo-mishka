@@ -23,6 +23,28 @@ archives_total:
   few: "{{ .Count }} публикации"
   many: "{{ .Count }} публикаций"
   other: "{{ .Count }} публикаций"
+projects_total:
+  one: "{{ .Count }} проект"
+  few: "{{ .Count }} проекта"
+  many: "{{ .Count }} проектов"
+  other: "{{ .Count }} проектов"
+
+# --- Projects (главная + /projects/) ---
+projects_heading: "Мои проекты"
+projects_more: "Все проекты"
+projects_open_external: "открыть на GitHub"
+projects_empty: "Список проектов пуст."
+projects_filter_label: "Фильтр по языку"
+projects_filter_all: "Все"
+projects_group_featured: "Избранное"
+projects_group_active: "Активные"
+projects_group_maintenance: "На паузе"
+projects_group_archived: "Архив"
+projects_group_other: "Прочее"
+projects_status_active: "активный"
+projects_status_maintenance: "на паузе"
+projects_status_archived: "архив"
+projects_badge_featured: "Избранное"
 
 # --- Пост: мета и действия ---
 edit_post: "Редактировать пост"

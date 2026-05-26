@@ -1,0 +1,30 @@
+{{- /* Карточка проекта. На вход — элемент из hugo.Data.projects:
+       {name, url, desc, lang, status, featured, tags}. */ -}}
+{{- $status := .status | default "" -}}
+{{- $lang := .lang | default "" -}}
+<article class="proj-card{{ with $status }} proj-card--{{ . }}{{ end }}{{ if .featured }} proj-card--featured{{ end }}"
+         data-lang="{{ $lang | urlize }}"
+         data-status="{{ $status }}">
+  <header class="proj-card__head">
+    <h3 class="proj-card__name">{{ .name }}</h3>
+    {{- with $lang }}<span class="proj-card__lang">{{ . }}</span>{{ end }}
+  </header>
+  {{- with .desc }}<p class="proj-card__desc">{{ . }}</p>{{ end }}
+  {{- $nonDefaultStatus := and $status (ne $status "active") -}}
+  {{- if or .featured $nonDefaultStatus }}
+  <footer class="proj-card__foot">
+    {{- if .featured }}<span class="proj-card__badge proj-card__badge--featured" title="{{ i18n "projects_badge_featured" | default "Избранное" }}">★</span>{{ end }}
+    {{- if $nonDefaultStatus }}
+      {{- $label := "" }}
+      {{- if eq $status "maintenance" }}{{ $label = i18n "projects_status_maintenance" | default "на паузе" }}{{ end }}
+      {{- if eq $status "archived" }}{{ $label = i18n "projects_status_archived" | default "архив" }}{{ end }}
+      {{- with $label }}<span class="proj-card__badge proj-card__badge--{{ $status }}">{{ . }}</span>{{ end }}
+    {{- end }}
+  </footer>
+  {{- end }}
+  <a class="proj-card__link"
+     href="{{ .url }}"
+     target="_blank"
+     rel="noopener noreferrer"
+     aria-label="{{ .name }} — {{ i18n "projects_open_external" | default "открыть на GitHub" }}"></a>
+</article>

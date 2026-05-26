@@ -65,6 +65,10 @@ menu:
       name: "Теги"
       url: "/tags/"
       weight: 20
+    - identifier: projects
+      name: "Проекты"
+      url: "/projects/"
+      weight: 25
     - identifier: search
       name: "Поиск"
       url: "/search/"
@@ -87,6 +91,18 @@ params:
   relatedMax: 4
   math: false
   mermaid: false
+
+  # Блок «Мои проекты» на главной. Источник — data/projects.yaml.
+  # enabled       — false полностью скрывает блок (страница /projects/ остаётся).
+  # featuredOnly  — true: показывать только проекты с `featured: true`.
+  # limit         — потолок карточек (по умолчанию 6).
+  # moreLink      — ссылка «Все проекты →» под сеткой (пусто = не показывать).
+  homeSections:
+    projects:
+      enabled: true
+      featuredOnly: false
+      limit: 6
+      moreLink: /projects/
 
   profileMode:
     enabled: true

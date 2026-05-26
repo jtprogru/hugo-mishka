@@ -1,16 +1,28 @@
+# Demo-данные для блока «Мои проекты» и страницы /projects/.
+# См. theme docs / основной сайт jtprog.ru для расширенного примера.
 - name: hugo-mishka
   url: https://github.com/jtprogru/hugo-mishka
   desc: "Самостоятельная Hugo-тема для технического блога: mobile-first, дарк-мод, profile-mode."
   lang: Hugo
+  status: active
+  featured: true
+  tags: [theme, hugo]
 - name: srekit
   url: https://github.com/jtprogru/srekit
   desc: "Генератор текстовых SRE-артефактов: задачи, постмортемы, RFC, runbook'и."
   lang: Go
+  status: active
+  featured: true
+  tags: [sre, cli]
 - name: jtsekret
   url: https://github.com/jtprogru/jtsekret
   desc: "CLI для централизованного управления личными секретами."
   lang: Go
+  status: active
+  tags: [cli, security]
 - name: cubic-root
   url: https://github.com/jtprogru/cubic-root
   desc: "Учебное Go-приложение с Docker multi-stage и Helm-чартом."
   lang: Go
+  status: maintenance
+  tags: [learning, k8s]

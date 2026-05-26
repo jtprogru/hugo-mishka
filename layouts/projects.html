@@ -1,0 +1,121 @@
+{{- /* Projects page — полная сетка проектов из hugo.Data.projects с
+       группировкой по статусу и фильтром по языку.
+
+       Использование (в проекте):
+         content/projects.md:
+           ---
+           title: "Проекты"
+           layout: "projects"
+           url: "/projects/"
+           ---
+
+       Источник данных: data/projects.yaml. Формат элемента:
+       {name, url, desc, lang, status, featured, tags}.
+
+       Группы (рендерятся только при наличии элементов):
+         1) Избранное      — featured: true
+         2) Активные       — status: active (без featured)
+         3) На паузе       — status: maintenance
+         4) Архив          — status: archived
+         5) Прочее         — без status / с неизвестным статусом
+
+       Фильтр по языку — чипы сверху, чистый JS поверх data-lang. */ -}}
+
+{{- define "main" -}}
+{{- $projects := hugo.Data.projects -}}
+
+<div class="container projects-page">
+  {{- partial "breadcrumbs.html" . }}
+
+  <header class="projects-page__header">
+    <h1 class="projects-page__title">{{ .Title }}</h1>
+    {{- with .Description }}<p class="projects-page__lede">{{ . }}</p>{{ end }}
+    {{- with .Content }}<div class="md-content projects-page__intro">{{ . }}</div>{{ end }}
+    <p class="projects-page__count">
+      {{- $n := len $projects -}}
+      {{ i18n "projects_total" (dict "Count" $n) | default (printf "%d проектов" $n) }}
+    </p>
+  </header>
+
+  {{- if not $projects }}
+    <p class="projects-page__empty">{{ i18n "projects_empty" | default "Список пуст." }}</p>
+  {{- else }}
+
+    {{- /* Уникальные языки для фильтра — в порядке появления. */ -}}
+    {{- $langs := slice -}}
+    {{- range $projects }}
+      {{- with .lang }}
+        {{- if not (in $langs .) }}{{ $langs = $langs | append . }}{{ end -}}
+      {{- end -}}
+    {{- end -}}
+
+    {{- if gt (len $langs) 1 }}
+    <div class="projects-filters" role="group" aria-label="{{ i18n "projects_filter_label" | default "Фильтр по языку" }}">
+      <button type="button" class="projects-filter is-active" data-filter="all">
+        {{ i18n "projects_filter_all" | default "Все" }}
+      </button>
+      {{- range $langs }}
+      <button type="button" class="projects-filter" data-filter="{{ . | urlize }}">{{ . }}</button>
+      {{- end }}
+    </div>
+    {{- end }}
+
+    {{- /* Группы. Каждая группа — отдельный where, чтобы порядок был стабильным. */ -}}
+    {{- $featured := where $projects "featured" true -}}
+    {{- $nonFeatured := where $projects "featured" "!=" true -}}
+    {{- $active := where $nonFeatured "status" "active" -}}
+    {{- $maint := where $nonFeatured "status" "maintenance" -}}
+    {{- $arch := where $nonFeatured "status" "archived" -}}
+    {{- $known := slice "active" "maintenance" "archived" -}}
+    {{- $other := where $nonFeatured "status" "not in" $known -}}
+
+    {{- $groups := slice
+        (dict "key" "featured" "title" (i18n "projects_group_featured"    | default "Избранное") "items" $featured)
+        (dict "key" "active"   "title" (i18n "projects_group_active"      | default "Активные")  "items" $active)
+        (dict "key" "maint"    "title" (i18n "projects_group_maintenance" | default "На паузе")  "items" $maint)
+        (dict "key" "arch"     "title" (i18n "projects_group_archived"    | default "Архив")     "items" $arch)
+        (dict "key" "other"    "title" (i18n "projects_group_other"       | default "Прочее")    "items" $other)
+    -}}
+
+    {{- range $g := $groups }}
+      {{- with $g.items }}
+      <section class="projects-group" data-group="{{ $g.key }}">
+        <h2 class="section-title">{{ $g.title }}</h2>
+        <div class="projects__grid">
+          {{- range . }}
+          {{- partial "proj_card.html" . -}}
+          {{- end }}
+        </div>
+      </section>
+      {{- end }}
+    {{- end }}
+
+    <script>
+      // Фильтр по языку: переключает is-active на чипе и hidden у карточек.
+      (function () {
+        var chips = document.querySelectorAll('.projects-filter');
+        if (!chips.length) return;
+        var cards = document.querySelectorAll('.proj-card');
+        chips.forEach(function (chip) {
+          chip.addEventListener('click', function () {
+            var f = chip.getAttribute('data-filter');
+            chips.forEach(function (c) { c.classList.toggle('is-active', c === chip); });
+            cards.forEach(function (card) {
+              var lang = card.getAttribute('data-lang') || '';
+              card.hidden = (f !== 'all' && lang !== f);
+            });
+            // Скрываем пустые группы, чтобы заголовки не висели.
+            document.querySelectorAll('.projects-group').forEach(function (g) {
+              var anyVisible = Array.prototype.some.call(
+                g.querySelectorAll('.proj-card'),
+                function (c) { return !c.hidden; }
+              );
+              g.hidden = !anyVisible;
+            });
+          });
+        });
+      })();
+    </script>
+  {{- end }}
+</div>
+{{- end -}}

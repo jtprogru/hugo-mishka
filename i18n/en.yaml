@@ -19,6 +19,26 @@ read_time:
 archives_total:
   one: "{{ .Count }} post"
   other: "{{ .Count }} posts"
+projects_total:
+  one: "{{ .Count }} project"
+  other: "{{ .Count }} projects"
+
+# --- Projects (home + /projects/) ---
+projects_heading: "My projects"
+projects_more: "All projects"
+projects_open_external: "open on GitHub"
+projects_empty: "No projects yet."
+projects_filter_label: "Filter by language"
+projects_filter_all: "All"
+projects_group_featured: "Featured"
+projects_group_active: "Active"
+projects_group_maintenance: "On hold"
+projects_group_archived: "Archived"
+projects_group_other: "Other"
+projects_status_active: "active"
+projects_status_maintenance: "on hold"
+projects_status_archived: "archived"
+projects_badge_featured: "Featured"
 
 # --- Post: meta and actions ---
 edit_post: "Edit post"

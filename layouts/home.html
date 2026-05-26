@@ -1,11 +1,16 @@
 {{- define "main" -}}
 {{- $profile := site.Params.profileMode.enabled -}}
 {{- $homeInfo := and (not $profile) site.Params.homeInfoParams -}}
+{{- /* Тумблер блока «Мои проекты» на главной: params.homeSections.projects.enabled.
+       Дефолт — true (обратно-совместимо со старыми конфигами). */ -}}
+{{- $projCfg := site.Params.homeSections.projects | default dict -}}
+{{- $showProjects := true -}}
+{{- if isset $projCfg "enabled" }}{{ $showProjects = $projCfg.enabled }}{{ end -}}
 
 <div class="container home {{ if $profile }}home--profile{{ else }}home--list{{ end }}">
   {{- if $profile }}
     {{- partial "profile.html" . }}
-    {{- partial "projects.html" . }}
+    {{- if $showProjects }}{{ partial "projects.html" . }}{{ end }}
     {{- partial "latest_posts.html" . }}
   {{- else if $homeInfo }}
     {{- partial "home_info.html" . }}

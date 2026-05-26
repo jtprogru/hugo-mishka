@@ -1,22 +1,42 @@
-{{- /* Сетка проектов из hugo.Data.projects. Yaml: [{name, url, desc, lang}, ...]. */ -}}
-{{- with hugo.Data.projects }}
+{{- /* Блок «Мои проекты» на главной.
+       Конфиг: site.Params.homeSections.projects
+         - limit         (int, default 6) — макс. карточек на главной.
+         - moreLink      (string) — куда ведёт «Все проекты →».
+         - featuredOnly  (bool, default false) — true: показывать только featured: true.
+       Если featuredOnly не задан — сортируем featured → active → остальное и режем по limit.
+       Источник: hugo.Data.projects ([{name,url,desc,lang,status,featured,tags}, ...]). */ -}}
+{{- $all := hugo.Data.projects -}}
+{{- with $all }}
+{{- $cfg := site.Params.homeSections.projects | default dict -}}
+{{- $limit := $cfg.limit | default 6 -}}
+{{- $moreLink := $cfg.moreLink | default "" -}}
+{{- $featuredOnly := $cfg.featuredOnly | default false -}}
+{{- $sorted := slice -}}
+{{- if $featuredOnly }}
+  {{- range (where $all "featured" true) }}{{ $sorted = $sorted | append . }}{{ end -}}
+{{- else }}
+  {{- $featured := where $all "featured" true -}}
+  {{- $rest := where $all "featured" "!=" true -}}
+  {{- $active := where $rest "status" "active" -}}
+  {{- $tail := where $rest "status" "!=" "active" -}}
+  {{- range $featured }}{{ $sorted = $sorted | append . }}{{ end -}}
+  {{- range $active   }}{{ $sorted = $sorted | append . }}{{ end -}}
+  {{- range $tail     }}{{ $sorted = $sorted | append . }}{{ end -}}
+{{- end -}}
+{{- $items := first $limit $sorted -}}
 <section class="projects">
-  <h2 class="section-title">Мои проекты</h2>
+  <h2 class="section-title">{{ i18n "projects_heading" | default "Мои проекты" }}</h2>
   <div class="projects__grid">
-    {{- range . }}
-    <article class="proj-card">
-      <header class="proj-card__head">
-        <h3 class="proj-card__name">{{ .name }}</h3>
-        {{- with .lang }}<span class="proj-card__lang">{{ . }}</span>{{ end }}
-      </header>
-      {{- with .desc }}<p class="proj-card__desc">{{ . }}</p>{{ end }}
-      <a class="proj-card__link"
-         href="{{ .url }}"
-         target="_blank"
-         rel="noopener noreferrer"
-         aria-label="{{ .name }} — открыть на GitHub"></a>
-    </article>
+    {{- range $items }}
+    {{- partial "proj_card.html" . -}}
     {{- end }}
   </div>
+  {{- with $moreLink }}
+  <p class="projects__more">
+    <a class="projects__more-link" href="{{ . | relURL }}">
+      {{ i18n "projects_more" | default "Все проекты" }} →
+    </a>
+  </p>
+  {{- end }}
 </section>
 {{- end }}
