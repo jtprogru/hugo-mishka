@@ -15,9 +15,11 @@
        Manifest.json: тема его НЕ генерирует, поскольку для него нужен
        output format и Hugo-конфиг сайта. README документирует пример. */ -}}
 
+{{- /* В Hugo `return` не делает early-exit — он лишь задаёт возвращаемое
+       значение partial'а, а рендеринг продолжается. Поэтому весь
+       вывод обёрнут в `if $enabled`. */ -}}
 {{- $enabled := eq (site.Params.PWA.enabled | default false) true -}}
-{{- if not $enabled -}}{{ return }}{{ end -}}
-
+{{- if $enabled -}}
 {{- $manifestPath := site.Params.PWA.manifestPath | default "/manifest.json" -}}
 <link rel="manifest" href="{{ $manifestPath | relURL }}">
 
@@ -41,4 +43,5 @@
     });
   }
 </script>
+{{- end -}}
 {{- end -}}
