@@ -10,12 +10,17 @@
 
        Берём только страницы из mainSections (по умолчанию posts). На
        мобиле — год сверху, ниже список постов; на десктопе год прилипает
-       слева, посты идут справа двумя колонками (sticky-year). */ -}}
+       слева, посты идут справа двумя колонками (sticky-year).
+
+       Формат даты в архиве задаётся params.archivesDateFormat
+       (по умолчанию "2 January"). Это отдельный параметр от глобального
+       params.dateFormat — в архиве колонка даты узкая, поэтому стоит
+       избегать форматов с временем. */ -}}
 
 {{- define "main" -}}
 {{- $mainSections := site.Params.mainSections | default (slice "posts") -}}
 {{- $pages := where site.RegularPages "Type" "in" $mainSections -}}
-{{- $dateFmt := site.Params.dateFormat | default "2 January" -}}
+{{- $dateFmt := site.Params.archivesDateFormat | default "2 January" -}}
 
 <div class="container">
   {{- partial "breadcrumbs.html" . }}
