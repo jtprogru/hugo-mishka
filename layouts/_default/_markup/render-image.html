@@ -27,9 +27,17 @@
 {{- end -}}
 
 {{- if $res -}}
-  {{- $w := $res.Width -}}
-  {{- $h := $res.Height -}}
+  {{- /* Width/Height доступны только у растровых ресурсов. У SVG их нет —
+         обращение к $res.Width на image/svg+xml падает с ошибкой. Поэтому
+         считаем размеры только для форматов с intrinsic dimensions. */ -}}
   {{- $isRaster := in (slice "image/jpeg" "image/png" "image/webp") $res.MediaType.Type -}}
+  {{- $hasIntrinsicSize := in (slice "image/jpeg" "image/png" "image/webp" "image/gif") $res.MediaType.Type -}}
+  {{- $w := 0 -}}
+  {{- $h := 0 -}}
+  {{- if $hasIntrinsicSize -}}
+    {{- $w = $res.Width -}}
+    {{- $h = $res.Height -}}
+  {{- end -}}
   {{- if $isRaster -}}
     {{- $maxW := site.Params.renderImageMaxW | default 1200 -}}
     {{- $avifQ := site.Params.renderImageAvifQ | default 60 -}}
