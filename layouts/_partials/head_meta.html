@@ -80,6 +80,16 @@
   {{- end }}
 {{- end }}
 
+{{- /* noindex для тонких term-страниц (теги/категории с <2 постами).
+       Listing с одной ссылкой Google всё равно отказывается индексировать
+       («Просканировано/Обнаружена, не проиндексирована» в GSC). Уводим их
+       из конкуренции за crawl budget. */ -}}
+{{- if eq .Kind "term" -}}
+  {{- if lt (len .Pages) 2 }}
+<meta name="robots" content="noindex, follow">
+  {{- end }}
+{{- end }}
+
 {{- /* noindex для служебных страниц: offline (PWA fallback), 404, и любой
        страницы с robotsNoIndex: true во фронтматтере. Страховка от ботов,
        игнорирующих robots.txt. */ -}}
