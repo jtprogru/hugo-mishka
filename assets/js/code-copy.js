@@ -1,6 +1,6 @@
 /* Clipboard-помощники темы:
    - кнопка «скопировать код» внутри .codeblock ([data-copy])
-   - кнопка «скопировать ссылку» внутри post_share ([data-share-copy])
+   - кнопка «скопировать ссылку» внутри post-actions ([data-copy-link])
    Используется одна универсальная writeText с fallback на execCommand. */
 (function () {
   var doneLabel = (document.documentElement.dataset.copyCodeDone) || 'Скопировано';
@@ -57,18 +57,18 @@
       return;
     }
 
-    /* Share-copy: «скопировать ссылку» в post_share */
-    var shareBtn = e.target.closest && e.target.closest('[data-share-copy]');
-    if (shareBtn) {
-      var url = shareBtn.getAttribute('data-url') || window.location.href;
-      var label = shareBtn.querySelector('[data-share-copy-label]');
-      var shareDone = document.documentElement.dataset.shareCopyDone || 'Скопировано';
+    /* Copy-link: «скопировать ссылку» в post-actions */
+    var linkBtn = e.target.closest && e.target.closest('[data-copy-link]');
+    if (linkBtn) {
+      var url = linkBtn.getAttribute('data-url') || window.location.href;
+      var label = linkBtn.querySelector('[data-copy-link-label]');
+      var linkDone = document.documentElement.dataset.copyLinkDone || 'Скопировано';
       var prevText = label ? label.textContent : null;
       writeText(url, function () {
-        shareBtn.classList.add('is-done');
-        if (label) label.textContent = shareDone;
+        linkBtn.classList.add('is-done');
+        if (label) label.textContent = linkDone;
         setTimeout(function () {
-          shareBtn.classList.remove('is-done');
+          linkBtn.classList.remove('is-done');
           if (label && prevText !== null) label.textContent = prevText;
         }, 1500);
       });

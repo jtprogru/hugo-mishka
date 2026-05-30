@@ -1,5 +1,9 @@
-{{- /* Share buttons: ссылки для «поделиться» в Telegram/Twitter(X)/LinkedIn/Email
+{{- /* Post actions: ссылки «поделиться» в Telegram/Twitter(X)/LinkedIn/Email
        + кнопка «скопировать ссылку».
+
+       Имена классов/атрибутов намеренно нейтральные (post-actions, data-net,
+       data-copy-link), чтобы не цепляться за cosmetic-фильтры адблокеров
+       (EasyList и пр. режут селекторы со словами share/social/telegram).
 
        Опт-ин:
        - site.Params.ShowShareButtons: true|false (по умолчанию false)
@@ -26,61 +30,61 @@
 {{- $li := printf "https://www.linkedin.com/sharing/share-offsite/?url=%s" $u -}}
 {{- $em := printf "mailto:?subject=%s&body=%s" $t $u -}}
 
-<aside class="share" aria-labelledby="share-heading">
-  <h2 id="share-heading" class="share__heading">{{ i18n "share_heading" }}</h2>
-  <ul class="share__list">
+<aside class="post-actions" aria-labelledby="post-actions-heading">
+  <h2 id="post-actions-heading" class="post-actions__heading">{{ i18n "share_heading" }}</h2>
+  <ul class="post-actions__list">
     {{- range $channels -}}
       {{- $c := . | lower -}}
       {{- if eq $c "telegram" }}
-      <li class="share__item">
-        <a class="share__btn share__btn--telegram"
+      <li class="post-actions__item">
+        <a class="post-actions__btn" data-net="tg"
            href="{{ $tg | safeURL }}"
            target="_blank" rel="noopener noreferrer nofollow"
            title="{{ i18n "share_telegram" }}"
            aria-label="{{ i18n "share_telegram" }}">
-          {{ partial "svg.html" (dict "name" "telegram" "size" 18 "class" "share__icon") }}
+          {{ partial "svg.html" (dict "name" "telegram" "size" 18 "class" "post-actions__icon") }}
         </a>
       </li>
       {{- else if eq $c "twitter" }}
-      <li class="share__item">
-        <a class="share__btn share__btn--twitter"
+      <li class="post-actions__item">
+        <a class="post-actions__btn" data-net="x"
            href="{{ $tw | safeURL }}"
            target="_blank" rel="noopener noreferrer nofollow"
            title="{{ i18n "share_twitter" }}"
            aria-label="{{ i18n "share_twitter" }}">
-          {{ partial "svg.html" (dict "name" "twitter" "size" 18 "class" "share__icon") }}
+          {{ partial "svg.html" (dict "name" "twitter" "size" 18 "class" "post-actions__icon") }}
         </a>
       </li>
       {{- else if eq $c "linkedin" }}
-      <li class="share__item">
-        <a class="share__btn share__btn--linkedin"
+      <li class="post-actions__item">
+        <a class="post-actions__btn" data-net="in"
            href="{{ $li | safeURL }}"
            target="_blank" rel="noopener noreferrer nofollow"
            title="{{ i18n "share_linkedin" }}"
            aria-label="{{ i18n "share_linkedin" }}">
-          {{ partial "svg.html" (dict "name" "linkedin" "size" 18 "class" "share__icon") }}
+          {{ partial "svg.html" (dict "name" "linkedin" "size" 18 "class" "post-actions__icon") }}
         </a>
       </li>
       {{- else if eq $c "email" }}
-      <li class="share__item">
-        <a class="share__btn share__btn--email"
+      <li class="post-actions__item">
+        <a class="post-actions__btn" data-net="mail"
            href="{{ $em | safeURL }}"
            title="{{ i18n "share_email" }}"
            aria-label="{{ i18n "share_email" }}">
-          {{ partial "svg.html" (dict "name" "mail" "size" 18 "class" "share__icon") }}
+          {{ partial "svg.html" (dict "name" "mail" "size" 18 "class" "post-actions__icon") }}
         </a>
       </li>
       {{- else if eq $c "copy" }}
-      <li class="share__item">
+      <li class="post-actions__item">
         <button type="button"
-                class="share__btn share__btn--copy"
-                data-share-copy
+                class="post-actions__btn" data-net="copy"
+                data-copy-link
                 data-url="{{ $url }}"
                 title="{{ i18n "share_copy" }}"
                 aria-label="{{ i18n "share_copy" }}">
-          {{ partial "svg.html" (dict "name" "link" "size" 18 "class" "share__icon") }}
+          {{ partial "svg.html" (dict "name" "link" "size" 18 "class" "post-actions__icon") }}
           {{- /* sr-only span — обновляется в JS на «Скопировано», скринридеры озвучат */ -}}
-          <span class="visually-hidden" data-share-copy-label>{{ i18n "share_copy" }}</span>
+          <span class="visually-hidden" data-copy-link-label>{{ i18n "share_copy" }}</span>
         </button>
       </li>
       {{- end -}}

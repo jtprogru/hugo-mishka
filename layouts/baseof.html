@@ -2,7 +2,7 @@
 {{ errorf "Hugo >= 0.146.0 required for theme mishka" }}
 {{- end -}}
 <!DOCTYPE html>
-<html lang="{{ site.Language.Lang }}" dir="{{ site.Language.Direction | default "ltr" }}" data-share-copy-done="{{ i18n "share_copy_done" }}" data-copy-code-done="{{ i18n "copy_code_done" }}">
+<html lang="{{ site.Language.Lang }}" dir="{{ site.Language.Direction | default "ltr" }}" data-copy-link-done="{{ i18n "share_copy_done" }}" data-copy-code-done="{{ i18n "copy_code_done" }}">
 <head>
   {{- partial "head.html" . }}
 </head>
