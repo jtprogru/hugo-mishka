@@ -3,35 +3,48 @@
 
 :root,
 :root[data-theme="light"] {
-  /* Фоны и поверхности */
-  --bg:           #fafaf7;
+  /* Фоны и поверхности (BRANDING §2) */
+  --bg:           #faf8f5;
   --bg-elevated:  #ffffff;
   --bg-sunken:    #f3f1ed;
 
   /* Текст */
-  --text:         #1c1c1f;
-  --text-muted:   #5b5b62;
+  --text:         #1f2428;
+  --text-muted:   #5c6266;
   --text-subtle:  #8b8b92;
 
-  /* Акценты */
-  --accent:       #c2410c;
-  --accent-hover: #9a3412;
+  /* Акцентная шкала (BRANDING §2). Один тёплый тон, четыре роли. */
+  --accent-300: #fdba74;  /* текст-ссылка на тёмной теме */
+  --accent-400: #fb923c;  /* брендовый/декоративный акцент */
+  --accent-600: #ea580c;  /* ссылка крупным текстом на свету, hover-заливка */
+  --accent-700: #c2410c;  /* основной цвет ссылок на свету, PWA theme-color */
+
+  /* Алиасы для совместимости и читаемости */
+  --accent:       var(--accent-700);
+  --accent-hover: var(--accent-600);
   --accent-soft:  #fed7aa;
 
   /* Границы */
-  --border:        #e5e3dc;
+  --border:        #e7e2da;
   --border-strong: #c8c5bb;
 
-  /* Код */
-  --code-bg:    #1e1e24;
-  --code-text:  #e8e6df;
+  /* Код (под gruvbox-light, BRANDING §4) */
+  --code-bg:    #fbf1c7;  /* gruvbox-light bg0 */
+  --code-text:  #3c3836;  /* gruvbox-light fg */
   --code-inline-bg: #f3f1ed;
 
-  /* Семантика */
-  --success: #16a34a;
-  --warning: #d97706;
-  --danger:  #dc2626;
-  --info:    #0ea5e9;
+  /* Семантика callouts (BRANDING §2) */
+  --c-note:      #3b82f6;
+  --c-tip:       #22c55e;
+  --c-important: #a855f7;
+  --c-warn:      #f59e0b;
+  --c-danger:    #ef4444;
+
+  /* Старые алиасы — сохранены, чтобы не ломать места вне callouts */
+  --info:    var(--c-note);
+  --success: var(--c-tip);
+  --warning: var(--c-warn);
+  --danger:  var(--c-danger);
 
   /* Тени */
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, .04);
@@ -40,24 +53,43 @@
 }
 
 :root[data-theme="dark"] {
-  --bg:           #1a1b1e;
-  --bg-elevated:  #23252a;
+  --bg:           #1e2327;
+  --bg-elevated:  #252b30;
   --bg-sunken:    #2a2b2f;
 
-  --text:         #e8e6df;
-  --text-muted:   #a8a89e;
+  --text:         #e6e1d9;
+  --text-muted:   #9aa0a4;
   --text-subtle:  #7a7a72;
 
-  --accent:       #fb923c;
-  --accent-hover: #fdba74;
+  /* Шкала та же — роли только меняются местами (см. BRANDING §2) */
+  --accent-300: #fdba74;
+  --accent-400: #fb923c;
+  --accent-600: #ea580c;
+  --accent-700: #c2410c;
+
+  --accent:       var(--accent-300);  /* ссылка на тёмном — светлее */
+  --accent-hover: var(--accent-400);
   --accent-soft:  #7c2d12;
 
-  --border:        #2e2e33;
+  --border:        #333b41;
   --border-strong: #3f3f46;
 
-  --code-bg:    #0f1014;
-  --code-text:  #e8e6df;
+  /* Код (под gruvbox, BRANDING §4) */
+  --code-bg:    #282828;  /* gruvbox bg0 */
+  --code-text:  #ebdbb2;  /* gruvbox fg */
   --code-inline-bg: #2a2b2f;
+
+  /* Семантика callouts — dark-варианты (BRANDING §2) */
+  --c-note:      #60a5fa;
+  --c-tip:       #4ade80;
+  --c-important: #c084fc;
+  --c-warn:      #fbbf24;
+  --c-danger:    #f87171;
+
+  --info:    var(--c-note);
+  --success: var(--c-tip);
+  --warning: var(--c-warn);
+  --danger:  var(--c-danger);
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, .25);
   --shadow-md: 0 2px 8px rgba(0, 0, 0, .35);
@@ -80,6 +112,10 @@
     --text-muted:   #1a1a1a;
     --text-subtle:  #404040;
 
+    --accent-300: #ffb878;
+    --accent-400: #c2410c;
+    --accent-600: #8a2c00;
+    --accent-700: #5a1d00;
     --accent:       #8a2c00;        /* темнее ржавого — больше контраст к белому */
     --accent-hover: #5a1d00;
     --accent-soft:  #ffd9b3;
@@ -101,6 +137,10 @@
     --text-muted:   #e6e6e6;
     --text-subtle:  #bfbfbf;
 
+    --accent-300: #ffd1a8;
+    --accent-400: #ffb878;
+    --accent-600: #c2410c;
+    --accent-700: #8a2c00;
     --accent:       #ffb878;        /* светлее оранжевого — больше контраст к чёрному */
     --accent-hover: #ffd1a8;
     --accent-soft:  #b34d00;
@@ -116,7 +156,7 @@
 
 :root {
   /* Шрифты */
-  --font-sans:  "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-sans:  "PT Sans", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-serif: Georgia, "Times New Roman", serif;
   --font-mono:  "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 

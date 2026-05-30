@@ -1,8 +1,14 @@
 {{- /* Render hook для блоков кода.
        Оборачивает результат HighlightCodeBlock в .codeblock с лэйблом языка
-       и кнопкой «копировать». JS — assets/js/code-copy.js. */ -}}
+       и кнопкой «копировать». JS — assets/js/code-copy.js.
+
+       noClasses: false принудительно — тема предоставляет свой chroma-CSS
+       (12-chroma.css, gruvbox-light/dark, переключение через :root[data-theme]).
+       Если оставить хостовый markup.highlight.noClasses=true, Hugo вшил бы
+       inline `style="color:..."` в каждый <span> и наша подсветка темы
+       перестала бы переключаться. */ -}}
 {{- $type := .Type | default "" -}}
-{{- $opts := .Options | default dict -}}
+{{- $opts := merge (.Options | default dict) (dict "noClasses" false) -}}
 {{- $result := transform.HighlightCodeBlock . $opts -}}
 {{- $showCopy := site.Params.ShowCodeCopyButtons | default true -}}
 <div class="codeblock{{ with $type }} codeblock--{{ . }}{{ end }}"{{ with $type }} data-lang="{{ . }}"{{ end }}>

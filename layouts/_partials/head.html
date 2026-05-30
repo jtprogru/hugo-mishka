@@ -2,8 +2,8 @@
 
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#fafaf7" media="(prefers-color-scheme: light)">
-<meta name="theme-color" content="#1a1b1e" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#faf8f5" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1e2327" media="(prefers-color-scheme: dark)">
 
 {{- partial "head_theme_init.html" . }}
 {{- partial "head_meta.html" . }}
@@ -13,6 +13,12 @@
        текущей странице, чтобы не раздувать <head> мёртвыми hint'ами. */ -}}
 {{- partial "head_preconnect.html" . }}
 {{- partial "head_preload_cover.html" . }}
+
+{{- /* Preload основных subset'ов PT Sans (Regular cyrillic + latin) —
+       шрифт self-hosted, BRANDING §3. Bold/Italic подгрузятся лениво
+       вместе с остальным CSS bundle. */ -}}
+<link rel="preload" href="{{ "/fonts/pt-sans/pt-sans-400n-cyrillic.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ "/fonts/pt-sans/pt-sans-400n-latin.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
 
 {{- /* Favicons */ -}}
 {{- with site.Params.assets }}
@@ -40,6 +46,7 @@
 {{- $criticalNames := slice
     "css/modules/00-vars.css"
     "css/modules/01-reset.css"
+    "css/modules/02-fonts.css"
     "css/modules/02-typography.css"
     "css/modules/03-layout.css"
     "css/modules/04-header.css"

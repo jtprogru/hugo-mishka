@@ -1,5 +1,5 @@
 /* Базовая типографика: заголовки, абзацы, инлайн-элементы.
-   Шрифты пока system-ui (Inter подключим в Этапе 2 через @font-face). */
+   Шрифт тела — PT Sans, подключён в 02-fonts.css (см. BRANDING §3). */
 
 body {
   font-feature-settings: "ss01", "cv11";
@@ -38,7 +38,7 @@ mark {
 }
 
 blockquote {
-  border-left: 3px solid var(--accent);
+  border-left: 3px solid var(--accent-400);
   padding: var(--gap-sm) var(--gap-md);
   color: var(--text-muted);
   background: var(--bg-sunken);

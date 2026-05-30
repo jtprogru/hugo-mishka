@@ -13,12 +13,12 @@
 - Главная: profile-hero + сетка проектов из `data/projects.yaml` + сетка свежих постов с превью.
 - Render-hooks для codeblock (язык в углу + copy-кнопка) и изображений (`<picture>` с AVIF/WebP).
 - Sticky-TOC с активной секцией по scroll.
-- Шорткоды: `callout` (note/tip/warn/danger), `refresh-banner`, `telegram-cta`, `thin-place`, `kbd`, `figure`, `audio`, `video`, `collapse`.
+- Шорткоды: `callout` (note/tip/important/warn/danger), `refresh-banner`, `telegram-cta`, `thin-place`, `kbd`, `figure`, `audio`, `video`, `collapse`.
 - Подсветка кода через Chroma с собственной палитрой (отдельные `chroma-light.css` / `chroma-dark.css`).
 - Поиск через Fuse.js (опционально).
 - Mermaid и MathJax/KaTeX — опт-ин через `params.math` / `params.mermaid` или фронтматтер.
 - Категории с цветом из `data/category-colors.yaml`.
-- Self-hosted шрифты (Inter + JetBrains Mono), `font-display: swap`, без Google Fonts.
+- Self-hosted шрифты (PT Sans + JetBrains Mono), `font-display: swap`, без Google Fonts.
 - A11y: keyboard nav, focus-visible, ARIA-разметка, `prefers-reduced-motion`, контрасты ≥ AA.
 - Производительность: главная без cover < 100 КБ gzip, Lighthouse mobile ≥ 95.
 - Только Hugo Pipes, никаких сборщиков и `node_modules`.
@@ -331,10 +331,10 @@ Raw HTML — когда нужно вставить произвольный ф�
 - `layouts/_shortcodes/` — все шорткоды темы.
 - `layouts/_default/_markup/` — render-hooks для codeblock, image, link, mermaid.
 - `assets/css/main.css` + `modules/00-vars.css … 99-a11y.css` — модульный CSS, склеивается через Hugo Pipes (`resources.Match css/modules/*.css | resources.Concat`).
-- `assets/css/modules/12-chroma.css` — палитра подсветки кода (catppuccin-latte для light, catppuccin-mocha для dark), префиксы `:root[data-theme="..."]`.
+- `assets/css/modules/12-chroma.css` — палитра подсветки кода: gruvbox-light для light, gruvbox для dark, оба профиля в одном файле под префиксами `:root[data-theme="..."]`. См. BRANDING §4.
 - `assets/js/` — `theme-toggle.js`, `code-copy.js`, `toc-active.js`, `search.js` + `vendor/fuse.basic.min.js`.
 - SVG-иконки — встроены в `_partials/svg.html` (path-карта по именам).
-- `static/fonts/` — self-hosted Inter + JetBrains Mono.
+- `static/fonts/pt-sans/` — self-hosted PT Sans (Regular/Bold/Italic, latin + cyrillic). JetBrains Mono подключается через систему/`--font-mono` fallback.
 - `i18n/{ru,en}.yaml` — строки интерфейса.
 
 ## Лицензия

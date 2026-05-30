@@ -88,7 +88,7 @@
 .codeblock__copy.is-done {
   background: color-mix(in srgb, var(--success) 35%, transparent);
   border-color: var(--success);
-  color: #fff;
+  color: var(--code-text);
   opacity: 1;
 }
 

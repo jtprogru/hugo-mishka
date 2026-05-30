@@ -98,7 +98,7 @@
 .md-content blockquote {
   margin: var(--gap-md) 0;
   padding: var(--gap-md) var(--gap-md) var(--gap-md) var(--gap-lg);
-  border-left: 3px solid var(--accent);
+  border-left: 3px solid var(--accent-400);
   background: var(--bg-sunken);
   border-radius: 0 var(--radius-md) var(--radius-md) 0;
   color: var(--text-muted);
