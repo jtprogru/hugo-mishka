@@ -48,9 +48,12 @@
     {{- end -}}
 
     {{- if $res -}}
-      {{- /* Обработка только если это image MIME. */ -}}
-      {{- $isImage := and $res.MediaType (eq $res.MediaType.MainType "image") -}}
-      {{- if $isImage -}}
+      {{- /* Resize только для растровых: SVG/прочее Hugo не умеет
+             процессить, .Width/.Resize на них падают. Для нерастровых
+             image-MIME отдаём Permalink как есть, без width/height. */ -}}
+      {{- $isRaster := and $res.MediaType (in (slice "image/jpeg" "image/png" "image/webp") $res.MediaType.Type) -}}
+      {{- $isImage  := and $res.MediaType (eq $res.MediaType.MainType "image") -}}
+      {{- if $isRaster -}}
         {{- $proc := $res -}}
         {{- if gt $res.Width 1200 -}}
           {{- $proc = $res.Resize "1200x q85" -}}
@@ -58,6 +61,8 @@
         {{- $url = $proc.Permalink -}}
         {{- $w   = $proc.Width -}}
         {{- $h   = $proc.Height -}}
+      {{- else if $isImage -}}
+        {{- $url = $res.Permalink -}}
       {{- else -}}
         {{- $url = $path | absURL -}}
       {{- end -}}
