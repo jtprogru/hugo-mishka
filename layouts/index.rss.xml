@@ -83,16 +83,25 @@
              Hugo использует html/template для .xml — поэтому литералы
              `<![CDATA[` он сам html-escape-ит. Собираем строку через
              printf и помечаем результат safeHTML, чтобы Hugo не трогал. */ -}}
-      {{- $body := "" -}}
+      {{- /* description без inline <style>: VK при импорте RSS на стену
+             выкидывает тег <style>, но оставляет его текстовое содержимое,
+             из-за чего CSS вываливается простынёй в начало поста и съедает
+             лимит на длину описания. Стили оставляем только в
+             <content:encoded> — там их уважают Feedly/Inoreader. */ -}}
+      {{- $descBody := "" -}}
+      {{- $contentBody := "" -}}
       {{- if $fullContent -}}
-        {{- $body = printf "<style>%s</style><div>%s</div>" $css .Content -}}
+        {{- $descBody = printf "<div>%s</div>" .Content -}}
+        {{- $contentBody = printf "<style>%s</style><div>%s</div>" $css .Content -}}
       {{- else -}}
-        {{- $body = printf "%s" .Summary -}}
+        {{- $descBody = printf "%s" .Summary -}}
+        {{- $contentBody = $descBody -}}
       {{- end -}}
-      {{- $body = replace $body "]]>" "]]]]><![CDATA[>" -}}
+      {{- $descBody = replace $descBody "]]>" "]]]]><![CDATA[>" -}}
+      {{- $contentBody = replace $contentBody "]]>" "]]]]><![CDATA[>" -}}
 
-      {{ printf "<description><![CDATA[%s]]></description>" $body | safeHTML }}
-      {{ printf "<content:encoded><![CDATA[%s]]></content:encoded>" $body | safeHTML }}
+      {{ printf "<description><![CDATA[%s]]></description>" $descBody | safeHTML }}
+      {{ printf "<content:encoded><![CDATA[%s]]></content:encoded>" $contentBody | safeHTML }}
     </item>
     {{- end }}
   </channel>
