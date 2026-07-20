@@ -2,10 +2,8 @@
 {{- $dateFmt := site.Params.dateFormat | default "2 January 2006" -}}
 <div class="post__meta">
   <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format $dateFmt }}</time>
-  {{- if not .Lastmod.IsZero }}
-    {{- if and (gt (sub .Lastmod.Unix .Date.Unix) 86400) (not (.Lastmod.Equal .Date)) }}
+  {{- if and (not .Lastmod.IsZero) (gt .Lastmod.Unix .Date.Unix) }}
   · <span class="post__updated" title="Обновлено">обн. {{ .Lastmod.Format $dateFmt }}</span>
-    {{- end }}
   {{- end }}
   {{- if site.Params.ShowReadingTime }}
   · <span class="post__reading-time">{{ .ReadingTime }} мин чтения</span>
