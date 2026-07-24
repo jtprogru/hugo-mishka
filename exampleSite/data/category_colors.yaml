@@ -2,8 +2,11 @@
 # Категория = «о чём пост», callout = «уровень внимания внутри текста» —
 # не смешивай: красный SRE-пилюли и красный `danger`-callout в одной статье
 # не должны конфликтовать смыслом, разные «оси» восприятия.
-OS:      "#0ea5e9"
-Tools:   "#22c55e"
-SRE:     "#ef4444"
-DevOps:  "#a855f7"
-Hugo:    "#ff4088"
+# Тона — catppuccin Latte, чтобы пилюли не выбивались из холодной базы.
+# SRE → Red, DevOps → Mauve — совпадают с семантикой callouts danger/important,
+# но это разные оси (о чём пост / уровень внимания), см. BRANDING §2.
+OS:      "#1e66f5"  # Blue
+Tools:   "#40a02b"  # Green
+SRE:     "#d20f39"  # Red
+DevOps:  "#8839ef"  # Mauve
+Hugo:    "#ea76cb"  # Pink

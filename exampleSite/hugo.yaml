@@ -143,4 +143,4 @@ params:
   PWA:
     enabled: true
     manifestPath: "/manifest.json"
-    themeColor: "#c2410c"
+    themeColor: "#24273a"

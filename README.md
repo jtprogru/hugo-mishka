@@ -8,7 +8,7 @@
 
 - Mobile-first вёрстка, отзывчивая от 320px до широких десктопов.
 - Светлая / тёмная тема: авто по `prefers-color-scheme` + ручной 3-state-тогглер (`auto / light / dark`), сохраняется в `localStorage`, без FOUC.
-- Тёплая «бумажная» палитра со ржаво-оранжевым акцентом — не клон серого PaperMod.
+- Холодная приглушённая палитра catppuccin (Latte на свету, Macchiato в темноте) с акцентом Sapphire — не клон серого PaperMod.
 - Type scale 1.250 (Major Third), читаемая колонка 720px для постов, межстрочный 1.65.
 - Главная: profile-hero + сетка проектов из `data/projects.yaml` + сетка свежих постов с превью.
 - Render-hooks для codeblock (язык в углу + copy-кнопка) и изображений (`<picture>` с AVIF/WebP).
@@ -152,7 +152,7 @@ params:
   # PWA:
   #   enabled: true
   #   manifestPath: "/manifest.json"
-  #   themeColor: "#c2410c"
+  #   themeColor: "#24273a"
 
   # RSS: полный текст постов + inline-CSS. По умолчанию on.
   # rssFullContent: true
@@ -331,7 +331,7 @@ Raw HTML — когда нужно вставить произвольный ф�
 - `layouts/_shortcodes/` — все шорткоды темы.
 - `layouts/_default/_markup/` — render-hooks для codeblock, image, link, mermaid.
 - `assets/css/main.css` + `modules/00-vars.css … 99-a11y.css` — модульный CSS, склеивается через Hugo Pipes (`resources.Match css/modules/*.css | resources.Concat`).
-- `assets/css/modules/12-chroma.css` — палитра подсветки кода: gruvbox-light для light, gruvbox для dark, оба профиля в одном файле под префиксами `:root[data-theme="..."]`. См. BRANDING §4.
+- `assets/css/modules/12-chroma.css` — палитра подсветки кода: catppuccin-latte для light, catppuccin-macchiato для dark, оба профиля в одном файле под префиксами `:root[data-theme="..."]`. См. BRANDING §4.
 - `assets/js/` — `theme-toggle.js`, `code-copy.js`, `toc-active.js`, `search.js` + `vendor/fuse.basic.min.js`.
 - SVG-иконки — встроены в `_partials/svg.html` (path-карта по именам).
 - `static/fonts/pt-sans/` — self-hosted PT Sans (Regular/Bold/Italic, latin + cyrillic). JetBrains Mono подключается через систему/`--font-mono` fallback.

@@ -3,42 +3,44 @@
 
 :root,
 :root[data-theme="light"] {
-  /* Фоны и поверхности (BRANDING §2) */
-  --bg:           #faf8f5;
-  --bg-elevated:  #ffffff;
-  --bg-sunken:    #f3f1ed;
+  /* Фоны и поверхности — catppuccin Latte (BRANDING §2) */
+  --bg:           #eff1f5;  /* base */
+  --bg-elevated:  #e6e9ef;  /* mantle */
+  --bg-sunken:    #dce0e8;  /* crust */
 
-  /* Текст */
-  --text:         #1f2428;
-  --text-muted:   #5c6266;
-  --text-subtle:  #8b8b92;
+  /* Текст — Latte */
+  --text:         #4c4f69;  /* text */
+  --text-muted:   #6c6f85;  /* subtext0 */
+  --text-subtle:  #8c8fa1;  /* subtext1 */
 
-  /* Акцентная шкала (BRANDING §2). Один тёплый тон, четыре роли. */
-  --accent-300: #fdba74;  /* текст-ссылка на тёмной теме */
-  --accent-400: #fb923c;  /* брендовый/декоративный акцент */
-  --accent-600: #ea580c;  /* ссылка крупным текстом на свету, hover-заливка */
-  --accent-700: #c2410c;  /* основной цвет ссылок на свету, PWA theme-color */
+  /* Акцентная шкала — Sapphire (BRANDING §2). Один холодный тон, четыре роли. */
+  --accent-300: #7dc4e4;  /* текст-ссылка на тёмной теме (Macchiato Sapphire) */
+  --accent-400: #209fb5;  /* брендовый/декоративный акцент (Latte Sapphire) */
+  --accent-600: #209fb5;  /* декор/hover-заливка на свету (не текст) */
+  --accent-700: #0b7285;  /* основной цвет ссылок на свету, PWA theme-color (затемнён вручную) */
 
-  /* Алиасы для совместимости и читаемости */
+  /* Алиасы для совместимости и читаемости.
+     --accent-hover — текст ссылки при :hover, поэтому темнее базы (AA ≥ 4.5),
+     а не accent-600 (#209fb5 = 2.78, годится только под декор/заливки). */
   --accent:       var(--accent-700);
-  --accent-hover: var(--accent-600);
-  --accent-soft:  #fed7aa;
+  --accent-hover: #095e6d;
+  --accent-soft:  #bcdff0;
 
-  /* Границы */
-  --border:        #e7e2da;
-  --border-strong: #c8c5bb;
+  /* Границы — Latte surface0/surface1 */
+  --border:        #ccd0da;
+  --border-strong: #bcc0cc;
 
-  /* Код (под gruvbox-light, BRANDING §4) */
-  --code-bg:    #fbf1c7;  /* gruvbox-light bg0 */
-  --code-text:  #3c3836;  /* gruvbox-light fg */
-  --code-inline-bg: #f3f1ed;
+  /* Код (под catppuccin-latte, BRANDING §4) — фон выровнен с --bg-elevated (mantle) */
+  --code-bg:    #e6e9ef;  /* mantle */
+  --code-text:  #4c4f69;  /* text */
+  --code-inline-bg: #dce0e8;
 
-  /* Семантика callouts (BRANDING §2) */
-  --c-note:      #3b82f6;
-  --c-tip:       #22c55e;
-  --c-important: #a855f7;
-  --c-warn:      #f59e0b;
-  --c-danger:    #ef4444;
+  /* Семантика callouts — Latte-тона (BRANDING §2) */
+  --c-note:      #7287fd;  /* Lavender — намеренно не Blue */
+  --c-tip:       #40a02b;  /* Green */
+  --c-important: #8839ef;  /* Mauve */
+  --c-warn:      #fe640b;  /* Peach */
+  --c-danger:    #d20f39;  /* Red */
 
   /* Старые алиасы — сохранены, чтобы не ломать места вне callouts */
   --info:    var(--c-note);
@@ -53,38 +55,39 @@
 }
 
 :root[data-theme="dark"] {
-  --bg:           #1e2327;
-  --bg-elevated:  #252b30;
-  --bg-sunken:    #2a2b2f;
+  /* Фоны и поверхности — catppuccin Macchiato (BRANDING §2) */
+  --bg:           #24273a;  /* base */
+  --bg-elevated:  #1e2030;  /* mantle */
+  --bg-sunken:    #181926;  /* crust */
 
-  --text:         #e6e1d9;
-  --text-muted:   #9aa0a4;
-  --text-subtle:  #7a7a72;
+  --text:         #cad3f5;  /* text */
+  --text-muted:   #a5adcb;  /* subtext0 */
+  --text-subtle:  #8087a2;  /* subtext1 */
 
   /* Шкала та же — роли только меняются местами (см. BRANDING §2) */
-  --accent-300: #fdba74;
-  --accent-400: #fb923c;
-  --accent-600: #ea580c;
-  --accent-700: #c2410c;
+  --accent-300: #7dc4e4;  /* Macchiato Sapphire */
+  --accent-400: #7dc4e4;
+  --accent-600: #209fb5;
+  --accent-700: #0b7285;
 
   --accent:       var(--accent-300);  /* ссылка на тёмном — светлее */
-  --accent-hover: var(--accent-400);
-  --accent-soft:  #7c2d12;
+  --accent-hover: #96ccdd;
+  --accent-soft:  #2d4f5c;
 
-  --border:        #333b41;
-  --border-strong: #3f3f46;
+  --border:        #363a4f;  /* surface0 */
+  --border-strong: #494d64;  /* surface1 */
 
-  /* Код (под gruvbox, BRANDING §4) */
-  --code-bg:    #282828;  /* gruvbox bg0 */
-  --code-text:  #ebdbb2;  /* gruvbox fg */
-  --code-inline-bg: #2a2b2f;
+  /* Код (под catppuccin-macchiato, BRANDING §4) — фон выровнен с --bg-elevated (mantle) */
+  --code-bg:    #1e2030;  /* mantle */
+  --code-text:  #cad3f5;  /* text */
+  --code-inline-bg: #181926;
 
-  /* Семантика callouts — dark-варианты (BRANDING §2) */
-  --c-note:      #60a5fa;
-  --c-tip:       #4ade80;
-  --c-important: #c084fc;
-  --c-warn:      #fbbf24;
-  --c-danger:    #f87171;
+  /* Семантика callouts — Macchiato-тона (BRANDING §2) */
+  --c-note:      #b7bdf8;  /* Lavender */
+  --c-tip:       #a6da95;  /* Green */
+  --c-important: #c6a0f6;  /* Mauve */
+  --c-warn:      #f5a97f;  /* Peach */
+  --c-danger:    #ed8796;  /* Red */
 
   --info:    var(--c-note);
   --success: var(--c-tip);
@@ -112,13 +115,13 @@
     --text-muted:   #1a1a1a;
     --text-subtle:  #404040;
 
-    --accent-300: #ffb878;
-    --accent-400: #c2410c;
-    --accent-600: #8a2c00;
-    --accent-700: #5a1d00;
-    --accent:       #8a2c00;        /* темнее ржавого — больше контраст к белому */
-    --accent-hover: #5a1d00;
-    --accent-soft:  #ffd9b3;
+    --accent-300: #4bb3cc;
+    --accent-400: #0b7285;
+    --accent-600: #065666;
+    --accent-700: #043b47;
+    --accent:       #065666;        /* темнее Sapphire — больше контраст к белому */
+    --accent-hover: #043b47;
+    --accent-soft:  #bcdff0;
 
     --border:        #999999;
     --border-strong: #444444;
@@ -137,13 +140,13 @@
     --text-muted:   #e6e6e6;
     --text-subtle:  #bfbfbf;
 
-    --accent-300: #ffd1a8;
-    --accent-400: #ffb878;
-    --accent-600: #c2410c;
-    --accent-700: #8a2c00;
-    --accent:       #ffb878;        /* светлее оранжевого — больше контраст к чёрному */
-    --accent-hover: #ffd1a8;
-    --accent-soft:  #b34d00;
+    --accent-300: #a6d8ea;
+    --accent-400: #7dc4e4;
+    --accent-600: #209fb5;
+    --accent-700: #0b7285;
+    --accent:       #a6d8ea;        /* светлее Sapphire — больше контраст к чёрному */
+    --accent-hover: #cbe8f3;
+    --accent-soft:  #2d4f5c;
 
     --border:        #808080;
     --border-strong: #cccccc;

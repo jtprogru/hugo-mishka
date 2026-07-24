@@ -212,8 +212,8 @@
   color: var(--accent);
 }
 .proj-card__badge--maintenance {
-  background: color-mix(in srgb, var(--warning, #d97706) 14%, transparent);
-  color: color-mix(in srgb, var(--warning, #d97706) 85%, var(--text));
+  background: color-mix(in srgb, var(--warning, #fe640b) 14%, transparent);
+  color: color-mix(in srgb, var(--warning, #fe640b) 85%, var(--text));
 }
 .proj-card__badge--archived {
   background: var(--bg-sunken);
