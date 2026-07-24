@@ -14,11 +14,14 @@
 {{- partial "head_preconnect.html" . }}
 {{- partial "head_preload_cover.html" . }}
 
-{{- /* Preload основных subset'ов PT Sans (Regular cyrillic + latin) —
-       шрифт self-hosted, BRANDING §3. Bold/Italic подгрузятся лениво
-       вместе с остальным CSS bundle. */ -}}
+{{- /* Preload основных subset'ов PT Sans (Regular + Bold, cyrillic + latin) —
+       шрифт self-hosted, BRANDING §3. Bold нужен above-the-fold (лого, навигация,
+       заголовки): без preload он подгружался поздно и swap реформатировал шапку,
+       толкая контент вниз (CLS). Italic остаётся ленивым с CSS bundle. */ -}}
 <link rel="preload" href="{{ "/fonts/pt-sans/pt-sans-400n-cyrillic.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{{ "/fonts/pt-sans/pt-sans-400n-latin.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ "/fonts/pt-sans/pt-sans-700n-cyrillic.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ "/fonts/pt-sans/pt-sans-700n-latin.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
 
 {{- /* Favicons */ -}}
 {{- with site.Params.assets }}

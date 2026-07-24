@@ -8,6 +8,7 @@
         <img class="header__logo-icon"
              src="{{ . | relURL }}"
              alt=""
+             width="{{ $.Site.Params.label.iconWidth | default 25 }}"
              height="{{ $.Site.Params.label.iconHeight | default 32 }}"
              aria-hidden="true">
         {{- end -}}
