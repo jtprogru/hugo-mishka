@@ -8,10 +8,12 @@
   --bg-elevated:  #e6e9ef;  /* mantle */
   --bg-sunken:    #dce0e8;  /* crust */
 
-  /* Текст — Latte */
+  /* Текст — Latte. muted/subtle затемнены до AA ≥ 4.5:1 на --bg (#eff1f5):
+     subtext0 #6c6f85 давал 4.37, overlay2 #8c8fa1 — 2.83 (валили контраст в
+     шапке, subtitle, футере). Значения остаются в пределах catppuccin Latte. */
   --text:         #4c4f69;  /* text */
-  --text-muted:   #6c6f85;  /* subtext0 */
-  --text-subtle:  #8c8fa1;  /* subtext1 */
+  --text-muted:   #5c5f77;  /* subtext1 — 5.53:1 */
+  --text-subtle:  #64677d;  /* затемнённый subtext0 — 4.9:1 */
 
   /* Акцентная шкала — Sapphire (BRANDING §2). Один холодный тон, четыре роли. */
   --accent-300: #7dc4e4;  /* текст-ссылка на тёмной теме (Macchiato Sapphire) */

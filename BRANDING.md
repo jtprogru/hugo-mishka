@@ -80,8 +80,10 @@
 | `--bg` | `#eff1f5` (base) | `#24273a` (base) | Фон страницы |
 | `--bg-elev` | `#e6e9ef` (mantle) | `#1e2030` (mantle) | Карточки, callout-подложки, блоки кода |
 | `--fg` | `#4c4f69` (text) | `#cad3f5` (text) | Основной текст |
-| `--fg-muted` | `#6c6f85` (subtext0) | `#a5adcb` (subtext0) | Мета, даты, подписи |
+| `--fg-muted` | `#5c5f77` (subtext1) | `#a5adcb` (subtext0) | Мета, даты, подписи |
 | `--border` | `#ccd0da` (surface0) | `#363a4f` (surface0) | Разделители, рамки карточек |
+
+Про `--fg-muted` на свету: catppuccin subtext0 `#6c6f85` даёт только 4.37:1 на `--bg` и валит AA (шапка, subtitle, футер). Сдвинуто на subtext1 `#5c5f77` — 5.53:1. Токен `--text-subtle` (подписи ещё тише: «Powered by», заголовки колонок футера) по той же причине затемнён с `#8c8fa1` (2.83:1) до `#64677d` (4.92:1). Проверено: light muted 5.53, subtle 4.92; dark muted `#a5adcb` — 6.62. Все ≥ AA.
 
 Отличие от 0.1: ушёл тёплый off-white `#faf8f5` — светлая тема теперь холодная сине-серая. Это осознанно: тёплая бумага на свету и холодный акцент дали бы ту же рассинхронизацию, от которой уходим, только зеркальную.
 
@@ -223,7 +225,7 @@ hugo gen chromastyles --style=catppuccin-macchiato > assets/css/modules/12-chrom
 
 - [ ] Переложить базу в `12-vars.css` на Latte/Macchiato (таблица §2), убрать тёплый off-white `#faf8f5` и сине-графит `#1e2327`.
 - [ ] Развернуть акцент в шкалу `--accent-300/400/600/700` на Sapphire, ссылки — `--accent-700` (light) / `--accent-300` (dark).
-- [ ] Прогнать контраст всех текстовых пар через WebAIM, ≥ AA. Особо: `--accent-600` (на грани) и `--fg-muted` на обеих темах.
+- [ ] Прогнать контраст всех текстовых пар через WebAIM, ≥ AA. Особо: `--accent-600` (на грани). `--fg-muted`/`--text-subtle` уже выверены до AA на light/dark (см. §2).
 - [ ] Переложить callouts на катпуччиновские тона, `note` → Lavender.
 - [ ] Свести `category-colors.yaml` (SRE → Red, DevOps → Mauve) с callout-цветами так, чтобы не путались.
 - [ ] Поменять PWA `themeColor` с `#c2410c` на `#24273a` (или Sapphire).
