@@ -58,6 +58,8 @@
   line-height: var(--lh-base);
 }
 .profile__subtitle p { margin-block: 0.2em; }
+/* Инлайн-ссылки в прозе подчёркнуты, а не только цветом (WCAG 1.4.1). */
+.profile__subtitle a { text-decoration: underline; }
 .profile__subtitle code {
   background: var(--code-inline-bg);
   padding: 0.05em 0.4em;
