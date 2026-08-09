@@ -62,7 +62,32 @@
         {{- $w   = $proc.Width -}}
         {{- $h   = $proc.Height -}}
       {{- else if $isImage -}}
-        {{- $url = $res.Permalink -}}
+        {{- /* SVG и прочие невекторно-непроцессируемые форматы в OG отдавать
+               нельзя: ни Facebook, ни Twitter, ни Telegram, ни VK их не
+               рендерят — карточка резервирует место и остаётся пустой.
+               Ищем растрового соседа с тем же именем (его кладёт
+               `make cover-rasterize`), и только если его нет — не отдаём
+               ничего, чтобы сработал общий фолбэк ниже. */ -}}
+        {{- $stem := strings.TrimSuffix (path.Ext $path) $path -}}
+        {{- $raster := "" -}}
+        {{- range slice "png" "webp" "jpg" -}}
+          {{- if not $raster -}}
+            {{- $cand := printf "%s.%s" $stem . -}}
+            {{- if $.IsPage -}}
+              {{- with $.Resources.GetMatch $cand }}{{ $raster = . }}{{ end -}}
+            {{- end -}}
+            {{- if not $raster -}}
+              {{- with resources.Get (printf "covers/%s" $cand) }}{{ $raster = . }}{{ end -}}
+            {{- end -}}
+          {{- end -}}
+        {{- end -}}
+        {{- if $raster -}}
+          {{- $proc := $raster -}}
+          {{- if gt $raster.Width 1200 }}{{ $proc = $raster.Resize "1200x q85" }}{{ end -}}
+          {{- $url = $proc.Permalink -}}
+          {{- $w   = $proc.Width -}}
+          {{- $h   = $proc.Height -}}
+        {{- end -}}
       {{- else -}}
         {{- $url = $path | absURL -}}
       {{- end -}}
@@ -77,7 +102,21 @@
       {{- end -}}
     {{- end -}}
 
-    {{- $result = dict "url" $url "width" $w "height" $h "alt" $alt -}}
+    {{- if $url -}}
+      {{- $result = dict "url" $url "width" $w "height" $h "alt" $alt -}}
+    {{- end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* Фолбэк для страниц без собственной обложки: главная, листинги, теги,
+       статические страницы. Без него шаринг главной в Telegram или чат идёт
+       вообще без картинки. Имя файла задаётся `params.cover.defaultImage`
+       и ищется в `assets/covers/`; параметра нет — нет и og:image. */ -}}
+{{- if not $result.url -}}
+  {{- with resources.Get (printf "covers/%s" (site.Params.cover.defaultImage | default "")) -}}
+    {{- $proc := . -}}
+    {{- if gt .Width 1200 }}{{ $proc = .Resize "1200x q85" }}{{ end -}}
+    {{- $result = dict "url" $proc.Permalink "width" $proc.Width "height" $proc.Height "alt" site.Title -}}
   {{- end -}}
 {{- end -}}
 
