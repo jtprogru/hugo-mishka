@@ -5,9 +5,26 @@
 {{- $fullTitle := cond $isHome (site.Title) (printf "%s — %s" $title site.Title) -}}
 {{- $desc := or .Description .Summary site.Params.description | plainify | htmlUnescape | chomp -}}
 
+{{- /* Собственный URL страницы. На пагинации > 1 это URL самой страницы
+       пагинации, а не первой: канонизация page/N на page/1 — устаревший
+       паттерн, он мешает обнаружению ссылок с глубоких страниц и конфликтует
+       с noindex, который мы там же и ставим. */ -}}
+{{- $selfURL := .Permalink -}}
+{{- if or .IsHome .IsSection (eq .Kind "taxonomy") (eq .Kind "term") -}}
+  {{- with .Paginator -}}
+    {{- if gt .PageNumber 1 }}{{ $selfURL = .URL | absURL }}{{ end -}}
+  {{- end -}}
+{{- end -}}
+
+{{- /* canonicalURL во фронтматтере перекрывает собственный URL. Используется
+       для перепечаток: если статья изначально вышла на внешней площадке,
+       канонической считается она, а версия в блоге — копией. Без параметра
+       каноническим остаётся сам пост. */ -}}
+{{- $canonical := .Params.canonicalURL | default $selfURL -}}
+
 <title>{{ $fullTitle }}</title>
 <meta name="description" content="{{ $desc }}">
-<link rel="canonical" href="{{ .Permalink }}">
+<link rel="canonical" href="{{ $canonical }}">
 
 {{- with site.Params.author }}
 <meta name="author" content="{{ . }}">
@@ -29,25 +46,73 @@
 <meta property="te:channel" content="@{{ $ch }}">
 {{- end }}
 
-{{- /* hreflang */ -}}
-<link rel="alternate" hreflang="{{ site.Language.Lang }}" href="{{ .Permalink }}">
+{{- /* hreflang — самоссылка на собственный URL, не на внешний canonical. */ -}}
+<link rel="alternate" hreflang="{{ site.Language.Lang }}" href="{{ $selfURL }}">
+
+{{- /* Сущность автора. Собирается один раз и переиспользуется в author и
+       publisher: без неё Google не может связать статьи с человеком, а ник
+       без url и sameAs сущностью не является. sameAs берём из socialIcons,
+       отбрасывая относительные ссылки — там лежит и /index.xml. */ -}}
+{{- $sameAs := slice -}}
+{{- range site.Params.socialIcons -}}
+  {{- if hasPrefix .url "http" }}{{ $sameAs = $sameAs | append .url }}{{ end -}}
+{{- end -}}
+{{- $person := dict
+      "@type" "Person"
+      "name" (site.Params.authorName | default site.Params.author | default "Anonymous")
+      "url" (absURL "/about-me/")
+-}}
+{{- if and site.Params.authorName site.Params.author -}}
+  {{- $person = merge $person (dict "alternateName" site.Params.author) -}}
+{{- end -}}
+{{- with $sameAs }}{{ $person = merge $person (dict "sameAs" .) }}{{ end -}}
 
 {{- /* JSON-LD: Article на single, WebSite на главной */ -}}
 {{- if .IsHome }}
-  {{- $ld := dict "@context" "https://schema.org" "@type" "WebSite" "url" site.BaseURL "name" site.Title -}}
-  {{- with site.Params.description }}{{ $ld = merge $ld (dict "description" .) }}{{ end -}}
-<script type="application/ld+json">{{ $ld | jsonify (dict "indent" "  ") | safeJS }}</script>
-{{- else if .IsPage }}
   {{- $ld := dict
         "@context" "https://schema.org"
-        "@type" "Article"
-        "headline" $title
-        "url" .Permalink
+        "@type" "WebSite"
+        "url" site.BaseURL
+        "name" site.Title
+        "inLanguage" site.Language.Lang
+        "author" $person
+        "publisher" $person
+  -}}
+  {{- with site.Params.description }}{{ $ld = merge $ld (dict "description" .) }}{{ end -}}
+  {{- /* SearchAction — только если на сайте действительно есть страница поиска. */ -}}
+  {{- with site.GetPage "/search" -}}
+    {{- $ld = merge $ld (dict "potentialAction" (dict
+          "@type" "SearchAction"
+          "target" (dict "@type" "EntryPoint" "urlTemplate" (printf "%s?q={search_term_string}" .Permalink))
+          "query-input" "required name=search_term_string")) -}}
+  {{- end -}}
+<script type="application/ld+json">{{ $ld | jsonify (dict "indent" "  ") | safeJS }}</script>
+{{- else if .IsPage }}
+  {{- /* headline Google просит держать в пределах 110 символов. */ -}}
+  {{- $headline := $title -}}
+  {{- if gt (len $headline) 110 }}{{ $headline = substr $headline 0 110 }}{{ end -}}
+  {{- $ld := dict
+        "@context" "https://schema.org"
+        "@type" (cond (eq .Section "posts") "BlogPosting" "Article")
+        "headline" $headline
+        "url" $canonical
+        "mainEntityOfPage" (dict "@type" "WebPage" "@id" $selfURL)
+        "inLanguage" site.Language.Lang
         "datePublished" (.PublishDate.Format "2006-01-02T15:04:05-07:00")
-        "author" (dict "@type" "Person" "name" (site.Params.author | default "Anonymous"))
+        "author" $person
+        "publisher" $person
   -}}
   {{- if not .Lastmod.IsZero }}{{ $ld = merge $ld (dict "dateModified" (.Lastmod.Format "2006-01-02T15:04:05-07:00")) }}{{ end -}}
   {{- with $desc }}{{ $ld = merge $ld (dict "description" .) }}{{ end -}}
+  {{- /* image — единственное поле, которое Google называет рекомендованным
+         для показа статьи с картинкой. Берём тот же растр, что уходит в OG. */ -}}
+  {{- $cover := partial "cover_og_image.html" . -}}
+  {{- with $cover.url }}{{ $ld = merge $ld (dict "image" (slice .)) }}{{ end -}}
+  {{- with .GetTerms "tags" -}}
+    {{- $kw := slice -}}
+    {{- range . }}{{ $kw = $kw | append .LinkTitle }}{{ end -}}
+    {{- $ld = merge $ld (dict "keywords" (delimit $kw ", ")) -}}
+  {{- end -}}
 <script type="application/ld+json">{{ $ld | jsonify (dict "indent" "  ") | safeJS }}</script>
 {{- /* HowTo, если фронтматтер описывает шаги */ -}}
   {{- if and .Params.howto .Params.howto.steps -}}
