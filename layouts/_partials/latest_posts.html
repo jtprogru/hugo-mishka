@@ -50,7 +50,7 @@
       {{- if $coverURL }}
       <img class="lp-card__cover"
            src="{{ $coverURL }}"
-           alt=""
+           alt="{{ .Title | plainify }}"
            loading="lazy"
            decoding="async"
            width="84" height="84">

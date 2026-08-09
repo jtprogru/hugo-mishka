@@ -3,7 +3,16 @@
 {{- $dateFmt := site.Params.dateFormat | default "2 January 2006" -}}
 {{- $cover := .Params.cover.image -}}
 {{- $coverURL := "" -}}
-{{- $coverAlt := .Params.cover.alt | default .Title -}}
+{{- $coverW := 0 -}}
+{{- $coverH := 0 -}}
+{{- $coverSrcset := "" -}}
+{{- /* Значения вроде `howto`, `OS`, `work` — это имя тематической обложки,
+       общей на десятки постов, а не описание картинки. Для image search и
+       скринридера такой alt бесполезен, поэтому подставляем заголовок. */ -}}
+{{- $coverAlt := .Params.cover.alt | default "" -}}
+{{- if or (eq $coverAlt "") (not (in (trim $coverAlt " ") " ")) -}}
+  {{- $coverAlt = .Title -}}
+{{- end -}}
 {{- $relative := .Params.cover.relative | default false -}}
 {{- if $cover -}}
   {{- /* Резолв в том же порядке, что и в `post_cover.html`:
@@ -16,6 +25,21 @@
   {{- end -}}
   {{- if $res -}}
     {{- $coverURL = $res.RelPermalink -}}
+    {{- /* Карточка на листинге шириной максимум ~540px, а в assets лежат
+           обложки 1200px и шире. Без ресайза на `/posts/` уезжает десяток
+           полноразмерных PNG, которые браузер ужимает средствами CSS.
+           Отдаём webp в двух ширинах и проставляем размеры: бокс под
+           картинку резервирует `aspect-ratio` на `.post-card__cover-wrap`,
+           но явные width/height корректны и помогают, если CSS не доехал.
+           SVG и прочее непроцессируемое пропускаем — Hugo их не ресайзит. */ -}}
+    {{- if in (slice "image/jpeg" "image/png" "image/webp") $res.MediaType.Type -}}
+      {{- $sm := $res.Fill "320x180 webp q80" -}}
+      {{- $lg := $res.Fill "640x360 webp q80" -}}
+      {{- $coverURL = $lg.RelPermalink -}}
+      {{- $coverW = $lg.Width -}}
+      {{- $coverH = $lg.Height -}}
+      {{- $coverSrcset = printf "%s 320w, %s 640w" $sm.RelPermalink $lg.RelPermalink -}}
+    {{- end -}}
   {{- else if or (strings.HasPrefix $cover "http://") (strings.HasPrefix $cover "https://") (strings.HasPrefix $cover "/") -}}
     {{- $coverURL = $cover -}}
   {{- else if $relative -}}
@@ -29,7 +53,9 @@
 <article class="post-card{{ if .Params.pinned }} post-card--pinned{{ end }}">
   {{- if and $coverURL (not $hideCover) }}
   <a class="post-card__cover-wrap" href="{{ .RelPermalink }}" tabindex="-1" aria-hidden="true">
-    <img class="post-card__cover" src="{{ $coverURL }}" alt="{{ $coverAlt }}" loading="lazy" decoding="async">
+    <img class="post-card__cover" src="{{ $coverURL }}" alt="{{ $coverAlt }}" loading="lazy" decoding="async"
+      {{- with $coverSrcset }} srcset="{{ . }}" sizes="(min-width: 768px) 540px, 100vw"{{ end }}
+      {{- with $coverW }} width="{{ . }}"{{ end }}{{ with $coverH }} height="{{ . }}"{{ end }}>
   </a>
   {{- end }}
   <div class="post-card__body">
