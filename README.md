@@ -89,6 +89,7 @@ params:
   ShowReadingTime: true
   ShowCodeCopyButtons: true
   ShowPostNavLinks: true
+  ShowFooterNav: true        # средняя колонка футера с меню (menus.footer, иначе menus.main)
   math: false                # глобально; можно переопределить во фронтматтере: math: true
   mermaid: false             # то же
 

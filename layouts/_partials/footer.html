@@ -1,15 +1,21 @@
 {{- /* Footer: трёхколоночный на десктопе (copyright | nav | social), стек на мобиле.
        Содержимое колонок выделено в footer_copyright/footer_nav/footer_social,
-       чтобы проекты могли переопределять отдельные блоки. */ -}}
+       чтобы проекты могли переопределять отдельные блоки.
+
+       Средняя колонка (навигация) отключается через `params.ShowFooterNav: false` —
+       тогда колонка не рендерится вовсе, а грид становится двухколоночным. */ -}}
+{{- $showNav := ne (site.Params.ShowFooterNav | default true) false -}}
 <footer class="footer">
-  <div class="container footer__inner">
+  <div class="container footer__inner{{ if not $showNav }} footer__inner--no-nav{{ end }}">
     <div class="footer__col footer__col--copy">
       {{- partial "footer_copyright.html" . -}}
     </div>
 
+    {{- if $showNav }}
     <div class="footer__col footer__col--nav">
       {{- partial "footer_nav.html" . -}}
     </div>
+    {{- end }}
 
     <div class="footer__col footer__col--social">
       {{- partial "footer_social.html" . -}}

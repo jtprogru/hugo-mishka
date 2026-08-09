@@ -20,6 +20,10 @@
     grid-template-columns: 2fr 1fr 1fr;
     gap: var(--gap-xl);
   }
+  /* ShowFooterNav: false — средней колонки нет, остаются copyright | social. */
+  .footer__inner--no-nav {
+    grid-template-columns: 2fr 1fr;
+  }
   .footer__col--social { text-align: right; }
 }
 
