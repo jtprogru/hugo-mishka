@@ -92,6 +92,20 @@
   transform: translateX(2px);
 }
 
+/* Вторая строка — служебные ссылки (чат, канал, ещё что-то). Тише основного
+   текста и отделена линией, чтобы не спорить с главным призывом выше. */
+.post-endnote__note {
+  margin-top: var(--gap-md);
+  padding-top: var(--gap-sm);
+  border-top: 1px solid var(--border);
+  color: var(--text-subtle);
+  font-size: var(--fs-sm);
+  line-height: var(--lh-base);
+}
+
+.post-endnote__note > :first-child { margin-top: 0; }
+.post-endnote__note > :last-child { margin-bottom: 0; }
+
 @media (max-width: 480px) {
   .post-endnote {
     padding: var(--gap-md);

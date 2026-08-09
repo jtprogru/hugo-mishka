@@ -20,6 +20,7 @@
              url: "https://…"               # обязателен, иначе не рендерим
              linkText: "Что там"            # по умолчанию — сам url
              nofollow: true                 # по умолчанию true для внешних
+             note: "Ещё [ссылки](…)"        # вторая строка, тише основной
 
        Per-page выключение — фронтматтер `endnote: false`.
 
@@ -71,6 +72,9 @@
       <span>{{ $linkText }}</span>
       {{ partial "svg.html" (dict "name" "arrow-right" "size" 16 "class" "post-endnote__arrow") }}
     </a>
+    {{- with $cfg.note }}
+    <div class="post-endnote__note">{{ . | markdownify }}</div>
+    {{- end }}
   </div>
 </aside>
 {{- end -}}
