@@ -31,10 +31,17 @@
       {{- /* .Description намеренно НЕ рендерим в шапке поста — она остаётся
              только в head_meta (description meta tag, og:description,
              twitter:description) для SEO/share-превью. */ -}}
+      {{- /* Мета (дата, обновление, автор) — только для постов. На обычных
+             страницах (about-me, donations, privacy-policy, ...) дата публикации
+             ничего не сообщает читателю и только шумит. Явный `hidemeta: true`
+             в frontmatter скрывает мету и на посте. */ -}}
+      {{- $showMeta := and $isPost (ne .Params.hidemeta true) -}}
+      {{- if $showMeta }}
       <div class="post__header-meta">
         {{- partial "post_meta.html" . }}
         {{- partial "edit_post.html" . }}
       </div>
+      {{- end }}
       {{- partial "translation_list.html" . }}
     </header>
 
