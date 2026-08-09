@@ -2,7 +2,12 @@
 
 {{- $title := .Title | default site.Title -}}
 {{- $isHome := .IsHome -}}
+{{- /* Суффикс с названием сайта съедает место в выдаче: Google обрезает
+       примерно на 60 символах кириллицей. Если вместе с брендом заголовок
+       перестаёт помещаться, бренд убираем — он всё равно не был бы виден, а
+       поисковик дорисовывает его сам из og:site_name. */ -}}
 {{- $fullTitle := cond $isHome (site.Title) (printf "%s — %s" $title site.Title) -}}
+{{- if gt (len $fullTitle) 65 }}{{ $fullTitle = $title }}{{ end -}}
 {{- $desc := or .Description .Summary site.Params.description | plainify | htmlUnescape | chomp -}}
 
 {{- /* Собственный URL страницы. На пагинации > 1 это URL самой страницы
@@ -86,6 +91,19 @@
           "target" (dict "@type" "EntryPoint" "urlTemplate" (printf "%s?q={search_term_string}" .Permalink))
           "query-input" "required name=search_term_string")) -}}
   {{- end -}}
+<script type="application/ld+json">{{ $ld | jsonify (dict "indent" "  ") | safeJS }}</script>
+{{- else if and .IsPage .Params.schemaProfile }}
+  {{- /* Страница «обо мне»: для неё правильный тип — ProfilePage с Person
+         внутри, а не Article. Именно так Google связывает сайт с автором. */ -}}
+  {{- $ld := dict
+        "@context" "https://schema.org"
+        "@type" "ProfilePage"
+        "url" $canonical
+        "inLanguage" site.Language.Lang
+        "mainEntity" $person
+  -}}
+  {{- with $desc }}{{ $ld = merge $ld (dict "description" .) }}{{ end -}}
+  {{- if not .Lastmod.IsZero }}{{ $ld = merge $ld (dict "dateModified" (.Lastmod.Format "2006-01-02T15:04:05-07:00")) }}{{ end -}}
 <script type="application/ld+json">{{ $ld | jsonify (dict "indent" "  ") | safeJS }}</script>
 {{- else if .IsPage }}
   {{- /* headline Google просит держать в пределах 110 символов. */ -}}
