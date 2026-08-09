@@ -7,6 +7,9 @@
 
 ### Fixed
 
+- `--section-gap` переехала из `.home` в `:root`. Переменная объявлялась только на главной, а `.section-title` используется ещё и на `/projects/` — там `var(--section-gap)` не резолвился, всё объявление `margin` становилось invalid at computed-value time и схлопывалось в `0`, забирая с собой и валидный нижний отступ. Заголовки групп проектов сидели вплотную к своим сеткам.
+- `.taxonomy` больше не объявлялся дважды в `07-post-card.css`.
+
 - Search: `indexUrl` в `<script id="search-config">` больше не получает двойной JSON-escape — внутри `<script type="application/json">` Go html/template сам JSON-escape'ит значения, а отдельные `jsonify` поверх давали `"indexUrl":"\"/index.json\""`. После `JSON.parse` получалась строка с кавычками внутри, fetch шёл на `/search/%22/index.json%22` → 404. Чиним: dict собирается один раз и отдаётся через `jsonify | safeJS`.
 - Search: опции Fuse.js теперь читаются из `site.Data.fuse` (приоритет) с fallback на `site.Params.fuseOpts`. Hugo lower-case'ит ключи в Params (`isCaseSensitive` → `iscasesensitive`), и Fuse такие ключи игнорировал — поиск работал на дефолтах. Data-файлы сохраняют case как написано. Пример — `exampleSite/data/fuse.yaml`.
 - PWA: `_partials/pwa_register.html` обёрнут в `{{- if $enabled -}}…{{- end -}}` — `{{ return }}` в Hugo не делает early-exit (только задаёт возвращаемое значение partial'а), поэтому при `params.PWA.enabled: false` partial всё равно выводил `<link rel=manifest>` и `<script>register>` и копировал `sw.js` в output. Теперь без PWA partial действительно ничего не выводит.
@@ -41,6 +44,10 @@
 
 ### Changed
 
+- Единая шапка страницы: новый партиал `_partials/page_header.html` и CSS-модуль `03-page-header.css`. Раньше `list`, `term`, `taxonomy`, `archives`, `projects` и `search` рисовали шапку каждый своим классом со своим размером `h1` — на соседних пунктах меню заголовки отличались (48 / 36 / 36 / 30 / 30px), состав шапки тоже плавал. Теперь один компонент: `.page-header` с опциональными `kicker` / `lede` / `intro` / `meta`. Размер h1 задаётся токеном `--page-title-size` (`--fs-3xl`, на ≥768px `--fs-4xl`) и общий для поста и хаб-страниц. `.post__title` намеренно оставлен отдельным именем класса в том же правиле — на него завязан селектор в `docs/telegram-instant-view.iv`. Удалены `.list__header/__title/__kicker/__count`, `.taxonomy__header/__title/__count`, `.search__header/__title`, `.archives__header/__title/__intro/__count`, `.projects-page__header/__title/__lede/__intro/__count`.
+- `--container-width` поднят с 1100px до 1200px, локальные `max-width: 1200px` на `.home--profile`, `.home--list` и `.projects-page` удалены. Ширина у всех страниц теперь одна и задаётся одним токеном.
+- Вертикальный отступ корневого блока страницы вынесен в токен `--page-pad-block` и применён к `.post`, `.list`, `.archives`, `.search`, `.projects-page`, `.taxonomy`, `.home`. Раньше `.post` и `.archives` брали `padding-block: var(--gap-lg) var(--gap-xl)`, остальные — `var(--gap-xl)`, и заголовки на соседних страницах стояли на разной высоте.
+- `breadcrumbs.html` вызывается теперь во всех хаб-шаблонах — `list`, `term`, `taxonomy` и `search` его не звали. Гейт прежний (`site.Params.ShowBreadCrumbs`), поведение по умолчанию не меняется.
 - Single-страница больше не ограничена `main--narrow` (узкая колонка `--content-width`) — пост рендерится во всю ширину `.container` (как шапка сайта).
 - TOC растягивается на полную ширину контейнера — раньше на десктопе принудительно ограничивался `--content-width` (720px), что после расширения single-страницы выглядело обрезанным.
 - Share-блок теперь icon-only: круглые 40×40 кнопки без подписи каналов, `title` и `aria-label` остались. Copy-кнопка хранит обновляемую sr-only-строку для скринридеров через `.visually-hidden`.

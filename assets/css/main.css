@@ -4,9 +4,9 @@
    модули из `modules/` подхватывались автоматически. Этот файл — справочное оглавление
    и точка входа для линтеров / IDE.
 
-   Порядок модулей: 00-vars → 01-reset → 02-typography → 03-layout → 04-header → 05-footer
-   → 06-profile → 07-post-card → 08-post-single → 09-toc → 10-callouts → 11-code → 12-chroma
-   → 99-a11y.
+   Порядок модулей: 00-vars → 01-reset → 02-typography → 03-layout → 03-page-header
+   → 04-header → 05-footer → 06-profile → 07-post-card → 08-post-single → 09-toc
+   → 10-callouts → 11-code → 12-chroma → 99-a11y.
 */
 
 @import "modules/00-vars.css";
@@ -14,6 +14,7 @@
 @import "modules/02-fonts.css";
 @import "modules/02-typography.css";
 @import "modules/03-layout.css";
+@import "modules/03-page-header.css";
 @import "modules/04-header.css";
 @import "modules/05-footer.css";
 @import "modules/06-profile.css";

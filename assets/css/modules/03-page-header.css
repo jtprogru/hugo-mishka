@@ -1,0 +1,56 @@
+/* ============================================================================
+   03-page-header.css — общая шапка страницы.
+
+   Один источник правды для h1 и отбивок под ним. Раньше list, term, taxonomy,
+   archives, projects, search и single описывали заголовок каждый у себя, и на
+   соседних пунктах меню размеры расходились: 48 / 36 / 36 / 30 / 30px.
+
+   `.post__title` включён в общее правило намеренно, а не переведён на
+   `.page-header__title`: на этот класс завязан селектор в шаблоне Telegram
+   Instant View (docs/telegram-instant-view.iv), переименование его сломает.
+   ============================================================================ */
+
+.page-header,
+.post__header {
+  margin-bottom: var(--gap-xl);
+}
+
+.page-header__title,
+.post__title {
+  font-size: var(--page-title-size);
+  line-height: var(--lh-tight);
+  letter-spacing: -0.02em;
+  margin: 0 0 var(--gap-sm);
+  text-wrap: balance;
+}
+
+.page-header__kicker {
+  margin: 0 0 var(--gap-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: var(--fs-xs);
+  color: var(--text-subtle);
+}
+
+.page-header__lede {
+  font-size: var(--fs-md);
+  color: var(--text-muted);
+  margin: 0 0 var(--gap-sm);
+}
+
+.page-header__intro {
+  color: var(--text-muted);
+  margin-bottom: var(--gap-sm);
+}
+
+.page-header__meta {
+  font-size: var(--fs-sm);
+  color: var(--text-subtle);
+  margin: 0;
+}
+
+/* Последний блок шапки не должен добавлять отступ поверх margin-bottom самой
+   шапки — иначе высота зазора зависит от того, есть ли на странице счётчик. */
+.page-header > :last-child {
+  margin-bottom: 0;
+}

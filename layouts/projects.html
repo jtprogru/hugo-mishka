@@ -27,15 +27,12 @@
 <div class="container projects-page">
   {{- partial "breadcrumbs.html" . }}
 
-  <header class="projects-page__header">
-    <h1 class="projects-page__title">{{ .Title }}</h1>
-    {{- with .Description }}<p class="projects-page__lede">{{ . }}</p>{{ end }}
-    {{- with .Content }}<div class="md-content projects-page__intro">{{ . }}</div>{{ end }}
-    <p class="projects-page__count">
-      {{- $n := len $projects -}}
-      {{ i18n "projects_total" (dict "Count" $n) | default (printf "%d проектов" $n) }}
-    </p>
-  </header>
+  {{- $n := len $projects -}}
+  {{- partial "page_header.html" (dict
+      "context" .
+      "lede"    .Description
+      "meta"    (i18n "projects_total" (dict "Count" $n) | default (printf "%d проектов" $n))
+  ) }}
 
   {{- if not $projects }}
     <p class="projects-page__empty">{{ i18n "projects_empty" | default "Список пуст." }}</p>

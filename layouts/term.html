@@ -1,15 +1,19 @@
 {{- /* Term page: посты с этим тегом/категорией.
        Используем тот же шаблон, что и для list (post-card grid + пагинация). */ -}}
 {{- define "main" -}}
+{{- $kicker := "" -}}
+{{- if eq .Data.Singular "tag" }}{{ $kicker = "Тег" }}
+{{- else if eq .Data.Singular "category" }}{{ $kicker = "Категория" }}
+{{- else }}{{ $kicker = .Data.Singular | humanize }}{{ end -}}
+{{- $n := len .Pages -}}
 <div class="container list">
-  <header class="list__header">
-    <p class="list__kicker">
-      {{- if eq .Data.Singular "tag" }}Тег{{ else if eq .Data.Singular "category" }}Категория{{ else }}{{ .Data.Singular | humanize }}{{ end }}
-    </p>
-    <h1 class="list__title">{{ .Title }}</h1>
-    {{- with .Content }}<div class="md-content">{{ . }}</div>{{ end }}
-    <p class="list__count">{{ len .Pages }} {{ if eq (len .Pages) 1 }}пост{{ else }}постов{{ end }}</p>
-  </header>
+  {{- partial "breadcrumbs.html" . }}
+
+  {{- partial "page_header.html" (dict
+      "context" .
+      "kicker"  $kicker
+      "meta"    (printf "%d %s" $n (cond (eq $n 1) "пост" "постов"))
+  ) }}
 
   {{- $paginator := .Paginate .Pages -}}
   <div class="post-list">

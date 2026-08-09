@@ -1,13 +1,15 @@
 /* Главная: profile hero + сетка проектов + сетка свежих постов.
-   Расширяем контейнер на главной до 1200px чтобы сетки дышали. */
+
+   Ширину здесь больше не переопределяем: --container-width теперь 1200px для
+   всех страниц, а локальные max-width на .home--* и .projects-page были
+   единственным местом, где ширина расходилась с остальным сайтом.
+   --section-gap тоже уехала в :root (00-vars.css): она объявлялась только на
+   .home, а .section-title используется ещё и на странице проектов — там
+   переменная не резолвилась, и margin схлопывался в 0. */
 
 .home {
-  --section-gap: var(--gap-2xl);
-  padding-block: var(--gap-xl);
+  padding-block: var(--page-pad-block);
 }
-
-.home--profile,
-.home--list { max-width: 1200px; }
 
 /* === Profile hero === */
 
@@ -259,29 +261,11 @@
 /* === Projects page === */
 
 .projects-page {
-  max-width: 1200px;
-  padding-block: var(--gap-xl);
+  padding-block: var(--page-pad-block);
 }
 
-.projects-page__header {
-  margin-bottom: var(--gap-xl);
-}
-.projects-page__title {
-  font-size: var(--fs-3xl);
-  letter-spacing: -0.02em;
-  margin: 0 0 var(--gap-sm);
-}
-.projects-page__lede {
-  color: var(--text-muted);
-  font-size: var(--fs-md);
-  margin: 0 0 var(--gap-sm);
-}
-.projects-page__intro { margin-bottom: var(--gap-sm); }
-.projects-page__count {
-  font-size: var(--fs-sm);
-  color: var(--text-subtle);
-  margin: 0;
-}
+/* Шапка страницы проектов живёт в 03-page-header.css (.page-header). */
+
 .projects-page__empty {
   padding: var(--gap-xl);
   border: 1px dashed var(--border);
