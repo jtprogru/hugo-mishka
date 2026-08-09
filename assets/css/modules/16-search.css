@@ -1,9 +1,8 @@
 /* Поиск: страница /search/ */
 
-.search { padding-block: var(--gap-xl); }
+.search { padding-block: var(--page-pad-block); }
 
-.search__header { margin-bottom: var(--gap-lg); }
-.search__title { margin: 0; font-size: var(--fs-2xl); }
+/* Шапка страницы поиска живёт в 03-page-header.css (.page-header). */
 
 .search__form { margin-block: var(--gap-md); }
 .search__label {

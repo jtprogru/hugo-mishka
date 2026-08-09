@@ -190,6 +190,17 @@
   --gap-xl:  2.5rem;
   --gap-2xl: 4rem;
 
+  /* Вертикальный отступ корневого блока страницы (.post, .list, .archives,
+     .search, .projects-page, .taxonomy, .home). Один токен на все шаблоны —
+     иначе заголовки на соседних пунктах меню стоят на разной высоте. */
+  --page-pad-block: var(--gap-xl);
+
+  /* Отбивка между секциями внутри страницы (.section-title). Живёт в :root,
+     а не на .home: страница проектов использует те же .section-title, и при
+     локальном объявлении переменная там не резолвилась — всё объявление
+     margin становилось invalid at computed-value time и схлопывалось в 0. */
+  --section-gap: var(--gap-2xl);
+
   /* Радиусы */
   --radius-sm:   4px;
   --radius-md:   8px;
@@ -198,10 +209,18 @@
 
   /* Контейнеры */
   --content-width:   720px;
-  --container-width: 1100px;
+  --container-width: 1200px;
   --header-height:   64px;
+
+  /* Размер h1 страницы: общий для поста и для всех хаб-страниц
+     (записи, архив, проекты, поиск, теги). Переопределяется ниже на ≥768px. */
+  --page-title-size: var(--fs-3xl);
 
   /* Анимации */
   --transition: 0.18s ease;
   --transition-slow: 0.36s ease;
+}
+
+@media (min-width: 768px) {
+  :root { --page-title-size: var(--fs-4xl); }
 }

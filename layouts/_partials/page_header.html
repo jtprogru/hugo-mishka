@@ -1,0 +1,44 @@
+{{- /* Единая шапка страницы для всех хаб-шаблонов: list, term, taxonomy,
+       archives, projects, search.
+
+       Раньше каждый из этих шаблонов рисовал свою шапку со своим классом и
+       своим размером h1 — на соседних пунктах меню заголовки отличались
+       (48 / 36 / 30px), состав шапки тоже плавал. Здесь один компонент и
+       один набор классов.
+
+       Пост (single.html) собирает шапку сам: там ещё мета, cover и список
+       переводов. Класс `post__title` там менять нельзя — на него завязан
+       шаблон Telegram Instant View (docs/telegram-instant-view.iv). Общая
+       типографика заголовка достаётся посту через 03-page-header.css, где
+       `.post__title` и `.page-header__title` описаны одним правилом.
+
+       Параметры (dict):
+         context — страница (обязательно; отсюда .Title и .Content)
+         title   — переопределить заголовок (по умолчанию .Title)
+         kicker  — надзаголовок над h1 («Тег», «Категория»)
+         lede    — лид-абзац одной строкой (обычно .Description)
+         intro   — HTML вступления (по умолчанию .Content страницы)
+         meta    — строка со счётчиком под шапкой
+
+       Любой параметр можно опустить: пустые блоки не рендерятся. Чтобы
+       подавить автоматический intro из .Content, передай `intro` пустой
+       строкой. */ -}}
+{{- $ctx := .context -}}
+{{- $title := .title | default $ctx.Title -}}
+{{- $intro := .intro -}}
+{{- if not (isset . "intro") }}{{ $intro = $ctx.Content }}{{ end -}}
+<header class="page-header">
+  {{- with .kicker }}
+  <p class="page-header__kicker">{{ . }}</p>
+  {{- end }}
+  <h1 class="page-header__title">{{ $title }}</h1>
+  {{- with .lede }}
+  <p class="page-header__lede">{{ . }}</p>
+  {{- end }}
+  {{- with $intro }}
+  <div class="md-content page-header__intro">{{ . }}</div>
+  {{- end }}
+  {{- with .meta }}
+  <p class="page-header__meta">{{ . }}</p>
+  {{- end }}
+</header>

@@ -1,8 +1,10 @@
 /* Single post: типография, заголовки, цитаты, код, таблицы. */
 
-.post { padding-block: var(--gap-lg) var(--gap-xl); }
+.post { padding-block: var(--page-pad-block); }
 
-.post__header { margin-bottom: var(--gap-xl); }
+/* .post__header и .post__title описаны в 03-page-header.css одним правилом
+   вместе с .page-header — иначе заголовок поста и заголовки хаб-страниц
+   расходятся по размеру, как было до унификации. */
 
 /* === Cover (одна на пост, в начале) === */
 
@@ -24,16 +26,6 @@
   text-align: center;
   font-size: var(--fs-sm);
   color: var(--text-muted);
-}
-
-.post__title {
-  font-size: var(--fs-3xl);
-  line-height: var(--lh-tight);
-  letter-spacing: -0.02em;
-  margin: 0 0 var(--gap-sm);
-}
-@media (min-width: 768px) {
-  .post__title { font-size: var(--fs-4xl); }
 }
 
 .post__meta {

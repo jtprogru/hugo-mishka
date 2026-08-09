@@ -2,10 +2,12 @@
        с frontmatter `layout: search` или маршрутизируется по path /search/. */ -}}
 {{- define "main" -}}
 <div class="container search">
-  <header class="search__header">
-    <h1 class="search__title">{{ i18n "search" | default "Поиск" }}</h1>
-    {{- with .Content }}<div class="md-content">{{ . }}</div>{{ end }}
-  </header>
+  {{- partial "breadcrumbs.html" . }}
+
+  {{- partial "page_header.html" (dict
+      "context" .
+      "title"   (i18n "search" | default .Title)
+  ) }}
 
   <form class="search__form" role="search" onsubmit="return false">
     <label class="search__label" for="search-input">{{ i18n "search" | default "Поиск" }}</label>

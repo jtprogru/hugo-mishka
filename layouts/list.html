@@ -1,9 +1,8 @@
 {{- define "main" -}}
 <div class="container list">
-  <header class="list__header">
-    <h1 class="list__title">{{ .Title }}</h1>
-    {{- with .Content }}<div class="md-content">{{ . }}</div>{{ end }}
-  </header>
+  {{- partial "breadcrumbs.html" . }}
+
+  {{- partial "page_header.html" (dict "context" .) }}
 
   {{- $pages := .Pages -}}
   {{- if .IsHome }}{{ $pages = where site.RegularPages "Type" "in" site.Params.mainSections }}{{ end -}}

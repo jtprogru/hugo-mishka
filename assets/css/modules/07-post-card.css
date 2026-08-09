@@ -1,14 +1,8 @@
 /* Карточка поста для list/term-страниц. Cover слева, текст справа на широких. */
 
-.list { padding-block: var(--gap-xl); }
+.list { padding-block: var(--page-pad-block); }
 
-.list__header {
-  margin-bottom: var(--gap-xl);
-}
-.list__title {
-  font-size: var(--fs-2xl);
-  margin: 0 0 var(--gap-sm);
-}
+/* Шапка list/term живёт в 03-page-header.css (.page-header). */
 
 .post-list {
   display: flex;
@@ -114,10 +108,9 @@
 
 /* === Taxonomy: облако тегов / категорий === */
 
-.taxonomy { padding-block: var(--gap-xl); }
-.taxonomy__header { margin-bottom: var(--gap-xl); }
-.taxonomy__title { margin: 0; font-size: var(--fs-2xl); }
-.taxonomy__count { margin: var(--gap-xs) 0 0; color: var(--text-muted); font-size: var(--fs-sm); }
+.taxonomy { padding-block: var(--page-pad-block); }
+
+/* Шапка облака тегов живёт в 03-page-header.css (.page-header). */
 
 .taxonomy__cloud {
   list-style: none;
@@ -129,15 +122,8 @@
 }
 /* .tag--cloud и связанные стили переехали в 15-tags.css */
 
-/* List header — общий заголовок */
-.list__kicker {
-  margin: 0 0 var(--gap-xs);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  font-size: var(--fs-xs);
-  color: var(--text-subtle);
-}
-.list__count { margin: var(--gap-xs) 0 0; font-size: var(--fs-sm); color: var(--text-muted); }
+/* .list__kicker / .list__count переехали в 03-page-header.css как
+   .page-header__kicker / .page-header__meta. */
 
 /* === Пагинация === */
 

@@ -5,32 +5,10 @@
    ============================================================================ */
 
 .archives {
-  padding-block: var(--gap-lg) var(--gap-xl);
+  padding-block: var(--page-pad-block);
 }
 
-.archives__header {
-  margin-bottom: var(--gap-xl);
-  padding-bottom: var(--gap-lg);
-  border-bottom: 1px solid var(--border);
-}
-
-.archives__title {
-  font-size: var(--fs-3xl);
-  line-height: var(--lh-tight);
-  letter-spacing: -0.02em;
-  margin: 0 0 var(--gap-sm);
-}
-
-.archives__intro {
-  color: var(--text-muted);
-  margin-bottom: var(--gap-sm);
-}
-
-.archives__count {
-  font-size: var(--fs-sm);
-  color: var(--text-subtle);
-  margin: 0;
-}
+/* Шапка архива живёт в 03-page-header.css (.page-header). */
 
 .archives__year {
   margin-bottom: var(--gap-2xl);
