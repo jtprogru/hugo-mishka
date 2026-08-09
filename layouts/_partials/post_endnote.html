@@ -1,0 +1,76 @@
+{{- /* Post endnote — короткий авторский блок под текстом поста.
+
+       Универсальный слот «от автора»: подписка, закрытый проект, курс,
+       книга, сбор — что угодно, что автор хочет показать читателю, который
+       дочитал до конца. Содержимое целиком из конфига, тема ничего не
+       зашивает.
+
+       Имена классов намеренно нейтральные (post-endnote), а не promo/cta/
+       sponsor/subscribe — cosmetic-фильтры адблокеров режут такие селекторы
+       вместе с содержимым. Та же логика, что в post_share.html.
+
+       Конфиг:
+
+         params:
+           postEndnote:
+             enabled: true                  # по умолчанию false
+             icon: "zap"                    # имя из svg.html, опционально
+             title: "Заголовок"             # опционально
+             text: "Текст с **markdown**"   # опционально
+             url: "https://…"               # обязателен, иначе не рендерим
+             linkText: "Что там"            # по умолчанию — сам url
+             nofollow: true                 # по умолчанию true для внешних
+
+       Per-page выключение — фронтматтер `endnote: false`.
+
+       Рендерим только на регулярных страницах постов (Type == "post" или
+       Section ∈ mainSections), чтобы блок не вылезал на /about/, /donations/
+       и прочих служебных страницах.
+
+       ВАЖНО: условия собраны в один флаг и обёрнуты в `if`, а не разложены
+       на серию ранних `{{ return }}` — `return` в Hugo не прерывает
+       выполнение partial'а, а только задаёт возвращаемое значение, и блок
+       рендерился бы на всех страницах. */ -}}
+
+{{- $cfg := site.Params.postEndnote | default dict -}}
+{{- $mainSections := site.Params.mainSections | default (slice "posts") -}}
+{{- $isPost := or (eq .Type "post") (in $mainSections .Section) -}}
+
+{{- $show := and
+      .IsPage
+      $isPost
+      (eq ($cfg.enabled | default false) true)
+      (ne .Params.endnote false)
+      (ne ($cfg.url | default "") "")
+-}}
+
+{{- if $show -}}
+{{- $linkText := $cfg.linkText | default $cfg.url -}}
+{{- $external := not (strings.HasPrefix $cfg.url "/") -}}
+{{- $nofollow := $cfg.nofollow | default true -}}
+{{- $rel := "" -}}
+{{- if $external -}}
+  {{- $rel = cond (eq $nofollow true) "noopener noreferrer nofollow" "noopener noreferrer" -}}
+{{- end -}}
+<aside class="post-endnote"{{ with $cfg.title }} aria-label="{{ . }}"{{ end }}>
+  {{- with $cfg.icon }}
+  <div class="post-endnote__mark" aria-hidden="true">
+    {{ partial "svg.html" (dict "name" . "size" 22 "class" "post-endnote__icon") }}
+  </div>
+  {{- end }}
+  <div class="post-endnote__body">
+    {{- with $cfg.title }}
+    <p class="post-endnote__title">{{ . }}</p>
+    {{- end }}
+    {{- with $cfg.text }}
+    <div class="post-endnote__text">{{ . | markdownify }}</div>
+    {{- end }}
+    <a class="post-endnote__link"
+       href="{{ $cfg.url }}"
+       {{- if $external }} target="_blank" rel="{{ $rel }}"{{ end }}>
+      <span>{{ $linkText }}</span>
+      {{ partial "svg.html" (dict "name" "arrow-right" "size" 16 "class" "post-endnote__arrow") }}
+    </a>
+  </div>
+</aside>
+{{- end -}}

@@ -121,6 +121,17 @@ params:
   ShowShareButtons: false
   ShareButtons: [telegram, twitter, linkedin, email, copy]
 
+  # Авторская приписка под текстом поста (подписка, закрытый проект, курс…).
+  # Рендерится только на постах, per-page выкл — фронтматтер `endnote: false`.
+  # postEndnote:
+  #   enabled: true
+  #   icon: "lock"                 # имя иконки из _partials/svg.html, опционально
+  #   title: "Заголовок"           # опционально
+  #   text: "Текст с **markdown**" # опционально
+  #   url: "https://example.com/"  # обязателен, без него блок не рендерится
+  #   linkText: "Что там"
+  #   nofollow: true               # по умолчанию true для внешних ссылок
+
   # Ссылка «Редактировать пост» под статьёй (PaperMod-совместимая семантика).
   editPost:
     URL: "https://github.com/<you>/<your-site>/edit/main/content"
