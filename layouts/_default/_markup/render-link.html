@@ -1,7 +1,15 @@
 {{- /* Render hook для inline-ссылок Markdown.
        External — добавляем rel="noopener noreferrer" + target=_blank.
-       Internal — рендерим как обычно. */ -}}
+       Internal — рендерим как обычно.
+
+       ВАЖНО: хвостовой перенос строки после закрывающего тега обязательно
+       съедаем — этим занят trim-маркер в последней строке файла. Hook
+       инлайновый: всё, что шаблон вывел, попадает прямо в строку текста, и
+       перевод строки в конце файла превращается в лишний пробел перед
+       следующим символом. Видно на «текст ссылки ,» и «текст ссылки .» —
+       пробел перед знаком препинания. */ -}}
 {{- $href := .Destination -}}
 {{- $isAbs := or (strings.HasPrefix $href "http://") (strings.HasPrefix $href "https://") -}}
 {{- $isExternal := and $isAbs (not (strings.HasPrefix $href site.BaseURL)) -}}
 <a href="{{ $href | safeURL }}"{{ with .Title }} title="{{ . }}"{{ end }}{{ if $isExternal }} rel="noopener noreferrer" target="_blank"{{ end }}>{{ .Text | safeHTML }}</a>
+{{- /* Не удалять: минус-маркер этого комментария съедает перевод строки выше. */ -}}

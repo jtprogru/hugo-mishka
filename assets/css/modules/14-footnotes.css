@@ -11,6 +11,14 @@
   color: var(--text-muted);
 }
 
+/* Goldmark кладёт внутрь .footnotes собственный <hr> — вместе с border-top
+   выше получались две горизонтальных линии подряд. Разделитель рисуем сами
+   (он темизирован и держит отступ), а разметочный <hr> прячем. Семантику
+   секции несёт role="doc-endnotes" на контейнере, не эта черта. */
+.footnotes > hr {
+  display: none;
+}
+
 .footnotes ol {
   padding-left: 1.25em;
 }
