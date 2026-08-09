@@ -6,6 +6,10 @@
          не индексирует — выкидываем из sitemap, чтобы не съедать crawl budget
          и не раздувать «обнаружена, не проиндексирована» в GSC. */ -}}
   {{- if and (eq .Kind "term") (lt (len .Pages) 2) -}}{{- continue -}}{{- end }}
+  {{- /* Всё, что помечено noindex во фронтматтере, из sitemap тоже убираем:
+         отдавать роботу карту с запрещёнными к индексации URL — это прямая
+         дорога к «Отправленный URL помечен тегом noindex» в GSC. */ -}}
+  {{- if .Params.robotsNoIndex -}}{{- continue -}}{{- end }}
   <url>
     <loc>{{ .Permalink }}</loc>
     {{- if not .Lastmod.IsZero }}
