@@ -21,6 +21,14 @@
   border-radius: var(--radius-md);
   background: var(--bg-sunken);
 }
+/* Широкая обложка (≈16:9 и шире) — концепт-схема, а не декоративная
+   иллюстрация: у неё по краям заголовок и подпись канала. Общий max-height
+   в 480px на контейнере шириной 1152px срезал у неё верх и низ, поэтому
+   для таких обложек ограничение снимается — класс ставит post_cover.html. */
+.post-cover--wide img {
+  max-height: none;
+  object-fit: contain;
+}
 .post-cover figcaption {
   margin-top: var(--gap-xs);
   text-align: center;

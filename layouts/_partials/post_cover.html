@@ -54,16 +54,19 @@
     {{- $srcsetWebp := "" -}}
     {{- $srcsetOrig := "" -}}
     {{- if $isRaster -}}
-      {{- $maxW := 1280 -}}
+      {{- /* 1600 — верхняя граница: обложка занимает до 1152 CSS-px, значит на
+              retina нужен вариант заметно шире 1280. Исходники концепт-обложек
+              лежат в 2100px, но полный 2× (2304) не окупается по весу. */ -}}
+      {{- $maxW := 1600 -}}
       {{- if gt $orig.Width $maxW -}}{{ $orig = $res.Resize (printf "%dx" $maxW) }}{{ end -}}
       {{- $webp = $orig.Resize (printf "%dx webp q85" $orig.Width) -}}
 
-      {{- /* Responsive srcset: 480w / 800w / 1200w (capped at $orig.Width).
+      {{- /* Responsive srcset: 480w / 800w / 1200w / 1600w (capped at $orig.Width).
               We only generate entries whose width is <= the original to avoid
               upscaling. WebP entries are independent from the original-format
               ones so the browser can pick best by both size and format. */ -}}
       {{- $widths := slice -}}
-      {{- range slice 480 800 1200 -}}
+      {{- range slice 480 800 1200 1600 -}}
         {{- if le . $orig.Width -}}{{ $widths = $widths | append . }}{{- end -}}
       {{- end -}}
       {{- $widths = $widths | append $orig.Width | uniq -}}
@@ -80,11 +83,26 @@
       {{- $srcsetOrig = delimit $origEntries ", " -}}
       {{- $srcsetWebp = delimit $webpEntries ", " -}}
     {{- end -}}
-    <figure class="post-cover">
+    {{- /* Широкоформатные обложки (концепт-обложки блога 1050×480, ≈2.19:1)
+            нельзя кропать: у них по краям значимые элементы — заголовок
+            сверху, подпись канала снизу. Общий пиксельный max-height срезал
+            их на широком экране, поэтому помечаем такие классом и снимаем
+            ограничение в CSS. Порог 1.8 — всё, что шире 16:9.
+            Для векторных обложек размеров нет, но в этом блоге SVG-обложка
+            всегда рисуется в широком концепт-формате. */ -}}
+    {{- $wide := not $isRaster -}}
+    {{- if and $isRaster (gt $orig.Height 0) -}}
+      {{- if ge (div (float $orig.Width) (float $orig.Height)) 1.8 -}}{{ $wide = true }}{{- end -}}
+    {{- end -}}
+    <figure class="post-cover{{ if $wide }} post-cover--wide{{ end }}">
       {{- if $linkFullImages }}<a href="{{ $res.RelPermalink }}" target="_blank" rel="noopener noreferrer">{{- end }}
       <picture>
-        {{- if $srcsetWebp }}<source srcset="{{ $srcsetWebp }}" sizes="(max-width: 800px) 100vw, 800px" type="image/webp">{{ else if $webp }}<source srcset="{{ $webp.RelPermalink }}" type="image/webp">{{ end }}
-        {{- if $srcsetOrig }}<source srcset="{{ $srcsetOrig }}" sizes="(max-width: 800px) 100vw, 800px" type="{{ $orig.MediaType.Type }}">{{ end }}
+        {{- /* Обложка идёт во всю ширину `.container` (--container-width 1200
+                минус боковые padding'и), а не в колонку контента. Старое
+                `sizes` обещало 800px, и браузер тянул 800w-вариант на 1152px
+                бокс — обложка выводилась мыльной. */ -}}
+        {{- if $srcsetWebp }}<source srcset="{{ $srcsetWebp }}" sizes="(min-width: 1200px) 1152px, 100vw" type="image/webp">{{ else if $webp }}<source srcset="{{ $webp.RelPermalink }}" type="image/webp">{{ end }}
+        {{- if $srcsetOrig }}<source srcset="{{ $srcsetOrig }}" sizes="(min-width: 1200px) 1152px, 100vw" type="{{ $orig.MediaType.Type }}">{{ end }}
         <img loading="eager" decoding="async"
              src="{{ $orig.RelPermalink }}"
              alt="{{ $alt }}"
