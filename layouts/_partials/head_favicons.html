@@ -1,0 +1,44 @@
+{{- /* Favicon'ы, при желании — разные для светлого и тёмного интерфейса.
+
+       Каждой иконке можно задать пару: `favicon` / `favicon_dark`,
+       `favicon16x16` / `favicon16x16_dark`, `favicon32x32` / `favicon32x32_dark`.
+       Если тёмного варианта нет, ссылка выводится как раньше, без media —
+       поведение сайтов, которые про эту возможность не знают, не меняется.
+
+       Разводит их `media="(prefers-color-scheme: …)"`: это чистый HTML, работает
+       без скриптов и до их загрузки. Ограничение у него одно, зато существенное —
+       media знает про системную схему, а не про переключатель темы в шапке. Когда
+       читатель выбрал тему руками, ссылки переписывает theme-toggle.js; в режиме
+       `auto` он возвращает управление media-запросу.
+
+       apple-touch-icon и mask-icon пары не имеют намеренно: iOS показывает иконку
+       на своей плашке и media у неё не читает, а mask-icon по устройству
+       одноцветный — цвет задаётся атрибутом. */ -}}
+
+{{- with site.Params.assets -}}
+  {{- $icons := slice
+      (dict "rel" "icon" "type" "" "sizes" "" "light" .favicon "dark" .favicon_dark)
+      (dict "rel" "icon" "type" "image/png" "sizes" "16x16" "light" .favicon16x16 "dark" .favicon16x16_dark)
+      (dict "rel" "icon" "type" "image/png" "sizes" "32x32" "light" .favicon32x32 "dark" .favicon32x32_dark)
+  -}}
+
+  {{- range $icons -}}
+    {{- $attrs := printf `rel="%s"` .rel -}}
+    {{- with .type }}{{ $attrs = printf `%s type="%s"` $attrs . }}{{ end -}}
+    {{- with .sizes }}{{ $attrs = printf `%s sizes="%s"` $attrs . }}{{ end -}}
+
+    {{- if and .light .dark -}}
+<link {{ $attrs | safeHTMLAttr }} href="{{ .light | relURL }}" media="(prefers-color-scheme: light)" data-icon-scheme="light" data-icon-media="(prefers-color-scheme: light)">
+<link {{ $attrs | safeHTMLAttr }} href="{{ .dark | relURL }}" media="(prefers-color-scheme: dark)" data-icon-scheme="dark" data-icon-media="(prefers-color-scheme: dark)">
+    {{- else -}}
+      {{- /* Задан только тёмный вариант — считаем его единственным: сайт,
+             который положил одну иконку, не должен остаться без иконки. */ -}}
+      {{- with or .light .dark -}}
+<link {{ $attrs | safeHTMLAttr }} href="{{ . | relURL }}">
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+
+  {{- with .apple_touch_icon }}<link rel="apple-touch-icon" href="{{ . | relURL }}">{{ end -}}
+  {{- with .safari_pinned_tab }}<link rel="mask-icon" href="{{ . | relURL }}" color="{{ site.Params.assets.safari_pinned_tab_color | default "#0b7285" }}">{{ end -}}
+{{- end -}}

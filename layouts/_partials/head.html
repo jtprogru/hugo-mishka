@@ -24,14 +24,8 @@
 <link rel="preload" href="{{ "/fonts/ibm-plex-sans/ibm-plex-sans-700n-cyrillic.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="{{ "/fonts/ibm-plex-sans/ibm-plex-sans-700n-latin.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
 
-{{- /* Favicons */ -}}
-{{- with site.Params.assets }}
-  {{- with .favicon }}<link rel="icon" href="{{ . | relURL }}">{{ end }}
-  {{- with .favicon16x16 }}<link rel="icon" type="image/png" sizes="16x16" href="{{ . | relURL }}">{{ end }}
-  {{- with .favicon32x32 }}<link rel="icon" type="image/png" sizes="32x32" href="{{ . | relURL }}">{{ end }}
-  {{- with .apple_touch_icon }}<link rel="apple-touch-icon" href="{{ . | relURL }}">{{ end }}
-  {{- with .safari_pinned_tab }}<link rel="mask-icon" href="{{ . | relURL }}" color="#0b7285">{{ end }}
-{{- end }}
+{{- /* Favicons — с опциональными вариантами под тёмный интерфейс */ -}}
+{{- partial "head_favicons.html" . }}
 
 {{- /* RSS autodiscovery */ -}}
 {{- with .OutputFormats.Get "RSS" }}

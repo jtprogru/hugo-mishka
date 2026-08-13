@@ -4,12 +4,28 @@
   <div class="container header__inner">
     <a class="header__logo" href="{{ site.BaseURL | relURL }}" aria-label="{{ site.Title }} — на главную">
       {{- with site.Params.label -}}
+        {{- /* Логотип может быть задан двумя файлами: `icon` для светлой темы и
+               `iconDark` для тёмной. Тогда в разметку идут оба, а лишний прячет
+               CSS по data-theme — подмена src по событию моргала бы не тем
+               логотипом, пока не отработает JS. Если `iconDark` нет, картинка
+               одна и ведёт себя как раньше. */ -}}
+        {{- $iconDark := .iconDark -}}
+        {{- $w := .iconWidth | default 25 -}}
+        {{- $h := .iconHeight | default 32 -}}
         {{- with .icon -}}
-        <img class="header__logo-icon"
+        <img class="header__logo-icon{{ with $iconDark }} header__logo-icon--light{{ end }}"
              src="{{ . | relURL }}"
              alt=""
-             width="{{ $.Site.Params.label.iconWidth | default 25 }}"
-             height="{{ $.Site.Params.label.iconHeight | default 32 }}"
+             width="{{ $w }}"
+             height="{{ $h }}"
+             aria-hidden="true">
+        {{- end -}}
+        {{- with $iconDark -}}
+        <img class="header__logo-icon header__logo-icon--dark"
+             src="{{ . | relURL }}"
+             alt=""
+             width="{{ $w }}"
+             height="{{ $h }}"
              aria-hidden="true">
         {{- end -}}
         <span class="header__logo-text">{{ .text | default site.Title }}</span>

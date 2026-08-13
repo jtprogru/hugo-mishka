@@ -113,6 +113,28 @@ params:
     - name: telegram
       url: "https://t.me/<you>"
 
+  # Логотип в шапке. `iconDark` опционален: если задан, в разметку идут обе
+  # картинки, а лишнюю прячет CSS по теме. Если нет — картинка одна на обе темы.
+  label:
+    text: "Название"        # по умолчанию site.Title
+    icon: "/logo.svg"
+    iconDark: "/logo-dark.svg"
+    iconWidth: 25
+    iconHeight: 32
+
+  # Favicon'ы. К любой из трёх иконок можно добавить парную с суффиксом
+  # `_dark` — тогда они разводятся по prefers-color-scheme.
+  assets:
+    favicon: "/favicon.svg"
+    favicon_dark: "/favicon-dark.svg"
+    favicon16x16: "/favicon-16.png"
+    favicon16x16_dark: "/favicon-16-dark.png"
+    favicon32x32: "/favicon-32.png"
+    favicon32x32_dark: "/favicon-32-dark.png"
+    apple_touch_icon: "/apple-touch-icon.png"
+    safari_pinned_tab: "/mask-icon.svg"
+    safari_pinned_tab_color: "#0b7285"
+
   # Related posts под статьёй (использует встроенный Hugo-механизм site.RegularPages.Related).
   # Конфигурация ранжирования — в верхнем `related:` блоке hugo.yaml.
   ShowRelatedPosts: true
@@ -171,6 +193,16 @@ params:
   # rssFullContent: true
   # rssLimit: 20
 ```
+
+## Логотип и favicon по темам
+
+Знак самой темы одноцветный и одинаково работает на светлом и на тёмном фоне, но свой логотип таким бывает не всегда: цветной знак на тёмном фоне тонет. Поэтому у логотипа и у favicon'ов есть парные варианты.
+
+Логотип переключает CSS. Задай `params.label.iconDark` — в разметку пойдут обе картинки, а лишнюю спрячет правило по `data-theme`. Это сознательно не JS: шапка рисуется до того, как скрипты отработают, и подмена `src` по событию давала бы моргание не тем логотипом на каждой загрузке. Цена — оба файла грузятся. Для логотипа в пару килобайт это дешевле, чем `<picture>`; если файл заметно больше, это уже не логотип.
+
+Favicon разводит `media="(prefers-color-scheme: …)"` прямо в `<head>` — чистый HTML, работает без скриптов. У него одно ограничение, зато существенное: media знает про системную схему, а не про переключатель в шапке. Поэтому когда читатель выбрал тему руками, ссылки переписывает `theme-toggle.js`, а в режиме `auto` возвращает управление media-запросу. Без JS иконка следует за системой — это разумный дефолт, а не поломка.
+
+Пары независимы: можно задать `favicon_dark`, не задавая `favicon32x32_dark`. Иконка без пары выводится как раньше, без `media`. `apple-touch-icon` и `mask-icon` пар не имеют намеренно — iOS рисует иконку на своей плашке и media у неё не читает, а `mask-icon` одноцветный по устройству, цвет задаётся параметром `safari_pinned_tab_color`.
 
 ## Pinned posts
 
