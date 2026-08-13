@@ -21,7 +21,7 @@
 .toc__summary {
   cursor: pointer;
   font-weight: 600;
-  color: var(--text);
+  color: var(--fg);
   list-style: none;
   display: flex;
   align-items: center;
@@ -34,7 +34,7 @@
   font-size: 1.2em;
   display: inline-block;
   transition: transform var(--transition);
-  color: var(--text-muted);
+  color: var(--fg-muted);
 }
 .toc__details[open] .toc__summary::before { transform: rotate(90deg); }
 
@@ -49,12 +49,12 @@
 .toc__nav a {
   display: block;
   padding: 2px var(--gap-sm);
-  color: var(--text-muted);
+  color: var(--fg-muted);
   text-decoration: none;
   border-left: 2px solid transparent;
   transition: color var(--transition), border-color var(--transition), background var(--transition);
 }
-.toc__nav a:hover { color: var(--accent); background: var(--bg-elevated); }
+.toc__nav a:hover { color: var(--accent); background: var(--bg-elev); }
 .toc__nav a.is-active {
   color: var(--accent);
   border-left-color: var(--accent);

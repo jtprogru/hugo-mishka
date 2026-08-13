@@ -14,14 +14,15 @@
 {{- partial "head_preconnect.html" . }}
 {{- partial "head_preload_cover.html" . }}
 
-{{- /* Preload основных subset'ов PT Sans (Regular + Bold, cyrillic + latin) —
-       шрифт self-hosted, BRANDING §3. Bold нужен above-the-fold (лого, навигация,
-       заголовки): без preload он подгружался поздно и swap реформатировал шапку,
-       толкая контент вниз (CLS). Italic остаётся ленивым с CSS bundle. */ -}}
-<link rel="preload" href="{{ "/fonts/pt-sans/pt-sans-400n-cyrillic.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="{{ "/fonts/pt-sans/pt-sans-400n-latin.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="{{ "/fonts/pt-sans/pt-sans-700n-cyrillic.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="{{ "/fonts/pt-sans/pt-sans-700n-latin.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+{{- /* Preload основных subset'ов IBM Plex Sans (Regular + Bold, cyrillic + latin) —
+       шрифт приезжает из mishka-ds, self-hosted. Bold нужен above-the-fold (лого,
+       навигация, заголовки): без preload он подгружался поздно и swap реформатировал
+       шапку, толкая контент вниз (CLS). Italic и моноширинный остаются ленивыми:
+       курсив живёт внутри прозы, код — ниже первого экрана. */ -}}
+<link rel="preload" href="{{ "/fonts/ibm-plex-sans/ibm-plex-sans-400n-cyrillic.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ "/fonts/ibm-plex-sans/ibm-plex-sans-400n-latin.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ "/fonts/ibm-plex-sans/ibm-plex-sans-700n-cyrillic.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="{{ "/fonts/ibm-plex-sans/ibm-plex-sans-700n-latin.woff2" | relURL }}" as="font" type="font/woff2" crossorigin>
 
 {{- /* Favicons */ -}}
 {{- with site.Params.assets }}
@@ -39,41 +40,55 @@
 
 {{- /* CSS: critical-набор inline в <head>, остальное грузится async.
 
-       Critical = модули, нужные до first paint (CSS-переменные, reset, типографика,
-       базовый layout, header, footer). Inline'ятся в <style> — применяются мгновенно,
-       рендер не блокируется загрузкой полного bundle.
+       Цвет, типографика, каркас и обвязка сайта приезжают из дизайн-системы
+       mishka-ds — каталог assets/css/vendor/mishka-ds/ синхронизируется скриптом
+       scripts/sync-ds.sh и в теме не правится. В css/modules/ остаётся только
+       Hugo-специфика: TOC, поиск, формулы, архив, 404, действия над постом.
 
-       Non-critical (post-card, single, code, callouts, и т.д.) собираются в отдельный
-       bundle и грузятся через rel="preload" + media-swap onload. Старые браузеры
-       без onload получают <noscript> fallback. */ -}}
+       Critical = то, что нужно до first paint: токены, шрифты, база, шапка с
+       подвалом. Inline'ится в <style> — применяется мгновенно, рендер не
+       блокируется загрузкой полного bundle. Ради этого shell-слой в пакете
+       вынесен из components.css отдельным файлом: тащить в <head> все 47 КБ
+       компонентов ради шапки нельзя.
+
+       Из пакета не берутся themes-scoped.css и compat.css: тема переключается
+       только через data-theme на <html> (см. head_theme_init.html), а локальные
+       модули переведены на канонические имена токенов. Это минус 11 КБ инлайна.
+
+       Non-critical (компоненты, печать, локальные модули) собирается в отдельный
+       bundle и грузится через rel="preload" + media-swap onload. Старые браузеры
+       без onload получают <noscript> fallback.
+
+       Порядок обязателен: вендорные слои идут первыми, локальные модули опираются
+       на их токены и переопределяют компоненты. */ -}}
 {{- $criticalNames := slice
-    "css/modules/00-vars.css"
-    "css/modules/01-reset.css"
-    "css/modules/02-fonts.css"
-    "css/modules/02-typography.css"
-    "css/modules/03-layout.css"
-    "css/modules/04-header.css"
-    "css/modules/05-footer.css"
+    "css/vendor/mishka-ds/tokens.css"
+    "css/vendor/mishka-ds/fonts.css"
+    "css/vendor/mishka-ds/base.css"
+    "css/vendor/mishka-ds/components-shell.css"
 -}}
-{{- $criticalSet := dict -}}
-{{- range $criticalNames -}}{{- $criticalSet = merge $criticalSet (dict . true) -}}{{- end -}}
-
 {{- $criticalResources := slice -}}
 {{- range $criticalNames -}}
   {{- with resources.Get . -}}
     {{- $criticalResources = $criticalResources | append . -}}
+  {{- else -}}
+    {{- errorf "не найден вендорный слой mishka-ds: %s — запусти ./scripts/sync-ds.sh" . -}}
   {{- end -}}
 {{- end -}}
 {{- $critical := $criticalResources | resources.Concat "css/mishka-critical.css" -}}
 {{- if hugo.IsProduction -}}{{- $critical = $critical | minify -}}{{- end -}}
 <style>{{ $critical.Content | safeCSS }}</style>
 
-{{- $allModules := resources.Match "css/modules/*.css" -}}
 {{- $nonCritical := slice -}}
-{{- range $allModules -}}
-  {{- if not (index $criticalSet .Name) -}}
+{{- range slice "css/vendor/mishka-ds/components.css" "css/vendor/mishka-ds/chroma.css" "css/vendor/mishka-ds/print-web.css" -}}
+  {{- with resources.Get . -}}
     {{- $nonCritical = $nonCritical | append . -}}
+  {{- else -}}
+    {{- errorf "не найден вендорный слой mishka-ds: %s — запусти ./scripts/sync-ds.sh" . -}}
   {{- end -}}
+{{- end -}}
+{{- range resources.Match "css/modules/*.css" -}}
+  {{- $nonCritical = $nonCritical | append . -}}
 {{- end -}}
 {{- $bundle := $nonCritical | resources.Concat "css/mishka.css" -}}
 {{- if hugo.IsProduction -}}{{- $bundle = $bundle | minify | fingerprint -}}{{- end -}}

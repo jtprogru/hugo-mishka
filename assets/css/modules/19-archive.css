@@ -68,13 +68,13 @@
 
 .archives__date {
   font-size: var(--fs-sm);
-  color: var(--text-subtle);
+  color: var(--fg-subtle);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
 .archives__link {
-  color: var(--text);
+  color: var(--fg);
   text-decoration: none;
   font-weight: 500;
   transition: color var(--transition, 0.18s ease);

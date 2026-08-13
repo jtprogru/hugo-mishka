@@ -5,19 +5,29 @@
 {{- $hasMermaid := or (.Store.Get "hasMermaid") .Params.mermaid -}}
 {{- if $hasMermaid -}}
 {{- $src := site.Params.mermaidSrc | default "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs" -}}
+{{- /* Палитра схем приезжает из mishka-ds: assets/mermaid/*.json генерятся из
+       тех же токенов, что и остальные стили. Встроенные темы mermaid
+       (default/dark) здесь не годятся — они рисуют схему в чужих цветах,
+       и пост выглядит собранным из двух блогов. */ -}}
+{{- $light := resources.Get "mermaid/mermaid-config.json" -}}
+{{- $dark := resources.Get "mermaid/mermaid-config.dark.json" -}}
+{{- if or (not $light) (not $dark) -}}
+  {{- errorf "не найдены конфиги mermaid из mishka-ds — запусти ./scripts/sync-ds.sh" -}}
+{{- end -}}
 <script type="module">
   import mermaid from {{ $src | jsonify | safeJS }};
+  var CONFIG = {
+    light: {{ $light.Content | safeJS }},
+    dark: {{ $dark.Content | safeJS }}
+  };
   function currentTheme() {
-    var t = document.documentElement.getAttribute('data-theme');
-    return t === 'dark' ? 'dark' : 'default';
+    return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
   }
   function initOnce(theme) {
-    mermaid.initialize({
-      startOnLoad: false,
-      theme: theme,
-      securityLevel: 'strict',
-      fontFamily: getComputedStyle(document.documentElement).getPropertyValue('--font-sans') || 'inherit'
-    });
+    mermaid.initialize(Object.assign(
+      { startOnLoad: false, securityLevel: 'strict' },
+      CONFIG[theme]
+    ));
     return mermaid.run({ querySelector: '.mermaid' });
   }
   initOnce(currentTheme());

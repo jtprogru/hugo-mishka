@@ -1,81 +1,12 @@
-/* ============================================================================
-   95-print.css — стили для печати/PDF-сохранения.
-   Скрываем интерактив, перекрашиваем под бумагу.
-   ============================================================================ */
+/* Печать: то, чего нет в print-web.css дизайн-системы.
+
+   Общий печатный слой (белый фон, скрытая шапка с подвалом и TOC, раскрытые
+   адреса ссылок, поля A4, запрет разрывов внутри блоков) приезжает из пакета.
+   Здесь остаётся Hugo-специфика — блоки, которых в системе нет. */
 
 @media print {
-  /* Цветовая инверсия и шрифты — для контраста и экономии чернил. */
-  :root,
-  :root[data-theme="dark"] {
-    --bg:           #ffffff;
-    --bg-elevated:  #ffffff;
-    --bg-sunken:    #f5f5f5;
-    --text:         #000000;
-    --text-muted:   #333333;
-    --text-subtle:  #666666;
-    --accent:       #000000;
-    --accent-hover: #000000;
-    --border:       #cccccc;
-    --code-bg:      #f5f5f5;
-    --code-text:    #000000;
-  }
-
-  body, html { background: #fff !important; color: #000 !important; }
-
-  /* Скрываем интерактивную обвязку, чтобы остался только текст. */
-  .header,
-  .footer,
-  .toc,
-  .post-actions,
-  .post-endnote,
-  .related,
   .edit-post,
-  .post-nav,
-  .breadcrumbs,
-  .skip-link,
-  [data-theme-toggle],
-  .header__burger {
+  .translation-list {
     display: none !important;
-  }
-
-  /* Контент — в одну колонку, во всю ширину страницы. */
-  .container,
-  .main,
-  .post,
-  .post__header,
-  .post__content,
-  .post__footer { max-width: 100% !important; }
-
-  .post-cover img { max-height: none; }
-
-  /* Ссылки — добавляем URL в квадратных скобках после видимого текста. */
-  .md-content a[href]::after {
-    content: " (" attr(href) ")";
-    font-size: 0.85em;
-    color: #555;
-    word-break: break-all;
-  }
-  /* Кроме внутренних якорей и telephone/email — там URL зашумит. */
-  .md-content a[href^="#"]::after,
-  .md-content a[href^="mailto:"]::after,
-  .md-content a[href^="tel:"]::after { content: ""; }
-
-  /* Код — без огромных padding'ов, в монопространстве. */
-  .md-content pre,
-  .md-content code {
-    background: #f5f5f5 !important;
-    color: #000 !important;
-    border: 1px solid #ddd !important;
-  }
-
-  /* Картинки и фигуры не должны рваться между страницами. */
-  figure, img, pre, blockquote, table {
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-
-  h1, h2, h3 {
-    page-break-after: avoid;
-    break-after: avoid;
   }
 }

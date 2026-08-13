@@ -1,5 +1,5 @@
 name = "Mishka"
-license = "MIT"
+license = "PolyForm-Noncommercial-1.0.0"
 licenselink = "https://github.com/jtprogru/hugo-mishka/blob/main/LICENSE"
 description = "Самостоятельная Hugo-тема для технического блога: mobile-first, светлая/тёмная с 3-state-тогглером, тёплая бумажная палитра, callouts, profile-mode с сеткой проектов, render-hooks для кода и картинок."
 homepage = "https://jtprog.ru"

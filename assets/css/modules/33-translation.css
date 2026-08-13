@@ -11,7 +11,7 @@
   gap: var(--gap-xs);
   margin-top: var(--gap-sm);
   font-size: var(--fs-sm);
-  color: var(--text-muted);
+  color: var(--fg-muted);
 }
 
 .translation-list__heading {
@@ -30,13 +30,13 @@
 .translation-list__item:not(:last-child)::after {
   content: "·";
   margin-left: var(--gap-xs);
-  color: var(--text-subtle);
+  color: var(--fg-subtle);
 }
 
 .translation-list a {
-  color: var(--text-muted);
+  color: var(--fg-muted);
   text-decoration: none;
-  border-bottom: 1px dotted var(--text-subtle);
+  border-bottom: 1px dotted var(--fg-subtle);
   padding-bottom: 1px;
   transition: color var(--transition, 0.18s ease),
               border-color var(--transition, 0.18s ease);

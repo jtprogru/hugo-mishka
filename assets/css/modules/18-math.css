@@ -9,7 +9,7 @@
    Текст в \text{} рендерится шрифтом темы (mtextInheritFont: true) —
    метрики STIX не учитывают высоту кириллических букв. */
 
-mjx-container { color: var(--text); }
+mjx-container { color: var(--fg); }
 
 /* Inline-формулы — никаких рамок, без скролла */
 mjx-container[jax="CHTML"][display="false"] {
@@ -33,7 +33,7 @@ mjx-container[jax="CHTML"][display="true"] {
   box-sizing: border-box;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
-  scrollbar-color: color-mix(in srgb, var(--text) 28%, transparent) transparent;
+  scrollbar-color: color-mix(in srgb, var(--fg) 28%, transparent) transparent;
 }
 mjx-container[jax="CHTML"][display="true"] > mjx-math {
   display: inline-block;
@@ -44,11 +44,11 @@ mjx-container[jax="CHTML"][display="true"] > mjx-math {
 mjx-container[jax="CHTML"][display="true"]::-webkit-scrollbar { height: 8px; }
 mjx-container[jax="CHTML"][display="true"]::-webkit-scrollbar-track { background: transparent; }
 mjx-container[jax="CHTML"][display="true"]::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--text) 28%, transparent);
+  background: color-mix(in srgb, var(--fg) 28%, transparent);
   border-radius: 999px;
 }
 mjx-container[jax="CHTML"][display="true"]:hover::-webkit-scrollbar-thumb {
-  background: color-mix(in srgb, var(--text) 45%, transparent);
+  background: color-mix(in srgb, var(--fg) 45%, transparent);
 }
 
 /* Опциональный wrapper из старого JS-хука — оставлен для обратной совместимости,

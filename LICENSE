@@ -1,21 +1,51 @@
-MIT License
+# Лицензии темы Mishka
 
-Copyright (c) 2026 Mikhail (jtprogru) Savin
+Copyright © 2026 Михаил Савин (Mikhail Savin), https://jtprog.ru
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+    Required Notice: Copyright © 2026 Михаил Савин (https://jtprog.ru)
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+Тема была под MIT до версии, в которой она перешла на дизайн-систему
+[`@jtprogru/mishka-ds`](https://github.com/jtprogru/mishka-ds). Стили системы
+распространяются под PolyForm Noncommercial 1.0.0, и раздавать их под MIT в
+составе темы нельзя — поэтому режим у темы теперь тот же. Теги, выпущенные до
+этого перехода, остаются под MIT: снять уже выданное разрешение задним числом
+нельзя, и это не делается.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+## 1. Тема — PolyForm Noncommercial 1.0.0
+
+Полный текст: [`LICENSES/PolyForm-Noncommercial-1.0.0.md`](LICENSES/PolyForm-Noncommercial-1.0.0.md),
+он же на https://polyformproject.org/licenses/noncommercial/1.0.0
+
+Покрывает: `layouts/`, `assets/`, `i18n/`, `data/`, `static/` (кроме шрифтов),
+`scripts/`, `exampleSite/`, `theme.toml` и документацию репозитория.
+
+Коротко, без замены текста лицензии: этим можно пользоваться, менять и
+распространять для любой некоммерческой цели — личный блог, учёба,
+исследования, некоммерческие организации, госучреждения. Любое коммерческое
+использование требует отдельной письменной лицензии от автора. Гарантий
+никаких.
+
+При распространении копии или производной работы вы обязаны передать дальше и
+текст лицензии, и строку `Required Notice` выше.
+
+## 2. Стили дизайн-системы — тот же PolyForm, чужая сборка
+
+`assets/css/vendor/mishka-ds/` — собранная копия `@jtprogru/mishka-ds`,
+обновляется скриптом `scripts/sync-ds.sh` и в теме не правится. Условия те же
+(PolyForm Noncommercial 1.0.0), правообладатель тот же. Знак, логотип и маскот
+системы в тему не входят: они под «все права защищены» и остаются в пакете.
+
+## 3. Шрифты — SIL OFL 1.1
+
+`static/fonts/ibm-plex-sans/` — IBM Plex Sans, © IBM Corp.
+`static/fonts/iosevka/` — Iosevka, © Renzhi Li (a.k.a. Belleve Invis).
+
+Оба под SIL Open Font License 1.1, тексты лежат рядом с бинарниками:
+`static/fonts/LICENSE-ibm-plex-sans.txt`, `static/fonts/LICENSE-iosevka.txt`.
+Шрифты — чужая работа, условия PolyForm на них не распространяются, и при
+распространении темы лицензии обязаны ехать вместе с файлами.
+
+## 4. Контент exampleSite
+
+Демо-посты в `exampleSite/content/` написаны как примеры вёрстки. Берите как
+образец, но не выдавайте за свой текст.

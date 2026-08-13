@@ -1,0 +1,168 @@
+/* СГЕНЕРИРОВАНО scripts/gen-chroma.mjs. Руками не править.
+
+   Подсветка кода Chroma (Hugo) на токенах --syn-*. Профиль один: тему
+   переключают сами токены, поэтому светлой и тёмной таблицы больше нет.
+
+   Порог AA на подложке кода держится в tokens.css и проверяется
+   scripts/check-contrast.mjs — здесь только раскладка ролей. */
+
+/* Блок кода целиком. */
+.chroma {
+  color: var(--code-fg);
+  background: var(--code-bg);
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+.bg { color: var(--code-fg); background: var(--code-bg); }
+
+/* ключевые слова, теги разметки, префиксы строк */
+.chroma .k,
+.chroma .kd,
+.chroma .kn,
+.chroma .kp,
+.chroma .kr,
+.chroma .nt,
+.chroma .sa {
+  color: var(--syn-keyword);
+}
+
+/* типы, классы, пространства имён, исключения */
+.chroma .kt,
+.chroma .nc,
+.chroma .ne,
+.chroma .nn {
+  color: var(--syn-type);
+}
+
+/* функции и встроенные имена */
+.chroma .nf,
+.chroma .fm,
+.chroma .nb,
+.chroma .bp {
+  color: var(--syn-function);
+}
+
+/* переменные и всё, что печатается цветом текста */
+.chroma .nv,
+.chroma .vc,
+.chroma .vg,
+.chroma .vi,
+.chroma .vm,
+.chroma .nx,
+.chroma .x,
+.chroma .ld,
+.chroma .cl,
+.chroma .gl,
+.chroma .go {
+  color: var(--syn-variable);
+}
+
+/* константы и escape-последовательности */
+.chroma .kc,
+.chroma .no,
+.chroma .se {
+  color: var(--syn-constant);
+}
+
+/* строки во всех видах */
+.chroma .s,
+.chroma .s1,
+.chroma .s2,
+.chroma .sb,
+.chroma .sc,
+.chroma .si,
+.chroma .ss,
+.chroma .sx,
+.chroma .dl {
+  color: var(--syn-string);
+}
+
+/* числа */
+.chroma .m,
+.chroma .mb,
+.chroma .mf,
+.chroma .mh,
+.chroma .mi,
+.chroma .mo,
+.chroma .il {
+  color: var(--syn-number);
+}
+
+/* комментарии, docstring, приглашение оболочки, номера строк */
+.chroma .c,
+.chroma .c1,
+.chroma .ch,
+.chroma .cm,
+.chroma .cp,
+.chroma .cpf,
+.chroma .cs,
+.chroma .sd,
+.chroma .sh,
+.chroma .gp,
+.chroma .ln,
+.chroma .lnt {
+  color: var(--syn-comment);
+}
+
+/* операторы */
+.chroma .o,
+.chroma .ow,
+.chroma .or {
+  color: var(--syn-operator);
+}
+
+/* атрибуты, декораторы, свойства, регулярные выражения */
+.chroma .na,
+.chroma .nd,
+.chroma .ni,
+.chroma .nl,
+.chroma .py,
+.chroma .sr {
+  color: var(--syn-meta);
+}
+
+/* Начертание — второй различитель к цвету. */
+.chroma .c,
+.chroma .c1,
+.chroma .ch,
+.chroma .cm,
+.chroma .cs,
+.chroma .sd,
+.chroma .ge { font-style: italic; }
+
+.chroma .nd,
+.chroma .o,
+.chroma .ow,
+.chroma .gh,
+.chroma .gu,
+.chroma .gs { font-weight: 700; }
+
+/* Ошибка разбора и диффы: тут цвет несёт смысл, поэтому берётся не из
+   палитры подсветки, а из семантики системы. Значения --c-*-text проверены на
+   подложке кода: она совпадает с фоном карточки. */
+.chroma .err,
+.chroma .gr,
+.chroma .gt { color: var(--c-danger-text); }
+
+.chroma .gd { color: var(--c-danger-text); }
+.chroma .gi { color: var(--c-tip-text); }
+.chroma .gh,
+.chroma .gu { color: var(--syn-keyword); }
+
+/* Подсветка строки и каркас таблицы с номерами — без цвета текста. */
+.chroma .hl { background: var(--border-strong); }
+
+.chroma .ln,
+.chroma .lnt {
+  white-space: pre;
+  -webkit-user-select: none;
+  user-select: none;
+  margin-right: 0.4em;
+  padding: 0 0.4em;
+}
+
+.chroma .lnlinks { outline: none; text-decoration: none; color: inherit; }
+.chroma .lntd { vertical-align: top; padding: 0; margin: 0; border: 0; }
+.chroma .lntable { border-spacing: 0; padding: 0; margin: 0; border: 0; }
+.chroma .line { display: flex; }

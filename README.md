@@ -18,7 +18,7 @@
 - Поиск через Fuse.js (опционально).
 - Mermaid и MathJax/KaTeX — опт-ин через `params.math` / `params.mermaid` или фронтматтер.
 - Категории с цветом из `data/category-colors.yaml`.
-- Self-hosted шрифты (PT Sans + JetBrains Mono), `font-display: swap`, без Google Fonts.
+- Self-hosted шрифты из дизайн-системы (IBM Plex Sans + Iosevka), unicode-range сабсеты, `font-display: swap`, без Google Fonts.
 - A11y: keyboard nav, focus-visible, ARIA-разметка, `prefers-reduced-motion`, контрасты ≥ AA.
 - Производительность: главная без cover < 100 КБ gzip, Lighthouse mobile ≥ 95.
 - Только Hugo Pipes, никаких сборщиков и `node_modules`.
@@ -343,13 +343,30 @@ Raw HTML — когда нужно вставить произвольный ф�
 - `layouts/_partials/` — header, footer, profile, projects, latest_posts, post_card, toc, breadcrumbs, ...
 - `layouts/_shortcodes/` — все шорткоды темы.
 - `layouts/_default/_markup/` — render-hooks для codeblock, image, link, mermaid.
-- `assets/css/main.css` + `modules/00-vars.css … 99-a11y.css` — модульный CSS, склеивается через Hugo Pipes (`resources.Match css/modules/*.css | resources.Concat`).
-- `assets/css/modules/12-chroma.css` — палитра подсветки кода: catppuccin-latte для light, catppuccin-macchiato для dark, оба профиля в одном файле под префиксами `:root[data-theme="..."]`. См. BRANDING §4.
+- `assets/css/vendor/mishka-ds/` — цвет, типографика, каркас, компоненты и обвязка сайта из дизайн-системы (см. ниже). В теме не правится.
+- `assets/css/modules/09-toc.css … 34-reading-mode.css` — то, чего в системе нет: TOC, поиск, chroma, формулы, архив, 404, действия над постом, перевод, режим чтения.
+- `assets/css/modules/12-chroma.css` — палитра подсветки кода: catppuccin-latte для light, catppuccin-macchiato для dark, оба профиля в одном файле под префиксами `:root[data-theme="..."]`.
 - `assets/js/` — `theme-toggle.js`, `code-copy.js`, `toc-active.js`, `search.js` + `vendor/fuse.basic.min.js`.
 - SVG-иконки — встроены в `_partials/svg.html` (path-карта по именам).
-- `static/fonts/pt-sans/` — self-hosted PT Sans (Regular/Bold/Italic, latin + cyrillic). JetBrains Mono подключается через систему/`--font-mono` fallback.
+- `static/fonts/{ibm-plex-sans,iosevka}/` — self-hosted шрифты системы, unicode-range сабсеты (latin, latin-ext, cyrillic, cyrillic-ext; у моноширинного latin-ext нет).
 - `i18n/{ru,en}.yaml` — строки интерфейса.
+
+## Дизайн-система
+
+Цвет, шрифты, ритм и компоненты приезжают из [`@jtprogru/mishka-ds`](https://github.com/jtprogru/mishka-ds) — одного источника для блога, резюме, презентаций и схем. Раньше всё это жило в теме копией, и копии расходились.
+
+Тема не собирается npm'ом: hugo-модуль должен ставиться одной строкой, без `node_modules` и submodule'ов. Поэтому собранные слои системы лежат в репозитории вендорной копией в `assets/css/vendor/mishka-ds/`, а обновляет её скрипт:
+
+```bash
+./scripts/sync-ds.sh [путь-к-mishka-ds]   # по умолчанию ../mishka-ds
+```
+
+Скрипту нужен собранный пакет: `dist/` у системы под `.gitignore`, поэтому сначала `make build` в её каталоге. Версия и коммит источника пишутся в `assets/css/vendor/mishka-ds/VERSION`.
+
+Вендорные файлы в теме не правятся никогда. Нашлась проблема в стилях — правится `src/styles/*` в пакете и делается пересинхронизация, иначе копия снова разойдётся.
+
+Из пакета берутся `tokens.css`, `fonts.css`, `base.css`, `components-shell.css`, `components.css`, `print-web.css` и конфиги mermaid. Не берутся `themes-scoped.css` (тема переключается только через `data-theme` на `<html>`), `compat.css` (локальные модули переведены на канонические имена токенов), `print-sheet.css` (лист A4 и визитка), `code.css` (у нас Chroma, не highlight.js) и `brand/*`.
 
 ## Лицензия
 
-MIT — см. [LICENSE](./LICENSE).
+PolyForm Noncommercial 1.0.0 — см. [LICENSE](./LICENSE). До перехода на дизайн-систему тема была под MIT; выпущенные тогда теги под MIT и остаются. Шрифты в `static/fonts/` — чужие, SIL OFL 1.1, тексты лицензий лежат рядом с ними.

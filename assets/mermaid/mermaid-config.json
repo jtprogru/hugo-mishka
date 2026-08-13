@@ -1,0 +1,22 @@
+{
+  "theme": "base",
+  "themeVariables": {
+    "background": "transparent",
+    "primaryBorderColor": "#bcc0cc",
+    "secondaryColor": "#dce0e8",
+    "secondaryBorderColor": "#ccd0da",
+    "tertiaryColor": "#bcdff0",
+    "tertiaryBorderColor": "#209fb5",
+    "secondBkg": "#dce0e8",
+    "nodeBorder": "#bcc0cc",
+    "clusterBkg": "#dce0e8",
+    "clusterBorder": "#ccd0da",
+    "edgeLabelBackground": "#eff1f5",
+    "noteBkgColor": "#bcdff0",
+    "noteBorderColor": "#209fb5",
+    "errorBkgColor": "#dce0e8",
+    "errorTextColor": "#d20f39",
+    "fontFamily": "\"IBM Plex Sans\", system-ui, -apple-system, \"Segoe UI\", Roboto, \"Helvetica Neue\", Arial, sans-serif",
+    "fontSize": "15px"
+  }
+}

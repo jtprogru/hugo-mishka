@@ -15,7 +15,7 @@
   font-size: var(--fs-md);
   line-height: var(--lh-tight);
   margin: 0 0 var(--gap-sm);
-  color: var(--text-muted);
+  color: var(--fg-muted);
   font-weight: 500;
 }
 
@@ -41,8 +41,8 @@
   padding: 0;
   border: 1px solid var(--border);
   border-radius: 50%;
-  background: var(--bg-elevated);
-  color: var(--text-muted);
+  background: var(--bg-elev);
+  color: var(--fg-muted);
   font: inherit;
   text-decoration: none;
   cursor: pointer;
@@ -68,8 +68,8 @@
 
 /* Visual cue для done-состояния copy-кнопки */
 .post-actions__btn[data-net="copy"].is-done {
-  border-color: var(--success);
-  color: var(--success);
+  border-color: var(--c-tip);
+  color: var(--c-tip);
 }
 
 @media (prefers-reduced-motion: reduce) {
