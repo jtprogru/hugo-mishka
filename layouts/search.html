@@ -38,12 +38,12 @@
        сам по себе JSON-escape'ит значения — без safeJS получаем
        "indexUrl":"\"/index.json\"" вместо "/index.json").
 
-       Fuse-опции читаем из site.Data.fuse (приоритет) или
+       Fuse-опции читаем из hugo.Data.fuse (приоритет) или
        site.Params.fuseOpts (legacy fallback). Hugo lower-case'ит
        ключи в Params.* (isCaseSensitive → iscasesensitive), и Fuse.js
        их не распознаёт. Data-файлы (data/fuse.yaml) сохраняют case
        как написано — это рабочий способ кастомизировать Fuse. */ -}}
-{{- $fuse := or site.Data.fuse site.Params.fuseOpts | default dict -}}
+{{- $fuse := or hugo.Data.fuse site.Params.fuseOpts | default dict -}}
 {{- $cfg := dict
     "indexUrl" ("/index.json" | relURL)
     "fuse"     $fuse
