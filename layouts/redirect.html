@@ -1,0 +1,69 @@
+{{- /* Страница-редирект для коротких ссылок вида /go/<slug>/.
+
+       Зачем: t.me/+<хеш> — нечитаемый URL, и по нему видно только вступления
+       (их считает Telegram по invite-ссылке), но не клики. Промежуточная
+       страница на своём домене даёт вторую половину воронки: сколько людей
+       кликнуло и с какой статьи (параметр ?src=<slug>).
+
+       Frontmatter страницы:
+         layout: redirect        — обязательно, иначе шаблон не подхватится
+         target: "https://..."   — обязательно, куда уводим
+         goal: "go_tg"           — цель в Яндекс.Метрике (опционально)
+         label: "канал"          — во что уводим, для строки «Открываем …»
+         robotsNoIndex: true     — noindex + выкидывание из sitemap.xml
+         analyticsEager: true    — Метрика без ленивой загрузки, см. ниже
+         _build: {list: never}   — не попадать в списки, RSS и related
+
+       Шаблон намеренно standalone (без baseof): на странице живут меньше
+       секунды, тянуть CSS-бандл, шапку и подвал незачем.
+
+       Почему analyticsEager: analytics.html по умолчанию откладывает счётчики
+       до requestIdleCallback (timeout 3000 мс). Для обычной страницы это плюс
+       к TTI, здесь — потеря замера: reachGoal встал бы в очередь ym.a, а через
+       800 мс страница уже уходит по location.replace. */ -}}
+{{- $target := .Params.target -}}
+{{- if not $target -}}
+  {{- errorf "layouts/redirect.html: у страницы %s нет параметра target" .Path -}}
+{{- end -}}
+{{- $goal := .Params.goal -}}
+{{- $ym := site.Params.metrics.yandexMetrics -}}
+<!DOCTYPE html>
+<html lang="{{ site.Language.Lang }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>{{ .Title }}</title>
+<meta http-equiv="refresh" content="2; url={{ $target | safeURL }}">
+<style>
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+         font: 1rem/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+         background: #1e1e2e; color: #cdd6f4; text-align: center; padding: 1.5rem; }
+  a { color: #89b4fa; }
+</style>
+{{- partial "analytics.html" . }}
+<script>
+(function () {
+  var target = {{ $target }};
+  var src = 'direct';
+  try { src = new URLSearchParams(location.search).get('src') || 'direct'; } catch (e) {}
+  var done = false;
+  function go() { if (done) { return; } done = true; location.replace(target); }
+{{ if and $ym $goal }}
+  // Цель уходит первой, переход — в её колбэке. Если Метрика не поднялась
+  // (заблокирована, локальная сборка, ошибка сети) — уводим по таймауту.
+  try {
+    ym({{ $ym }}, 'reachGoal', {{ $goal }}, { src: src }, go);
+  } catch (e) { go(); }
+{{ else }}
+  go();
+{{ end }}
+  setTimeout(go, 800);
+})();
+</script>
+</head>
+<body>
+<p>Открываем {{ .Params.label | default "ссылку" }}…<br>
+<a href="{{ $target | safeURL }}">Если не сработало — вот ссылка</a></p>
+</body>
+</html>

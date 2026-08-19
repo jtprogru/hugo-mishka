@@ -3,6 +3,8 @@
          channel — @-handle или URL (если без @ и без https, добавим t.me/)
          title   — заголовок (опц., есть дефолт)
          text    — пояснение (опц.)
+       channel принимает @handle, полный URL или путь на своём домене
+       (/go/chat/?src=slug — тогда клик попадает в цель Метрики).
        Использование:
          {{< telegram-cta channel="@my_channel" >}}
          или
@@ -14,6 +16,10 @@
 {{- if $channel -}}
   {{- if or (strings.HasPrefix $channel "http://") (strings.HasPrefix $channel "https://") -}}
     {{- $href = $channel -}}
+  {{- else if strings.HasPrefix $channel "/" -}}
+    {{- /* Ссылка на свой домен — как правило короткий редирект /go/chat/?src=<slug>.
+           Без этой ветки t.me приклеивался к пути и ссылка ломалась. */ -}}
+    {{- $href = $channel | relURL -}}
   {{- else -}}
     {{- $handle := strings.TrimPrefix "@" $channel -}}
     {{- $href = printf "https://t.me/%s" $handle -}}

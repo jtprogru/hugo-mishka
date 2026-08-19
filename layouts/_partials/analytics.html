@@ -10,11 +10,17 @@
        Lazy-load: оба счётчика откладываются до первого `requestIdleCallback`
        (fallback — setTimeout 2s). Это даёт −30..50 мс к TTI на mobile без
        потери функциональности — webvisor / clickmap / link-tracking всё
-       работает как обычно, просто стартует чуть позже LCP. */ -}}
+       работает как обычно, просто стартует чуть позже LCP.
+
+       Исключение — `analyticsEager: true` во фронтматтере страницы: тогда
+       счётчики стартуют сразу. Нужно страницам, с которых уходят почти
+       мгновенно (layout `redirect`): отложенный тег не успевает отправить
+       reachGoal до location.replace, и клик теряется. */ -}}
 
 {{- if and hugo.IsProduction (eq (site.Params.env | default "production") "production") -}}
   {{- $gaID := site.Config.Services.GoogleAnalytics.ID -}}
   {{- $ymID := site.Params.metrics.yandexMetrics -}}
+  {{- $eager := .Params.analyticsEager | default false -}}
   {{- if or $gaID $ymID }}
   <script>
   (function () {
@@ -46,11 +52,15 @@
       });
       {{- end }}
     }
+    {{ if $eager -}}
+    loadAnalytics();
+    {{- else -}}
     if ('requestIdleCallback' in window) {
       requestIdleCallback(loadAnalytics, { timeout: 3000 });
     } else {
       setTimeout(loadAnalytics, 2000);
     }
+    {{- end }}
   })();
   </script>
   {{- end }}
