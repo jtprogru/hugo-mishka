@@ -60,6 +60,15 @@
 {{- $cover := partial "cover_og_image.html" . }}
 {{- with $cover.url }}
 <meta property="og:image" content="{{ . }}">
+{{- /* og:image:type — MIME обложки. Telegram и VK по нему решают, стоит ли
+       вообще качать картинку, до того как получат тело; без него часть
+       краулеров резервирует место под карточку и оставляет его пустым.
+       Расширение берём из пути, а не из строки целиком: у static-обложек
+       к URL приклеен cache-bust `?v=<mtime>`. */ -}}
+  {{- $ext := lower (strings.TrimPrefix "." (path.Ext (urls.Parse .).Path)) -}}
+  {{- with index (dict "png" "image/png" "jpg" "image/jpeg" "jpeg" "image/jpeg" "webp" "image/webp" "gif" "image/gif") $ext }}
+<meta property="og:image:type" content="{{ . }}">
+  {{- end }}
 {{- end }}
 {{- with $cover.alt }}
 <meta property="og:image:alt" content="{{ . }}">
