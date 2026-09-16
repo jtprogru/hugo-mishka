@@ -19,8 +19,14 @@
 {{- $hash := sha256 $code -}}
 {{- $light := resources.Get (printf "mermaid/%s.svg"      $hash) -}}
 {{- $dark  := resources.Get (printf "mermaid/%s.dark.svg" $hash) -}}
+{{- /* Растровая копия светлой схемы. На странице не показывается никогда —
+       нужна только парсерам, которые не умеют SVG. Прежде всего это Telegram
+       Instant View: без PNG пост со схемой приходится целиком помечать
+       @unsupported, и IV для него не генерится вовсе. Цена для читателя —
+       один атрибут в разметке, картинка не запрашивается. */ -}}
+{{- $png   := resources.Get (printf "mermaid/%s.png"      $hash) -}}
 {{- if $light -}}
-<figure class="mermaid mermaid--prerendered" aria-label="Mermaid diagram">
+<figure class="mermaid mermaid--prerendered" aria-label="Mermaid diagram"{{ with $png }} data-png="{{ .Permalink }}"{{ end }}>
 <div class="mermaid-svg mermaid-svg--light">
 {{ $light.Content | safeHTML }}
 </div>
