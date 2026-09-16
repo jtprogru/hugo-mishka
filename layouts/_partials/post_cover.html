@@ -94,7 +94,37 @@
     {{- if and $isRaster (gt $orig.Height 0) -}}
       {{- if ge (div (float $orig.Width) (float $orig.Height)) 1.8 -}}{{ $wide = true }}{{- end -}}
     {{- end -}}
-    <figure class="post-cover{{ if $wide }} post-cover--wide{{ end }}">
+    {{- /* Растровый двойник векторной обложки — для тех, кто не умеет SVG.
+            На странице по-прежнему отдаётся вектор: он легче и чётче. Но в
+            Telegram Instant View <img> с .svg просто не отрисовывается, и
+            обложка у поста пропадает. Кладём URL растра в data-png, IV-шаблон
+            подменяет им src (см. plans/instant-view-telegram-v3.template).
+            Для читателя это атрибут, а не лишний запрос.
+
+            Растр рисует `make cover-rasterize`, он же сосед с тем же stem'ом.
+            Ровно такой же поиск живёт в cover_og_image.html — если меняешь
+            правила резолва, правь оба места. Здесь намеренно НЕ используется
+            сам cover_og_image.html: у него есть фолбэк на дефолтную обложку
+            сайта, и пост без растрового соседа получил бы в data-png чужую
+            картинку. 1200px и q85 те же, что в OG, поэтому Hugo отдаёт уже
+            посчитанный ресурс, а не рисует второй. */ -}}
+    {{- $coverRaster := "" -}}
+    {{- if not $isRaster -}}
+      {{- $stem := strings.TrimSuffix (path.Ext $img) $img -}}
+      {{- range slice "png" "jpg" -}}
+        {{- if not $coverRaster -}}
+          {{- $cand := printf "%s.%s" $stem . -}}
+          {{- with $ctx.Resources.GetMatch $cand }}{{ $coverRaster = . }}{{ end -}}
+          {{- if not $coverRaster -}}
+            {{- with resources.Get (printf "covers/%s" $cand) }}{{ $coverRaster = . }}{{ end -}}
+          {{- end -}}
+        {{- end -}}
+      {{- end -}}
+      {{- with $coverRaster -}}
+        {{- if gt .Width 1200 }}{{ $coverRaster = .Resize "1200x q85" }}{{ end -}}
+      {{- end -}}
+    {{- end -}}
+    <figure class="post-cover{{ if $wide }} post-cover--wide{{ end }}"{{ with $coverRaster }} data-png="{{ .Permalink }}"{{ end }}>
       {{- if $linkFullImages }}<a href="{{ $res.RelPermalink }}" target="_blank" rel="noopener noreferrer">{{- end }}
       <picture>
         {{- /* Обложка идёт во всю ширину `.container` (--container-width 1200
