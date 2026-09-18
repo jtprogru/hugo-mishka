@@ -71,3 +71,40 @@ mjx-assistive-mml {
   overflow: hidden !important;
   clip: rect(1px, 1px, 1px, 1px) !important;
 }
+
+/* ─── Обёртки из render-passthrough.html ──────────────────────────────────
+   Формулу по-прежнему рисует KaTeX в браузере; обёртка нужна, чтобы
+   донести до парсеров без JS ссылку на растровый двойник (data-png) —
+   в первую очередь до Telegram Instant View. Читателю сайта эти элементы
+   не стоят ничего: ни лишнего запроса, ни перерисовки.
+
+   .math__tex — контейнер с исходным TeX внутри делимитеров. До того, как
+   отработает auto-render, в нём лежит сырая формула; после — KaTeX-разметка. */
+
+.math-block {
+  display: block;
+  max-width: 100%;
+  margin: var(--gap-md) 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--fg) 28%, transparent) transparent;
+}
+
+.math-block .katex-display { margin: 0; padding: 0.4em 2px; }
+
+.math-block::-webkit-scrollbar { height: 8px; }
+.math-block::-webkit-scrollbar-track { background: transparent; }
+.math-block::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--fg) 28%, transparent);
+  border-radius: 999px;
+}
+
+.math-inline { display: inline; }
+.math-inline .katex { color: var(--fg); }
+
+/* Пока KaTeX не отработал, сырой TeX не должен прыгать по ширине строки. */
+.math__tex { white-space: nowrap; }
+.math-block .math__tex { display: block; white-space: normal; text-align: center; }

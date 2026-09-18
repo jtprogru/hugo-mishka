@@ -1,0 +1,35 @@
+{{- /* Render hook для passthrough-математики ($$..$$, \[..\], \(..\)).
+
+       Формулу по-прежнему рисует KaTeX в браузере — тут только обёртка,
+       которая доносит формулу до парсеров без JS. Главный потребитель —
+       Telegram Instant View: он не исполняет скрипты и не понимает ни
+       MathML, ни KaTeX-разметку, так что без растра в IV уезжал сырой TeX
+       вида `$$\frac{a}{b}$$`.
+
+       Тот же контракт, что у mermaid и векторных обложек: абсолютный URL
+       PNG лежит в data-png на самом блоке, а IV-шаблон собирает из него
+       <img> (для блочных) или <pic> (для инлайновых).
+
+       PNG рисует `make math-render` (scripts/math-prerender.mjs) и кладёт
+       в assets/math/<sha256("<type>|<tex>")>.png. Хеш здесь и в скрипте
+       считается от одной и той же строки — если разойдутся, data-png
+       просто не появится, а `make math-check` уронит CI.
+
+       Растр всегда 2×, поэтому width/height для инлайна делим пополам:
+       IV показывает Icon ровно в тех размерах, что указаны в атрибутах. */ -}}
+
+{{- $tex := .Inner -}}
+{{- $type := cond (eq .Type "block") "block" "inline" -}}
+{{- $png := resources.Get (printf "math/%s.png" (sha256 (printf "%s|%s" $type $tex))) -}}
+
+{{- if eq $type "block" -}}
+  <div class="math-block"
+    {{- with $png }} data-png="{{ .Permalink }}"{{ end -}}
+  ><span class="math__tex">$${{ $tex }}$$</span></div>
+{{- else -}}
+  {{- $w := 0 }}{{ $h := 0 -}}
+  {{- with $png }}{{ $w = div .Width 2 }}{{ $h = div .Height 2 }}{{ end -}}
+  <span class="math-inline"
+    {{- with $png }} data-png="{{ .Permalink }}" data-w="{{ $w }}" data-h="{{ $h }}"{{ end -}}
+  ><span class="math__tex">\({{ $tex }}\)</span></span>
+{{- end -}}
