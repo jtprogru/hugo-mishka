@@ -54,19 +54,22 @@
     {{- $srcsetWebp := "" -}}
     {{- $srcsetOrig := "" -}}
     {{- if $isRaster -}}
-      {{- /* 1600 — верхняя граница: обложка занимает до 1152 CSS-px, значит на
-              retina нужен вариант заметно шире 1280. Исходники концепт-обложек
-              лежат в 2100px, но полный 2× (2304) не окупается по весу. */ -}}
-      {{- $maxW := 1600 -}}
+      {{- /* 2304 — верхняя граница: обложка занимает до 1152 CSS-px, на retina
+              это ровно 2× = 2304. С прежним лимитом 1600 браузер растягивал
+              картинку почти в полтора раза, и тонкий текст концепт-обложек
+              выходил мыльным. Исходник у́же лимита (концепт-обложки в 2100px,
+              категорийные в 1200px) не апскейлится: верхний вариант равен его
+              собственной ширине. */ -}}
+      {{- $maxW := 2304 -}}
       {{- if gt $orig.Width $maxW -}}{{ $orig = $res.Resize (printf "%dx" $maxW) }}{{ end -}}
       {{- $webp = $orig.Resize (printf "%dx webp q85" $orig.Width) -}}
 
-      {{- /* Responsive srcset: 480w / 800w / 1200w / 1600w (capped at $orig.Width).
+      {{- /* Responsive srcset: 480w / 800w / 1200w / 1600w / 2304w (capped at $orig.Width).
               We only generate entries whose width is <= the original to avoid
               upscaling. WebP entries are independent from the original-format
               ones so the browser can pick best by both size and format. */ -}}
       {{- $widths := slice -}}
-      {{- range slice 480 800 1200 1600 -}}
+      {{- range slice 480 800 1200 1600 2304 -}}
         {{- if le . $orig.Width -}}{{ $widths = $widths | append . }}{{- end -}}
       {{- end -}}
       {{- $widths = $widths | append $orig.Width | uniq -}}
