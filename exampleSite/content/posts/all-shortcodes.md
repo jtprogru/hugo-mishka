@@ -120,6 +120,10 @@ echo "и код тоже работает"
 We are what we repeatedly do. Excellence, then, is not an act, but a habit.
 {{< /thin-place >}}
 
+## Цитата с переводом
+
+Документация `net/http` про `Client.Timeout` коротка: {{< tr "нулевой Timeout означает, что таймаута нет" >}}«A Timeout of zero means no timeout»{{< /tr >}}. Наведи курсор на цитату или тапни по ней, и под абзацем появится перевод.
+
 ## Figure
 
 {{< figure src="/images/avatar.svg" alt="Демо аватар" caption="Подпись к картинке" attr="Source: example" attrlink="https://example.org/" >}}

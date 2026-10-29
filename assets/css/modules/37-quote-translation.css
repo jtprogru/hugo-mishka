@@ -1,0 +1,109 @@
+/* ============================================================================
+   37-quote-translation.css — цитата с переводом по наведению (shortcode tr).
+
+   Перевод — обычный текст внутри .tr__ru. По умолчанию он визуально скрыт,
+   но остаётся доступен скринридеру. При наведении, тапе или фокусе с
+   клавиатуры он показывается карточкой под абзацем во всю его ширину.
+   Карточка привязана к абзацу, а не к самой цитате: цитата часто
+   переносится на несколько строк и может начинаться у правого края, и
+   подсказка, привязанная к ней, уезжала бы за край экрана.
+   ============================================================================ */
+
+:is(p, li, td, th, dd, figcaption):has(.tr) {
+  position: relative;
+}
+
+.tr {
+  text-decoration: underline dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+  cursor: help;
+  border-radius: 2px;
+}
+
+.tr:focus {
+  outline: none;
+}
+
+.tr:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.tr__ru {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.tr:is(:hover, :focus, :focus-within) .tr__ru {
+  left: 0;
+  right: 0;
+  top: calc(100% + var(--gap-xs));
+  z-index: 20;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip-path: none;
+  white-space: normal;
+  padding: var(--gap-sm) var(--gap-md);
+  background: var(--bg-elev);
+  color: var(--fg);
+  border: 1px solid var(--border-strong);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  font-size: var(--fs-sm);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.5;
+  text-align: left;
+  cursor: auto;
+}
+
+.tr:is(:hover, :focus, :focus-within) .tr__ru::before {
+  content: "Перевод";
+  display: block;
+  margin-bottom: 0.15em;
+  font-size: var(--fs-xs);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--fg-subtle);
+}
+
+.tr:is(:hover, :focus, :focus-within) .tr__paren {
+  display: none;
+}
+
+/* На бумаге наводить некуда: перевод печатается сразу за оригиналом. */
+@media print {
+  .tr {
+    text-decoration: none;
+  }
+
+  .tr .tr__ru,
+  .tr:is(:hover, :focus, :focus-within) .tr__ru {
+    position: static;
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip-path: none;
+    white-space: normal;
+    padding: 0;
+    background: none;
+    border: 0;
+    box-shadow: none;
+    font-size: inherit;
+  }
+
+  .tr .tr__ru::before {
+    content: none;
+  }
+
+  .tr .tr__paren {
+    display: inline;
+  }
+}

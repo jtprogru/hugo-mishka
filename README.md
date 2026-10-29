@@ -13,7 +13,7 @@
 - Главная: profile-hero + сетка проектов из `data/projects.yaml` + сетка свежих постов с превью.
 - Render-hooks для codeblock (язык в углу + copy-кнопка) и изображений (`<picture>` с AVIF/WebP).
 - Sticky-TOC с активной секцией по scroll.
-- Шорткоды: `callout` (note/tip/important/warn/danger), `refresh-banner`, `telegram-cta`, `thin-place`, `kbd`, `figure`, `audio`, `video`, `collapse`.
+- Шорткоды: `callout` (note/tip/important/warn/danger), `refresh-banner`, `telegram-cta`, `thin-place`, `tr`, `kbd`, `figure`, `audio`, `video`, `collapse`.
 - Подсветка кода через Chroma с собственной палитрой (отдельные `chroma-light.css` / `chroma-dark.css`).
 - Поиск через Fuse.js (опционально).
 - Mermaid и MathJax/KaTeX — опт-ин через `params.math` / `params.mermaid` или фронтматтер.
@@ -315,7 +315,10 @@ Fuse.js (v7, basic) подключается только на странице 
 {{< refresh-banner date="2026-05-23" >}}Что обновилось.{{< /refresh-banner >}}
 {{< collapse summary="Показать детали" >}}…{{< /collapse >}}
 {{< thin-place author="Кто-то" >}}Эпиграф.{{< /thin-place >}}
+{{< tr "Перевод цитаты" >}}«Original quote»{{< /tr >}}
 ```
+
+`tr` — цитата на языке оригинала с переводом по наведению или по тапу. Перевод лежит в разметке текстом, поэтому его читают скринридеры, а в RSS, Telegram Instant View и при печати он виден в скобках сразу за оригиналом. Язык оригинала по умолчанию `en`, другой задаётся через `lang`: `{{< tr text="Перевод" lang="de" >}}«Zitat»{{< /tr >}}`.
 
 Одиночные:
 

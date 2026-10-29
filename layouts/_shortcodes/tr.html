@@ -1,0 +1,15 @@
+{{- /*
+  Цитата на языке оригинала с переводом по наведению или по тапу.
+
+    {{< tr "Перевод цитаты" >}}«Original quote»{{< /tr >}}
+    {{< tr text="Перевод" lang="de" >}}«Zitat»{{< /tr >}}
+
+  Перевод лежит в разметке обычным текстом, а не в атрибуте: его читают
+  скринридеры, и там, где CSS нет (RSS-читалки, Telegram Instant View,
+  печать), он виден сразу после оригинала в скобках. Подсказку рисует
+  CSS-модуль 37-quote-translation.css.
+*/ -}}
+{{- $text := .Get "text" | default (.Get 0) -}}
+{{- $lang := .Get "lang" | default "en" -}}
+<span class="tr" tabindex="0"><span class="tr__orig" lang="{{ $lang }}">{{ .Inner | .Page.RenderString }}</span><span class="tr__ru" lang="ru"><span class="tr__paren"> (перевод: </span>{{ $text | .Page.RenderString }}<span class="tr__paren">)</span></span></span>
+{{- /* без завершающего перевода строки, чтобы за цитатой не появлялся пробел */ -}}
